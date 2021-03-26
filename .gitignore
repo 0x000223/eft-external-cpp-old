@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Custom
+include/*.dll
+include/*.lib
+src/NativeExternalTest/bypass_handler.hpp
+src/NativeExternalTest/offset.hpp
+
 # User-specific files
 *.rsuser
 *.suo
