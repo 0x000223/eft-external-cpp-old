@@ -4,7 +4,7 @@ uintptr_t managers::type_manager		= 0;
 uintptr_t managers::object_manager		= 0;
 uintptr_t managers::render_manager		= 0;
 uintptr_t managers::network_manager		= 0;
-uintptr_t managers::scripting_manager	= 0;
+uintptr_t managers::scripting_manager		= 0;
 
 auto managers::init() -> BOOL
 {
