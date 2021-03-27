@@ -51,7 +51,7 @@ public:
 
 		auto camera_type = unity::find_type_by_name("Camera");
 		
-		auto component_address = camera_game_object.query_component_by_type(camera_type);
+		auto component_address = game_object::query_component_by_type(camera_game_object, camera_type);
 
 		return camera ( component_address );
 	}

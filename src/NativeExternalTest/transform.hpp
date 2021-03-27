@@ -9,6 +9,10 @@
 
 class transform	// Inherits from Component
 {
+
+	// TODO
+	// FindTransformWithName(), Find(), 
+	
 public:
 
 	uintptr_t address;

@@ -12,7 +12,7 @@ struct managers // Aggregate unity managers
 {
 	static uintptr_t type_manager;
 	
-	static uintptr_t object_manager;
+	static uintptr_t game_object_manager;
 
 	static uintptr_t render_manager;
 

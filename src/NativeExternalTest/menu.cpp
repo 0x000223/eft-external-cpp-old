@@ -202,9 +202,9 @@ auto menu::window_main() -> void
 
 					if(ImGui::Button("Test Code"))
 					{
-						auto type = unity::find_type_by_name("TimeManager");
+						auto target_object = game_object::find("Captcha");
 
-						auto derived_types = unity::find_all_derived_types(type);
+						
 					}
 				
 					ImGui::Separator();
@@ -239,7 +239,7 @@ auto menu::window_main() -> void
 				{
 					// Handle state
 				
-					ImGui::Text("Object Manager: 0x%llX", managers::object_manager);
+					ImGui::Text("Object Manager: 0x%llX", managers::game_object_manager);
 
 					ImGui::Text("Render Manager: 0x%llX", managers::render_manager);
 				}

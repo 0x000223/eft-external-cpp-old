@@ -13,6 +13,17 @@ class object
 {
 	// Object
 	// https://docs.unity3d.com/2018.4/Documentation/ScriptReference/Object.html
+
+	// TODO
+	// FindSceneObjectsOfType(MonoObject* ),
+	// FindObjectsOfTypeIncludingAssets(MonoObject* ),
+	// FindObjectsOfTypeImplementation
+	// FindObjectFromInstanceID(int)
+	// FindAllLiveObjects()
+	// FindInstanceIDsOfTypeImplementation()
+	// FindInstanceIDsOfType(Unity::Type, dynamic_array<int ,0> &, bool)
+	// FindObjectOfType(),
+	// FindObjectsOfType()
 	
 public:
 

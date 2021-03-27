@@ -12,6 +12,9 @@
 
 class unity
 {
+	// TODO
+	// FindTypeByPersistentTypeID(int)
+	// 
 	
 public:
 
@@ -93,7 +96,7 @@ public:
 		return 0;
 	}
 
-	static auto find_all_derived_types(uintptr_t unity_type) -> std::vector<uintptr_t>
+	static auto find_all_derived_types(uintptr_t unity_type) -> std::vector<uintptr_t> // TODO - return std::map<std::string, uintptr_t>
 	{
 		if(!managers::type_manager)
 		{

@@ -1,16 +1,16 @@
 #include "managers.hpp"
 
 uintptr_t managers::type_manager		= 0;
-uintptr_t managers::object_manager		= 0;
+uintptr_t managers::game_object_manager	= 0;
 uintptr_t managers::render_manager		= 0;
 uintptr_t managers::network_manager		= 0;
 uintptr_t managers::scripting_manager	= 0;
 
 auto managers::init() -> BOOL
 {
-	object_manager = get_object_manager();
+	game_object_manager = get_object_manager();
 
-	if (!object_manager)
+	if (!game_object_manager)
 	{
 		return FALSE;
 	}
@@ -34,7 +34,7 @@ auto managers::init() -> BOOL
 
 auto managers::release() -> void
 {
-	object_manager = 0;
+	game_object_manager = 0;
 
 	render_manager = 0;
 
