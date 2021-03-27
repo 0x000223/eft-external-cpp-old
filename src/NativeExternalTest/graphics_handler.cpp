@@ -71,21 +71,21 @@ auto graphics_handler::create_d3d11_device(const HWND window_handle, IDXGISwapCh
 	
 	DXGI_MODE_DESC md { 0 };
 
-	md.Height						= 0;
-	md.Width						= 0;
-	md.Format						= DXGI_FORMAT_B8G8R8A8_UNORM;
+	md.Height					= 0;
+	md.Width					= 0;
+	md.Format					= DXGI_FORMAT_B8G8R8A8_UNORM;
 	md.RefreshRate					= DXGI_RATIONAL { 60, 1 };
 	
 	DXGI_SWAP_CHAIN_DESC cd { 0 };
 
 	cd.BufferCount					= 1;
 	cd.BufferDesc					= md;
-	cd.Windowed						= TRUE;
+	cd.Windowed					= TRUE;
 	cd.OutputWindow					= window_handle;
 	cd.SampleDesc					= DXGI_SAMPLE_DESC { 1, 0 };
 	cd.BufferUsage					= DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	cd.SwapEffect					= DXGI_SWAP_EFFECT_DISCARD;
-	cd.Flags						= NULL;
+	cd.Flags					= NULL;
 
 	D3D_FEATURE_LEVEL feature_level_array[] = 
 	{
@@ -100,18 +100,18 @@ auto graphics_handler::create_d3d11_device(const HWND window_handle, IDXGISwapCh
 
 	auto result = D3D11CreateDeviceAndSwapChain
 	(
-		nullptr,							// DXGI adapter
-		D3D_DRIVER_TYPE_HARDWARE,			// Driver type
-		nullptr,							// Software
+		nullptr,				// DXGI adapter
+		D3D_DRIVER_TYPE_HARDWARE,		// Driver type
+		nullptr,				// Software
 		D3D11_CREATE_DEVICE_BGRA_SUPPORT,	// Flags
-		feature_level_array,				// Feature levels
+		feature_level_array,			// Feature levels
 		_countof(feature_level_array),		// Feature levels count
-		D3D11_SDK_VERSION,					// SDK version
-		&cd,								// Swapchain descriptor
-		&swapchain,							// Swapchain pointer
-		&device,							// D3D11 device pointer
-		nullptr,							// Feature levels supported
-		&device_context						// D3D11 device context pointer
+		D3D11_SDK_VERSION,			// SDK version
+		&cd,					// Swapchain descriptor
+		&swapchain,				// Swapchain pointer
+		&device,				// D3D11 device pointer
+		nullptr,				// Feature levels supported
+		&device_context				// D3D11 device context pointer
 	);
 
 	if(FAILED(result))
