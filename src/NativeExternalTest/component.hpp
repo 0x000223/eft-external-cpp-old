@@ -18,7 +18,7 @@ public:
 
 	uint16_t tag;			// Tag is game object its attached to
 
-	uintptr_t transform;	// Transform of the game object its attached to
+	uintptr_t transform;		// Transform of the game object its attached to
 
 	explicit component(const uintptr_t addr) : address(addr)
 	{
