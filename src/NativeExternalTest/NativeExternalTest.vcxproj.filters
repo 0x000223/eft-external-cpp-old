@@ -18,6 +18,12 @@
     <Filter Include="Header Files\Type Files">
       <UniqueIdentifier>{9c01ff70-29be-4ea0-b587-779e1a5e4151}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripting Types">
+      <UniqueIdentifier>{14828542-9563-4999-abd7-7243d172df66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Unity Types">
+      <UniqueIdentifier>{97e8ffb9-3373-469c-b601-e5cfeb7e234c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -147,6 +153,33 @@
     </ClInclude>
     <ClInclude Include="object.hpp">
       <Filter>Header Files\Type Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\camera.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\component.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\debug.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\game_object.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\object.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\transform.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\array_t.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\list_t.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\string_t.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

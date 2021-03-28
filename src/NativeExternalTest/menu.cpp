@@ -8,8 +8,8 @@ HWND menu::window_handle = nullptr;
 
 WNDCLASSEX menu::wc = { 0 };
 
-IDXGISwapChain*			menu::swapchain				= nullptr;
-ID3D11Device*			menu::d3d11_device			= nullptr;
+IDXGISwapChain*		menu::swapchain			= nullptr;
+ID3D11Device*		menu::d3d11_device		= nullptr;
 ID3D11DeviceContext*	menu::d3d11_device_context	= nullptr;
 ID3D11RenderTargetView* menu::d3d11_render_target	= nullptr;
 
@@ -202,7 +202,9 @@ auto menu::window_main() -> void
 
 					if(ImGui::Button("Test Code"))
 					{
-						auto target_object = game_object::find("Captcha");
+						auto found_game_object = game_object::find("GameWorld");
+
+						auto found_component = found_game_object->get_component_by_name("LocalGameWorld");
 
 						
 					}

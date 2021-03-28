@@ -89,7 +89,7 @@
     <SourcePath>$(VC_SourcePath);$(SolutionDir)include;</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)include;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)include;</LibraryPath>
@@ -216,9 +216,18 @@
     <ClInclude Include="overlay.hpp" />
     <ClInclude Include="process_state.hpp" />
     <ClInclude Include="scripting.hpp" />
+    <ClInclude Include="scripting_types\array_t.hpp" />
+    <ClInclude Include="scripting_types\list_t.hpp" />
+    <ClInclude Include="scripting_types\string_t.hpp" />
     <ClInclude Include="string_t.hpp" />
     <ClInclude Include="transform.hpp" />
     <ClInclude Include="unity.hpp" />
+    <ClInclude Include="unity_types\camera.hpp" />
+    <ClInclude Include="unity_types\component.hpp" />
+    <ClInclude Include="unity_types\debug.hpp" />
+    <ClInclude Include="unity_types\game_object.hpp" />
+    <ClInclude Include="unity_types\object.hpp" />
+    <ClInclude Include="unity_types\transform.hpp" />
     <ClInclude Include="utility.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

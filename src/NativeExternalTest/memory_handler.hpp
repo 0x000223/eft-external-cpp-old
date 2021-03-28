@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <array>
+#include <vector>
 
 #include "process_state.hpp"
 #include "bypass_handler.hpp"
@@ -11,6 +13,8 @@
 
 class memory_handler
 {
+	static unsigned long process_id;
+	
 public:
 
 	static auto init() -> bool;
@@ -27,13 +31,11 @@ public:
 
 	static auto read_bytes(uintptr_t from, size_t length) -> void*;
 
+	static auto read_chain(uintptr_t base, std::vector<uintptr_t> offsets) -> uintptr_t;
+	
 	static auto read_narrow_string(uintptr_t string_address) -> std::string;
 	
 	static auto get_module_address(const wchar_t* module_name) -> uintptr_t;
-
-private:
-
-	static unsigned long process_id;
 };
 
 template <typename T>

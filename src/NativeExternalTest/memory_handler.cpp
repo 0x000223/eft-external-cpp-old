@@ -26,6 +26,20 @@ auto memory_handler::read_bytes(const uintptr_t from, const size_t length) -> vo
 	return buffer;
 }
 
+auto memory_handler::read_chain(const uintptr_t base, const std::vector<uintptr_t> offsets) -> uintptr_t
+{
+	auto pointer = base;
+
+	for(const auto& offset : offsets)
+	{
+		auto temp_ptr = read<uintptr_t>(pointer + offset);
+
+		pointer = temp_ptr;
+	}
+
+	return pointer;
+}
+
 auto memory_handler::read_narrow_string(const uintptr_t string_address) -> std::string
 {
 	auto* buffer = static_cast<char*>(read_bytes(string_address, 265)); // Magic
