@@ -109,27 +109,6 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>Library Files\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="string_t.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
-    <ClInclude Include="list_t.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
-    <ClInclude Include="array_t.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game_object.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
-    <ClInclude Include="component.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
-    <ClInclude Include="camera.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
-    <ClInclude Include="transform.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
     <ClInclude Include="menu.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -145,13 +124,7 @@
     <ClInclude Include="unity.hpp">
       <Filter>Header Files\Type Files</Filter>
     </ClInclude>
-    <ClInclude Include="debug.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
     <ClInclude Include="scripting.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
-    <ClInclude Include="object.hpp">
       <Filter>Header Files\Type Files</Filter>
     </ClInclude>
     <ClInclude Include="unity_types\camera.hpp">
@@ -179,6 +152,12 @@
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
     <ClInclude Include="scripting_types\string_t.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="CC_BrightnessContrastGamma.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="ThermalVision.h">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
   </ItemGroup>

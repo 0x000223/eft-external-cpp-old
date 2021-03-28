@@ -24,8 +24,9 @@ public:
 			memory_handler::read<uint32_t>(addr + offset::string::length);
 
 		auto* buffer = 
-			static_cast<wchar_t*>(memory_handler::read_bytes(addr + offset::string::start, 
-				static_cast<size_t>(length) * 2)); // Unicode characters
+			static_cast<wchar_t*>(
+				memory_handler::read_bytes(
+					addr + offset::string::start, static_cast<size_t>(length) * 2)); // Unicode characters
 
 		data = std::wstring(buffer);
 	}

@@ -14,7 +14,6 @@ class unity
 {
 	// TODO
 	// FindTypeByPersistentTypeID(int)
-	// 
 	
 public:
 

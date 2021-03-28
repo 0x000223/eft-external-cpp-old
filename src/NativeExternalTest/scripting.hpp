@@ -36,7 +36,9 @@ struct scripting
 		auto mono_script_manager = 
 			memory_handler::read<uintptr_t>(managers::scripting_manager + 0x30);
 
-		
+		// TODO
+
+		return 0;
 	}
 };
 

@@ -1,6 +1,8 @@
 #include "menu.hpp"
 
 
+
+
 float menu::window_width	= 450;
 float menu::window_height	= 500;
 
@@ -176,57 +178,7 @@ auto menu::window_main() -> void
 				{
 					// Display data about current raid
 
-					static std::vector<game_object> object_list;
-
-					static std::map<std::string, uintptr_t> registered_types;
-				
-					if(ImGui::Button("Get Active Objects"))
-					{
-						object_list = game_object::get_active_objects();
-					}
-				
-					if(ImGui::Button("Get Tagged Objects"))
-					{
-						object_list = game_object::get_tagged_objects();
-					}
-
-					if(ImGui::Button("Get Registered Types"))
-					{
-						registered_types = unity::get_registered_types();
-					}
-
-					if(ImGui::Button("Find Main Camera"))
-					{
-						camera::get_main_camera();
-					}
-
-					if(ImGui::Button("Test Code"))
-					{
-						auto found_game_object = game_object::find("GameWorld");
-
-						auto found_component = found_game_object->get_component_by_name("LocalGameWorld");
-
-						
-					}
-				
-					ImGui::Separator();
-
-					for(auto& type : registered_types)
-					{
-						ImGui::Text("0x%llX", type.second);
-						ImGui::Text("%s", type.first.c_str());
-
-						ImGui::Separator();
-					}
-				
-					for(auto& object : object_list)
-					{
-						ImGui::Text("0x%llX", object.address);
-						ImGui::Text("%s", object.name.c_str());
-						ImGui::Text("Tag: %d", object.tag);
-						
-						ImGui::Separator();
-					}
+					
 				}
 				
 			ImGui::EndChild();

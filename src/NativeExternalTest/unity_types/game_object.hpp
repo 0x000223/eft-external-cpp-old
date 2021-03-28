@@ -71,6 +71,14 @@ public:
 			memory_handler::read<uintptr_t>(addr + offset::game_object::component_count);
 	}
 
+	auto reset() const -> void
+	{
+		// Unity internal
+
+		memory_handler::write<uint32_t>(address + 0x50, 0);
+		memory_handler::write<uint16_t>(address + 0x54, 0);
+	}
+	
 	auto get_transform() const -> uintptr_t // TODO - retrun transform component type instead of address
 	{
 		auto component_array = 
@@ -102,14 +110,23 @@ public:
 		return nullptr;
 	}
 
-	auto reset() const -> void
+	auto get_all_components() const -> std::vector<std::shared_ptr<component>>
 	{
-		// Unity internal
+		auto component_array =
+			memory_handler::read<uintptr_t>(address + offset::game_object::component_array);
 
-		memory_handler::write<uint32_t>(address + 0x50, 0);
-		memory_handler::write<uint16_t>(address + 0x54, 0);
+		std::vector<std::shared_ptr<component>> components;
+		
+		for(unsigned index = 0; index < component_count; index++)
+		{
+			components.push_back(
+				std::make_shared<component>(
+					memory_handler::read<uintptr_t>(component_array + 0x10 * index + 0x8)));
+		}
+
+		return components;
 	}
-
+	
 	static auto query_component_by_type(const game_object* game_object, const uintptr_t unity_type) -> std::shared_ptr<component>
 	{
 		// Unity internal
