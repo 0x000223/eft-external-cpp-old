@@ -13,6 +13,8 @@ struct raid_instance
 	
 	static uintptr_t scripting_class;
 
+	static std::shared_ptr<game_object> main_camera_game_object;
+	
 	// Player list
 
 	// Loot list
@@ -22,7 +24,7 @@ struct raid_instance
 	// Exfils
 
 	
-	static auto init() -> void;
+	static auto init() -> BOOL;
 
 	static auto release() -> void;
 

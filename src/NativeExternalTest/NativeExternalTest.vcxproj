@@ -196,6 +196,7 @@
   <ItemGroup>
     <ClInclude Include="bypass_handler.hpp" />
     <ClInclude Include="CC_BrightnessContrastGamma.hpp" />
+    <ClInclude Include="EFT.Interactive.ExfiltrationPoint.hpp" />
     <ClInclude Include="graphics_handler.hpp" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -210,6 +211,7 @@
     <ClInclude Include="menu.hpp" />
     <ClInclude Include="NightVision.h" />
     <ClInclude Include="offset.hpp" />
+    <ClInclude Include="physical.hpp" />
     <ClInclude Include="process_state.hpp" />
     <ClInclude Include="raid_instance.hpp" />
     <ClInclude Include="render.hpp" />

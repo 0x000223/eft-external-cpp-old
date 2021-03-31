@@ -181,5 +181,11 @@
     <ClInclude Include="scripting_types\EFT.Profile.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
+    <ClInclude Include="EFT.Interactive.ExfiltrationPoint.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="physical.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

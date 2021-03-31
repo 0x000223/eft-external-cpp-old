@@ -4,7 +4,7 @@
 #include "offset.hpp"
 #include "memory_handler.hpp"
 
-class profile
+class player_profile
 {
 	uintptr_t address;
 
@@ -20,7 +20,7 @@ class profile
 	
 public:
 
-	explicit profile(const uintptr_t addr) : address(addr)
+	explicit player_profile(const uintptr_t addr) : address(addr)
 	{
 		id = 
 			memory_handler::read_wide_string(addr + offset::player::profile::id);
