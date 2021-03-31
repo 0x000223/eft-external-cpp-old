@@ -4,7 +4,6 @@
 #include "utility.hpp"
 #include "memory_handler.hpp"
 
-
 struct process_state
 {
 	static DWORD process_id;
@@ -25,5 +24,5 @@ struct process_state
 
 	static auto is_heartbeat() -> bool;
 
-	static auto is_in_raid() -> BOOL;
+	static auto is_in_raid() -> bool;
 };

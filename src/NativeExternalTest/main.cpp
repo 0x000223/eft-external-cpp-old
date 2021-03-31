@@ -13,9 +13,9 @@ auto WinMain(HINSTANCE, HINSTANCE, char*, int) -> int
 	
 	process_state::init();
 
-	render::init();
-
 	managers::init();
+	
+	render::init();
 	
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
@@ -54,6 +54,10 @@ auto WinMain(HINSTANCE, HINSTANCE, char*, int) -> int
 	}
 
 	render::terminate();
+
+	managers::release();
+	
+	process_state::release();
 	
 	memory_handler::terminate();
 

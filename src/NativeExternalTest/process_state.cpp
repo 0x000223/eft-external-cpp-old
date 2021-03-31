@@ -8,11 +8,6 @@ bool		process_state::in_raid			= false;
 
 auto process_state::init() -> BOOL
 {
-	if (!is_heartbeat())
-	{
-		return FALSE;
-	}
-
 	process_id = get_process_id("EscapeFromTarkov");
 
 	if (!process_id)
@@ -20,7 +15,7 @@ auto process_state::init() -> BOOL
 		return FALSE;
 	}
 
-	memory_handler::attach(process_id); // TODO - refactor this
+	memory_handler::attach(process_id);
 	
 	module_address = get_module_address("UnityPlayer.dll");
 
@@ -28,8 +23,6 @@ auto process_state::init() -> BOOL
 	{
 		return FALSE;
 	}
-
-	heartbeat = true;
 
 	return TRUE;
 }
@@ -64,11 +57,9 @@ auto process_state::is_heartbeat() -> bool
 	return get_process_id("EscapeFromTarkov") != NULL;
 }
 
-auto process_state::is_in_raid() -> BOOL
+auto process_state::is_in_raid() -> bool
 {
-	BOOL result = game_object::find("GameWorld") != nullptr;
+	in_raid = game_object::find("GameWorld") != nullptr;
 
-	in_raid = result;
-
-	return result;
+	return in_raid;
 }
