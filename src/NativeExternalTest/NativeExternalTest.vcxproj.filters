@@ -71,6 +71,9 @@
     <ClCompile Include="render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="raid_instance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.hpp">
@@ -168,6 +171,12 @@
     </ClInclude>
     <ClInclude Include="render.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="raid_instance.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EFT.Player.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

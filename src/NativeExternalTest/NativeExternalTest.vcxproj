@@ -189,12 +189,14 @@
     <ClCompile Include="memory_handler.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="process_state.cpp" />
+    <ClCompile Include="raid_instance.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="scripts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bypass_handler.hpp" />
     <ClInclude Include="CC_BrightnessContrastGamma.hpp" />
+    <ClInclude Include="EFT.Player.hpp" />
     <ClInclude Include="graphics_handler.hpp" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -210,6 +212,7 @@
     <ClInclude Include="NightVision.h" />
     <ClInclude Include="offset.hpp" />
     <ClInclude Include="process_state.hpp" />
+    <ClInclude Include="raid_instance.hpp" />
     <ClInclude Include="render.hpp" />
     <ClInclude Include="scripting.hpp" />
     <ClInclude Include="scripting_types\array_t.hpp" />
