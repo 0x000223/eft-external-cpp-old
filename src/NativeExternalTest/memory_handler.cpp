@@ -1,5 +1,7 @@
 #include "memory_handler.hpp"
 
+#pragma warning (disable : 26451)
+
 unsigned long memory_handler::process_id = 0;
 
 auto memory_handler::init() -> bool
@@ -56,6 +58,17 @@ auto memory_handler::read_narrow_string(const uintptr_t string_address) -> std::
 	ret.assign(buffer, count);
 
 	return ret;
+}
+
+auto memory_handler::read_wide_string(const uintptr_t string_address) -> std::wstring
+{
+	auto string_class = read<uintptr_t>(string_address);
+	
+	auto length = read<int32_t>(string_class + offset::string::length);
+
+	auto* buffer = read_bytes(string_class + offset::string::start, length * 2);
+
+	return std::wstring( static_cast<wchar_t*>(buffer) );
 }
 
 auto memory_handler::get_module_address(const wchar_t* module_name) -> uintptr_t

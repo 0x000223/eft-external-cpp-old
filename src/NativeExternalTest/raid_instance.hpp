@@ -11,7 +11,7 @@ struct raid_instance
 
 	static std::vector<std::shared_ptr<component>> attached_components;
 	
-	static uintptr_t scripting_class; // EFT.GameWorld
+	static uintptr_t scripting_class;
 
 	// Player list
 
@@ -21,7 +21,6 @@ struct raid_instance
 
 	// Exfils
 
-	
 	
 	static auto init() -> void;
 

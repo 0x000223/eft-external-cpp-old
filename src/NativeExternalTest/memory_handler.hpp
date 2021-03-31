@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include "offset.hpp"
 #include "bypass_handler.hpp"
 
 #pragma warning(disable : 26495)
@@ -31,6 +32,8 @@ public:
 	static auto read_chain(uintptr_t base, std::vector<uintptr_t> offsets) -> uintptr_t;
 	
 	static auto read_narrow_string(uintptr_t string_address) -> std::string;
+
+	static auto read_wide_string(uintptr_t string_address) -> std::wstring;
 	
 	static auto get_module_address(const wchar_t* module_name) -> uintptr_t;
 };

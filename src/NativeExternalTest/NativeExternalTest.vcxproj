@@ -196,7 +196,6 @@
   <ItemGroup>
     <ClInclude Include="bypass_handler.hpp" />
     <ClInclude Include="CC_BrightnessContrastGamma.hpp" />
-    <ClInclude Include="EFT.Player.hpp" />
     <ClInclude Include="graphics_handler.hpp" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -216,6 +215,8 @@
     <ClInclude Include="render.hpp" />
     <ClInclude Include="scripting.hpp" />
     <ClInclude Include="scripting_types\array_t.hpp" />
+    <ClInclude Include="scripting_types\EFT.Player.hpp" />
+    <ClInclude Include="scripting_types\EFT.Profile.hpp" />
     <ClInclude Include="scripting_types\list_t.hpp" />
     <ClInclude Include="scripting_types\string_t.hpp" />
     <ClInclude Include="scripts.hpp" />

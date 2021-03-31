@@ -175,7 +175,10 @@
     <ClInclude Include="raid_instance.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EFT.Player.hpp">
+    <ClInclude Include="scripting_types\EFT.Player.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\EFT.Profile.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
   </ItemGroup>
