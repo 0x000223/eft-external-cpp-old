@@ -1,11 +1,9 @@
 #pragma once
 #include <Windows.h>
 
-#include "memory_handler.hpp"
 #include "utility.hpp"
+#include "memory_handler.hpp"
 
-#ifndef STATE_HPP
-#define STATE_HPP
 
 struct process_state
 {
@@ -29,5 +27,3 @@ struct process_state
 
 	static auto is_in_raid() -> BOOL;
 };
-
-#endif

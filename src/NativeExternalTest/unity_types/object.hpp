@@ -1,13 +1,8 @@
 #pragma once
-#include <cstdint>
-#include <string>
 
 #include "offset.hpp"
 #include "memory_handler.hpp"
 #include "unity.hpp"
-
-#ifndef OBJECT_HPP
-#define OBJECT_HPP
 
 class object
 {
@@ -44,7 +39,7 @@ public:
 		return 0;
 	}
 
-	auto set_hide_flags(uint8_t hide_flags) const -> void
+	auto set_hide_flags(const uint8_t hide_flags) const -> void
 	{
 		// Unity internal function
 		
@@ -83,5 +78,3 @@ public:
 		// Parse each derived class
 	}
 };
-
-#endif

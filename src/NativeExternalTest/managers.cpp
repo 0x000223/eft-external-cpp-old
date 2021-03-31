@@ -4,7 +4,6 @@ uintptr_t managers::context				= 0;
 uintptr_t managers::type_manager		= 0;
 uintptr_t managers::game_object_manager	= 0;
 uintptr_t managers::render_manager		= 0;
-uintptr_t managers::network_manager		= 0;
 uintptr_t managers::scripting_manager	= 0;
 
 auto managers::init() -> BOOL
@@ -55,8 +54,6 @@ auto managers::release() -> void
 
 	type_manager = 0;
 	
-	network_manager = 0;
-
 	scripting_manager = 0;
 }
 

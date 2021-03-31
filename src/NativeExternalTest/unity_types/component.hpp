@@ -1,9 +1,10 @@
 #pragma once
-#include <cstdint>
 
 #include "offset.hpp"
 #include "memory_handler.hpp"
 #include "object.hpp"
+
+class game_object;
 
 class component : public object
 {
@@ -45,5 +46,12 @@ public:
 			memory_handler::read<uintptr_t>(mono_class + offset::mono::class_namespace);
 
 		return memory_handler::read_narrow_string(namespace_address);
+	}
+
+	auto get_game_object() const -> std::shared_ptr<game_object>
+	{
+		return std::make_shared<game_object>(
+			memory_handler::read<uintptr_t>(
+				address + offset::component::attached_game_object));
 	}
 };

@@ -2,9 +2,8 @@
 
 #include "memory_handler.hpp"
 #include "managers.hpp"
-#include "graphics_handler.hpp"
 #include "process_state.hpp"
-#include "menu.hpp"
+#include "render.hpp"
 
 #pragma warning (disable : 28251)
 
@@ -14,7 +13,7 @@ auto WinMain(HINSTANCE, HINSTANCE, char*, int) -> int
 	
 	process_state::init();
 
-	menu::init();
+	render::init();
 
 	managers::init();
 	
@@ -30,7 +29,7 @@ auto WinMain(HINSTANCE, HINSTANCE, char*, int) -> int
 			continue;
 		}
 
-		menu::render_frame();
+		render::render_frame();
 		
 		if(!process_state::is_heartbeat())
 		{
@@ -51,11 +50,10 @@ auto WinMain(HINSTANCE, HINSTANCE, char*, int) -> int
 			continue;
 		}
 		
-		// Run scripts
-
+		scripts::run_scripts();
 	}
 
-	menu::terminate();
+	render::terminate();
 	
 	memory_handler::terminate();
 

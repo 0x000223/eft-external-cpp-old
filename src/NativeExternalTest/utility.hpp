@@ -1,11 +1,6 @@
 #pragma once
 #include <string>
 
-#ifndef UTILITY_HPP
-#define UTILITY_HPP
-
-// TODO refactor this mess
-
 namespace imported
 {
 	extern "C" __declspec(dllimport) auto get_process_id(const wchar_t* process_name) -> DWORD;
@@ -20,5 +15,3 @@ namespace utility
 		return imported::get_process_id(process_name.data());
 	}
 }
-
-#endif

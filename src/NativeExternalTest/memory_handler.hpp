@@ -1,15 +1,12 @@
 #pragma once
 #include <string>
-#include <array>
 #include <vector>
 
-#include "process_state.hpp"
 #include "bypass_handler.hpp"
 
 #pragma warning(disable : 26495)
 
-// TODO
-// same approach as with graphics handler, refactor to become instance agnostic service provider
+struct process_state;
 
 class memory_handler
 {

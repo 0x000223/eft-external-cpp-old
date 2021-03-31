@@ -1,5 +1,4 @@
 #pragma once
-#include <map>
 #include <Windows.h>
 #include <d3d11.h>
 #include <d2d1.h>
@@ -9,9 +8,8 @@
 
 #pragma warning(disable : 26495)
 
-// TODO
-// rafactor graphics handler class to become instance agnostic service provider
-// remove instance members and keep static create/remove methods 
+#ifndef GRAPHICS_HANDLER_HPP
+#define GRAPHICS_HANDLER_HPP
 
 class graphics_handler
 {
@@ -30,7 +28,9 @@ public:
 	static auto create_d3d11_render_target(IDXGISwapChain* swapchain, ID3D11Device* device, ID3D11RenderTargetView*& render_target) -> BOOL;
 
 	static auto create_d2d1_device_context(IDXGISwapChain* swapchain, ID3D11Device* device, ID2D1DeviceContext*& device_context) -> BOOL;
-	
+
+	static auto create_d2d11_render_target(IDXGISwapChain* swapchain, ID2D1RenderTarget*& d2d1_render_target) -> BOOL;
+
 	static auto release_dxgi_swapchain(IDXGISwapChain* swapchain) -> void;
 
 	static auto release_d3d11_device(ID3D11Device* device) -> void;
@@ -41,9 +41,7 @@ public:
 
 	static auto release_d2d1_device_context(ID2D1DeviceContext* device_context) -> void;
 
-	auto create_solid_brushes() -> void;
-
-	auto release_solid_brushes() -> void;
-	
-	std::map<D2D1::ColorF::Enum, ID2D1SolidColorBrush*> solid_brushes; // TODO
+	static auto release_d2d11_render_target(ID2D1RenderTarget* d2d1_render_target) -> void;
 };
+
+#endif

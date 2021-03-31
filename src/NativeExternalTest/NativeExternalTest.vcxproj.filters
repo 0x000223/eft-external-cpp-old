@@ -59,13 +59,16 @@
     <ClCompile Include="menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="overlay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="managers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="process_state.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scripts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -112,9 +115,6 @@
     <ClInclude Include="menu.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="overlay.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="process_state.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -159,6 +159,15 @@
     </ClInclude>
     <ClInclude Include="ThermalVision.h">
       <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripts.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightVision.h">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="render.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

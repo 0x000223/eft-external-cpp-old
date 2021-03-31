@@ -188,8 +188,9 @@
     <ClCompile Include="managers.cpp" />
     <ClCompile Include="memory_handler.cpp" />
     <ClCompile Include="menu.cpp" />
-    <ClCompile Include="overlay.cpp" />
     <ClCompile Include="process_state.cpp" />
+    <ClCompile Include="render.cpp" />
+    <ClCompile Include="scripts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bypass_handler.hpp" />
@@ -206,13 +207,15 @@
     <ClInclude Include="managers.hpp" />
     <ClInclude Include="memory_handler.hpp" />
     <ClInclude Include="menu.hpp" />
+    <ClInclude Include="NightVision.h" />
     <ClInclude Include="offset.hpp" />
-    <ClInclude Include="overlay.hpp" />
     <ClInclude Include="process_state.hpp" />
+    <ClInclude Include="render.hpp" />
     <ClInclude Include="scripting.hpp" />
     <ClInclude Include="scripting_types\array_t.hpp" />
     <ClInclude Include="scripting_types\list_t.hpp" />
     <ClInclude Include="scripting_types\string_t.hpp" />
+    <ClInclude Include="scripts.hpp" />
     <ClInclude Include="ThermalVision.h" />
     <ClInclude Include="unity.hpp" />
     <ClInclude Include="unity_types\camera.hpp" />

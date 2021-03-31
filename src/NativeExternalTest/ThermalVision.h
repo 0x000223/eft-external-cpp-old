@@ -5,12 +5,17 @@
 
 class ThermalVision
 {
-	
 	uintptr_t address;
 	
 public:
 
 	explicit ThermalVision(const uintptr_t addr) : address(addr) {  }
+
+	auto toggle(const bool value) const -> void
+	{
+		return memory_handler::write(
+			address + offset::scripting::ThermalVision::is_on, value);
+	}
 	
 	auto enable() const -> void
 	{

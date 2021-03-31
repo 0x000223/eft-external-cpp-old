@@ -1,13 +1,10 @@
 #pragma once
-#include <cstdint>
 
-#include "memory_handler.hpp"
 #include "offset.hpp"
+#include "memory_handler.hpp"
+#include "process_state.hpp"
 
-#ifndef MANAGERS_HPP
-#define MANAGERS_HPP
-
-struct managers // Aggregate unity managers
+struct managers
 {
 	static uintptr_t context;
 	
@@ -16,8 +13,6 @@ struct managers // Aggregate unity managers
 	static uintptr_t game_object_manager;
 
 	static uintptr_t render_manager;
-
-	static uintptr_t network_manager;
 
 	static uintptr_t scripting_manager;
 	
@@ -39,5 +34,3 @@ struct managers // Aggregate unity managers
 
 	static auto get_scripting_manager() -> uintptr_t;
 };
-
-#endif

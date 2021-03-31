@@ -1,12 +1,10 @@
 #include "process_state.hpp"
+#include "game_object.hpp"
 
-DWORD process_state::process_id = 0;
-
-uintptr_t process_state::module_address = 0;
-
-bool process_state::heartbeat = false;
-
-bool process_state::in_raid = false;
+DWORD		process_state::process_id		= 0;
+uintptr_t	process_state::module_address	= 0;
+bool		process_state::heartbeat		= false;
+bool		process_state::in_raid			= false;
 
 auto process_state::init() -> BOOL
 {
@@ -68,7 +66,9 @@ auto process_state::is_heartbeat() -> bool
 
 auto process_state::is_in_raid() -> BOOL
 {
-	// TODO - is_in_raid()
+	BOOL result = game_object::find("GameWorld") != nullptr;
 
-	return FALSE;
+	in_raid = result;
+
+	return result;
 }

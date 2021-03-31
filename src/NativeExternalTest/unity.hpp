@@ -5,9 +5,6 @@
 #include "memory_handler.hpp"
 #include "managers.hpp"
 
-#ifndef UNITY_HPP
-#define UNITY_HPP
-
 #pragma warning (disable : 26451)
 
 class unity
@@ -133,5 +130,3 @@ public:
 		return derived_types;
 	}
 };
-
-#endif

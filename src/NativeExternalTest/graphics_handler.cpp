@@ -3,7 +3,7 @@
 #pragma warning (disable : 6387)
 #pragma warning (disable : 4996)
 
-inline auto graphics_handler::create_window(const wchar_t* title_name = L"Default IME") -> HWND
+auto graphics_handler::create_window(const wchar_t* title_name = L"Default IME") -> HWND
 {
 	return imported::create_overlay(title_name);
 }
@@ -71,21 +71,21 @@ auto graphics_handler::create_d3d11_device(const HWND window_handle, IDXGISwapCh
 	
 	DXGI_MODE_DESC md { 0 };
 
-	md.Height					= 0;
-	md.Width					= 0;
-	md.Format					= DXGI_FORMAT_B8G8R8A8_UNORM;
+	md.Height						= 0;
+	md.Width						= 0;
+	md.Format						= DXGI_FORMAT_B8G8R8A8_UNORM;
 	md.RefreshRate					= DXGI_RATIONAL { 60, 1 };
 	
 	DXGI_SWAP_CHAIN_DESC cd { 0 };
 
 	cd.BufferCount					= 1;
 	cd.BufferDesc					= md;
-	cd.Windowed					= TRUE;
+	cd.Windowed						= TRUE;
 	cd.OutputWindow					= window_handle;
 	cd.SampleDesc					= DXGI_SAMPLE_DESC { 1, 0 };
 	cd.BufferUsage					= DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	cd.SwapEffect					= DXGI_SWAP_EFFECT_DISCARD;
-	cd.Flags					= NULL;
+	cd.Flags						= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	D3D_FEATURE_LEVEL feature_level_array[] = 
 	{
@@ -93,25 +93,22 @@ auto graphics_handler::create_d3d11_device(const HWND window_handle, IDXGISwapCh
 		D3D_FEATURE_LEVEL_11_0,
 		D3D_FEATURE_LEVEL_10_1,
 		D3D_FEATURE_LEVEL_10_0,
-		D3D_FEATURE_LEVEL_9_3,
-		D3D_FEATURE_LEVEL_9_2,
-		D3D_FEATURE_LEVEL_9_1
 	};
 
 	auto result = D3D11CreateDeviceAndSwapChain
 	(
-		nullptr,				// DXGI adapter
-		D3D_DRIVER_TYPE_HARDWARE,		// Driver type
-		nullptr,				// Software
+		nullptr,							// DXGI adapter
+		D3D_DRIVER_TYPE_HARDWARE,			// Driver type
+		nullptr,							// Software
 		D3D11_CREATE_DEVICE_BGRA_SUPPORT,	// Flags
-		feature_level_array,			// Feature levels
+		feature_level_array,				// Feature levels
 		_countof(feature_level_array),		// Feature levels count
-		D3D11_SDK_VERSION,			// SDK version
-		&cd,					// Swapchain descriptor
-		&swapchain,				// Swapchain pointer
-		&device,				// D3D11 device pointer
-		nullptr,				// Feature levels supported
-		&device_context				// D3D11 device context pointer
+		D3D11_SDK_VERSION,					// SDK version
+		&cd,								// Swapchain descriptor
+		&swapchain,							// Swapchain pointer
+		&device,							// D3D11 device pointer
+		nullptr,							// Feature levels supported
+		&device_context						// D3D11 device context pointer
 	);
 
 	if(FAILED(result))
@@ -179,7 +176,7 @@ auto graphics_handler::create_d2d1_device_context(IDXGISwapChain* swapchain, ID3
 	D2D1_BITMAP_PROPERTIES1 bitmap_prop = D2D1::BitmapProperties1
 	(
 		D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
-		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
+		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE),
 		dpiX,
 		dpiY
 	);
@@ -198,6 +195,44 @@ auto graphics_handler::create_d2d1_device_context(IDXGISwapChain* swapchain, ID3
 
 	device_context->SetTarget(target_bitmap);
 
+	return TRUE;
+}
+
+auto graphics_handler::create_d2d11_render_target(IDXGISwapChain* swapchain, ID2D1RenderTarget*& d2d1_render_target) -> BOOL
+{
+	if(!swapchain)
+	{
+		return FALSE;
+	}
+
+	IDXGISurface* dxgi_surface;
+	if(swapchain->GetBuffer(0, IID_PPV_ARGS(&dxgi_surface)) != S_OK)
+	{
+		return FALSE;
+	}
+
+	ID2D1Factory1* d2d1_factory;
+	if(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &d2d1_factory) != S_OK)
+	{
+		return FALSE;
+	}
+
+	float dpiX, dpiY;
+	d2d1_factory->GetDesktopDpi(&dpiX, &dpiY);
+	
+	D2D1_RENDER_TARGET_PROPERTIES prop = D2D1::RenderTargetProperties
+	(
+		D2D1_RENDER_TARGET_TYPE_HARDWARE,
+		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
+		dpiX,
+		dpiY
+	);
+
+	if(d2d1_factory->CreateDxgiSurfaceRenderTarget(dxgi_surface, &prop, &d2d1_render_target) != S_OK)
+	{
+		return FALSE;
+	}
+	
 	return TRUE;
 }
 
@@ -246,24 +281,11 @@ auto graphics_handler::release_d2d1_device_context(ID2D1DeviceContext* device_co
 	}
 }
 
-auto graphics_handler::create_solid_brushes() -> void
+auto graphics_handler::release_d2d11_render_target(ID2D1RenderTarget* d2d1_render_target) -> void
 {
-	solid_brushes =
-		{
-			{ D2D1::ColorF::Black, nullptr },
-			{ D2D1::ColorF::White, nullptr },
-			{ D2D1::ColorF::Red,   nullptr },
-			{ D2D1::ColorF::Green, nullptr },
-			{ D2D1::ColorF::Blue,  nullptr }
-		};
-
-	for(auto& brush : solid_brushes)
+	if(d2d1_render_target)
 	{
-		//this->d2d1_device_context->CreateSolidColorBrush(D2D1::ColorF(brush.first), &brush.second);
+		d2d1_render_target->Release();
+		d2d1_render_target = nullptr;
 	}
-}
-
-auto graphics_handler::release_solid_brushes() -> void
-{
-	this->solid_brushes.clear();
 }
