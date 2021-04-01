@@ -62,6 +62,12 @@ auto menu::main_menu_window() -> void
 					{
 						scripts::toggle_night_vision();
 					}
+
+					if(ImGui::Checkbox("Stamina", &scripts::flags::unlimited_stamina))
+					{
+						
+					}
+					
 				}
 
 			ImGui::EndChild();

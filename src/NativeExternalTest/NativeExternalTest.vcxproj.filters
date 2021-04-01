@@ -15,9 +15,6 @@
     <Filter Include="Library Files\imgui">
       <UniqueIdentifier>{a1ff2d80-c96e-4006-ae9f-101449f8bf31}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Type Files">
-      <UniqueIdentifier>{9c01ff70-29be-4ea0-b587-779e1a5e4151}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Scripting Types">
       <UniqueIdentifier>{14828542-9563-4999-abd7-7243d172df66}</UniqueIdentifier>
     </Filter>
@@ -124,12 +121,6 @@
     <ClInclude Include="managers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="unity.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scripting.hpp">
-      <Filter>Header Files\Type Files</Filter>
-    </ClInclude>
     <ClInclude Include="unity_types\camera.hpp">
       <Filter>Header Files\Unity Types</Filter>
     </ClInclude>
@@ -189,6 +180,12 @@
     </ClInclude>
     <ClInclude Include="scripting_types\eft_player_body.hpp">
       <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\scripting.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\unity.hpp">
+      <Filter>Header Files\Unity Types</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

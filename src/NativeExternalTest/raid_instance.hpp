@@ -19,8 +19,6 @@ struct raid_instance
 
 	static std::shared_ptr<player> local_player;
 	
-	// Local player
-	
 	// Player list
 
 	// Loot list
@@ -36,4 +34,6 @@ struct raid_instance
 	static auto get_registered_players() -> std::vector<player>;
 
 	static auto get_local_player() -> std::shared_ptr<player>;
+
+	// Thread - monitor registered players list
 };
