@@ -28,7 +28,7 @@ auto memory_handler::read_bytes(const uintptr_t from, const size_t length) -> vo
 	return buffer;
 }
 
-auto memory_handler::read_chain(const uintptr_t base, const std::vector<uintptr_t> offsets) -> uintptr_t
+auto memory_handler::read_chain(const uintptr_t base, const std::vector<uintptr_t>& offsets) -> uintptr_t
 {
 	auto pointer = base;
 
@@ -68,7 +68,7 @@ auto memory_handler::read_wide_string(const uintptr_t string_address) -> std::ws
 
 	auto* buffer = read_bytes(string_class + offset::string::start, length * 2);
 
-	return std::wstring( static_cast<wchar_t*>(buffer) );
+	return std::wstring().assign(static_cast<const wchar_t*>(buffer), length);
 }
 
 auto memory_handler::get_module_address(const wchar_t* module_name) -> uintptr_t

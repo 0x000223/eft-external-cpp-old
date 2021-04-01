@@ -29,7 +29,7 @@ public:
 
 	static auto read_bytes(uintptr_t from, size_t length) -> void*;
 
-	static auto read_chain(uintptr_t base, std::vector<uintptr_t> offsets) -> uintptr_t;
+	static auto read_chain(uintptr_t base, const std::vector<uintptr_t>& offsets) -> uintptr_t;
 	
 	static auto read_narrow_string(uintptr_t string_address) -> std::string;
 
