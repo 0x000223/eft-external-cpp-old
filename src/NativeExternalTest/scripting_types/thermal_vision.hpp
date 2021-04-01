@@ -3,13 +3,13 @@
 #include "offset.hpp"
 #include "memory_handler.hpp"
 
-class ThermalVision
+class thermal_vision
 {
 	uintptr_t address;
 	
 public:
 
-	explicit ThermalVision(const uintptr_t addr) : address(addr) {  }
+	explicit thermal_vision(const uintptr_t addr) : address(addr) {  }
 
 	auto toggle(const bool value) const -> void
 	{

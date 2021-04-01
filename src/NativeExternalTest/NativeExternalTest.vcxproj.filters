@@ -148,26 +148,8 @@
     <ClInclude Include="unity_types\transform.hpp">
       <Filter>Header Files\Unity Types</Filter>
     </ClInclude>
-    <ClInclude Include="scripting_types\array_t.hpp">
-      <Filter>Header Files\Scripting Types</Filter>
-    </ClInclude>
-    <ClInclude Include="scripting_types\list_t.hpp">
-      <Filter>Header Files\Scripting Types</Filter>
-    </ClInclude>
-    <ClInclude Include="scripting_types\string_t.hpp">
-      <Filter>Header Files\Scripting Types</Filter>
-    </ClInclude>
-    <ClInclude Include="CC_BrightnessContrastGamma.hpp">
-      <Filter>Header Files\Scripting Types</Filter>
-    </ClInclude>
-    <ClInclude Include="ThermalVision.h">
-      <Filter>Header Files\Scripting Types</Filter>
-    </ClInclude>
     <ClInclude Include="scripts.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NightVision.h">
-      <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
     <ClInclude Include="render.hpp">
       <Filter>Header Files</Filter>
@@ -175,16 +157,37 @@
     <ClInclude Include="raid_instance.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scripting_types\EFT.Player.hpp">
+    <ClInclude Include="scripting_types\array_t.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
-    <ClInclude Include="scripting_types\EFT.Profile.hpp">
+    <ClInclude Include="scripting_types\brightness_contrast_gamma.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
-    <ClInclude Include="EFT.Interactive.ExfiltrationPoint.hpp">
+    <ClInclude Include="scripting_types\eft_exfil_point.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
-    <ClInclude Include="physical.hpp">
+    <ClInclude Include="scripting_types\eft_player.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\eft_profile.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\list_t.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\night_vision.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\player_physical.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\string_t.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\thermal_vision.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\eft_player_body.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,7 +4,7 @@
 #include "offset.hpp"
 #include "memory_handler.hpp"
 
-class CC_BrightnessContrastGamma
+class brightness_contrast_gamma
 {
 	float brightness;
 
@@ -22,7 +22,7 @@ public:
 
 	uintptr_t address;
 
-	CC_BrightnessContrastGamma(uintptr_t addr) : address(addr)
+	brightness_contrast_gamma(uintptr_t addr) : address(addr)
 	{
 		
 	}

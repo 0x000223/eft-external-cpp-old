@@ -2,6 +2,7 @@
 
 std::shared_ptr<game_object>				raid_instance::attached_game_object		= nullptr;
 std::shared_ptr<game_object>				raid_instance::main_camera_game_object	= nullptr;
+std::shared_ptr<player>						raid_instance::local_player				= nullptr;
 std::vector<std::shared_ptr<component>>		raid_instance::attached_components		= std::vector<std::shared_ptr<component>>();
 uintptr_t									raid_instance::scripting_class			= 0;
 
@@ -29,13 +30,17 @@ auto raid_instance::init() -> BOOL
 	{
 		return FALSE;
 	}
+
+	local_player = get_local_player();
+	
+	process_state::is_in_raid = true;
 	
 	return TRUE;
 }
 
 auto raid_instance::release() -> void
 {
-	attached_game_object->reset();
+	attached_game_object.reset();
 
 	for(auto& component : attached_components)
 	{
@@ -44,5 +49,32 @@ auto raid_instance::release() -> void
 
 	scripting_class = 0;
 
-	main_camera_game_object->reset();
+	main_camera_game_object.reset();
+
+	local_player.reset();
+
+	process_state::is_in_raid = false;
+}
+
+auto raid_instance::get_registered_players() -> std::vector<player>
+{
+	auto players = 
+		list_t<player>( memory_handler::read<uintptr_t>(scripting_class + offset::game_world::registered_players) );
+
+	return players.data;
+}
+
+auto raid_instance::get_local_player() -> std::shared_ptr<player>
+{
+	auto players = get_registered_players();
+
+	for(auto& object : players)
+	{
+		if(object.is_local)
+		{
+			return std::make_shared<player>(object);
+		}
+	}
+
+	return nullptr;
 }

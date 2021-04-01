@@ -195,8 +195,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bypass_handler.hpp" />
-    <ClInclude Include="CC_BrightnessContrastGamma.hpp" />
-    <ClInclude Include="EFT.Interactive.ExfiltrationPoint.hpp" />
     <ClInclude Include="graphics_handler.hpp" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -209,20 +207,23 @@
     <ClInclude Include="managers.hpp" />
     <ClInclude Include="memory_handler.hpp" />
     <ClInclude Include="menu.hpp" />
-    <ClInclude Include="NightVision.h" />
     <ClInclude Include="offset.hpp" />
-    <ClInclude Include="physical.hpp" />
     <ClInclude Include="process_state.hpp" />
     <ClInclude Include="raid_instance.hpp" />
     <ClInclude Include="render.hpp" />
     <ClInclude Include="scripting.hpp" />
     <ClInclude Include="scripting_types\array_t.hpp" />
-    <ClInclude Include="scripting_types\EFT.Player.hpp" />
-    <ClInclude Include="scripting_types\EFT.Profile.hpp" />
+    <ClInclude Include="scripting_types\brightness_contrast_gamma.hpp" />
+    <ClInclude Include="scripting_types\eft_exfil_point.hpp" />
+    <ClInclude Include="scripting_types\eft_player.hpp" />
+    <ClInclude Include="scripting_types\eft_player_body.hpp" />
+    <ClInclude Include="scripting_types\eft_profile.hpp" />
     <ClInclude Include="scripting_types\list_t.hpp" />
+    <ClInclude Include="scripting_types\night_vision.hpp" />
+    <ClInclude Include="scripting_types\player_physical.hpp" />
     <ClInclude Include="scripting_types\string_t.hpp" />
+    <ClInclude Include="scripting_types\thermal_vision.hpp" />
     <ClInclude Include="scripts.hpp" />
-    <ClInclude Include="ThermalVision.h" />
     <ClInclude Include="unity.hpp" />
     <ClInclude Include="unity_types\camera.hpp" />
     <ClInclude Include="unity_types\component.hpp" />

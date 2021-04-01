@@ -7,8 +7,8 @@
 #include "camera.hpp"
 #include "scripts.hpp"
 
-#include "CC_BrightnessContrastGamma.hpp"
-#include "ThermalVision.h"
+#include "brightness_contrast_gamma.hpp"
+#include "thermal_vision.hpp"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"

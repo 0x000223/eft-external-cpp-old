@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <thread>
 
 #include "memory_handler.hpp"
 #include "managers.hpp"
@@ -16,6 +17,8 @@ auto WinMain(HINSTANCE, HINSTANCE, char*, int) -> int
 	managers::init();
 	
 	render::init();
+
+	std::thread thread_state_monitor { process_state::process_state_monitor };
 	
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
@@ -28,29 +31,13 @@ auto WinMain(HINSTANCE, HINSTANCE, char*, int) -> int
 			DispatchMessage(&msg);
 			continue;
 		}
-
+		
 		render::render_frame();
-		
-		if(!process_state::is_heartbeat())
+
+		if(process_state::is_in_raid)
 		{
-			// Handle process not running
-
-			if(process_state::init())
-			{
-				managers::init();
-			}
-			
-			continue;
+			scripts::run_scripts();
 		}
-
-		if(!process_state::is_in_raid())
-		{
-			// Handle process not in raid
-
-			continue;
-		}
-		
-		scripts::run_scripts();
 	}
 
 	render::terminate();

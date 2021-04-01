@@ -1,10 +1,11 @@
 #include "process_state.hpp"
 #include "game_object.hpp"
+#include "raid_instance.hpp"
 
 DWORD		process_state::process_id		= 0;
 uintptr_t	process_state::module_address	= 0;
-bool		process_state::heartbeat		= false;
-bool		process_state::in_raid			= false;
+bool		process_state::is_heartbeat		= false;
+bool		process_state::is_in_raid			= false;
 
 auto process_state::init() -> BOOL
 {
@@ -24,6 +25,8 @@ auto process_state::init() -> BOOL
 		return FALSE;
 	}
 
+	is_heartbeat = true;
+	
 	return TRUE;
 }
 
@@ -33,9 +36,9 @@ auto process_state::release() -> void
 
 	module_address = 0;
 
-	heartbeat = false;
+	is_heartbeat = false;
 
-	in_raid = false;
+	is_in_raid = false;
 }
 
 auto process_state::get_process_id(std::string process_name) -> DWORD
@@ -52,14 +55,66 @@ auto process_state::get_module_address(std::string module_name) -> uintptr_t
 	return memory_handler::get_module_address(wide_module_name.data());
 }
 
-auto process_state::is_heartbeat() -> bool
+auto process_state::check_heartbeat() -> bool
 {
 	return get_process_id("EscapeFromTarkov") != NULL;
 }
 
-auto process_state::is_in_raid() -> bool
+auto process_state::check_in_raid() -> bool
 {
-	in_raid = game_object::find("GameWorld") != nullptr;
+	return game_object::find("GameWorld") != nullptr;
+}
 
-	return in_raid;
+auto process_state::process_state_monitor() -> void
+{
+	// Runs on a separate thread 
+	// monitors process state (heartbeat / raid status) & updates state flags
+	
+	while(true)
+	{
+		Sleep(1000);
+		
+		if(!check_heartbeat() || (check_heartbeat() && !is_heartbeat))
+		{
+			// Capture if process not running OR just launched
+			
+			if(is_heartbeat)
+			{
+				raid_instance::release();
+
+				managers::release();
+				
+				release();
+			}
+			else
+			{
+				// !is_heartbeat => requries initialization
+				
+				if(init())
+				{
+					managers::init();		
+				}
+			}
+			
+			continue;
+		}
+
+		if(!check_in_raid() || (check_in_raid() && !is_in_raid))
+		{
+			// Capture not in raid OR just got into a raid
+			
+			if(is_in_raid)
+			{
+				// Release raid instance resources
+
+				raid_instance::release();
+			}
+			else
+			{
+				// !is_in_raid => requires initialization
+
+				raid_instance::init();
+			}
+		}
+	}
 }

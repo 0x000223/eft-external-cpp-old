@@ -4,13 +4,13 @@
 #include "offset.hpp"
 #include "memory_handler.hpp"
 
-class NightVision
+class night_vision
 {
 	uintptr_t address;
 
 public:
 
-	explicit NightVision(const uintptr_t addr) : address(addr) {  }
+	explicit night_vision(const uintptr_t addr) : address(addr) {  }
 	
 	auto toggle(const bool value) const -> void
 	{

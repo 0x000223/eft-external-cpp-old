@@ -35,13 +35,6 @@ auto managers::init() -> BOOL
 	{
 		return FALSE;
 	}
-
-	scripting_manager = get_scripting_manager();
-
-	if(!scripting_manager)
-	{
-		return FALSE;
-	}
 	
 	return TRUE;
 }
@@ -70,7 +63,7 @@ auto managers::get_context() -> uintptr_t
 
 auto managers::get_manager_from_context(const int index) -> uintptr_t
 {
-	return memory_handler::read<uintptr_t>(context + 0x8 * index);
+	return memory_handler::read<uintptr_t>(context + 0x8 * index); // TODO
 }
 
 auto managers::get_type_manager() -> uintptr_t

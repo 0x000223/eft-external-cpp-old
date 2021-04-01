@@ -20,20 +20,17 @@ public:
 		auto temp = 
 			memory_handler::read<uintptr_t>(addr + offset::player::physical::stamina);
 
-		stamina_address =
-			memory_handler::read<uintptr_t>(temp + 0x48); // Current
+		stamina_address = temp + 0x48; // Current value
 
 		temp =
 			memory_handler::read<uintptr_t>(addr + offset::player::physical::hands_stamina);
 
-		hands_stamina_address =
-			memory_handler::read<uintptr_t>(temp + 0x48);
+		hands_stamina_address = temp + 0x48;
 
 		temp =
 			memory_handler::read<uintptr_t>(addr + offset::player::physical::oxygen);
 
-		oxygen_address =
-			memory_handler::read<uintptr_t>(temp + 0x48);
+		oxygen_address = temp + 0x48;
 	}
 
 	auto get_address() const -> uintptr_t

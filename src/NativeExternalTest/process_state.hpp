@@ -1,4 +1,5 @@
 #pragma once
+#include <thread>
 #include <Windows.h>
 
 #include "utility.hpp"
@@ -10,9 +11,9 @@ struct process_state
 
 	static uintptr_t module_address;
 	
-	static bool heartbeat;
+	static bool is_heartbeat;
 
-	static bool in_raid;
+	static bool is_in_raid;
 
 	static auto init() -> BOOL;
 
@@ -22,7 +23,9 @@ struct process_state
 
 	static auto get_module_address(std::string module_name) -> uintptr_t;
 
-	static auto is_heartbeat() -> bool;
+	static auto check_heartbeat() -> bool;
 
-	static auto is_in_raid() -> bool;
+	static auto check_in_raid() -> bool;
+
+	static auto process_state_monitor() -> void;
 };

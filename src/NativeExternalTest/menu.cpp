@@ -53,12 +53,12 @@ auto menu::main_menu_window() -> void
 
 					// Scripts - (recoil / stamina / aim)
 
-					if(ImGui::Checkbox("Thermal Vision", &scripts::thermal_vision))
+					if(ImGui::Checkbox("Thermal Vision", &scripts::flags::thermal_vision))
 					{
 						scripts::toggle_thermal_vision();
 					}
 
-					if(ImGui::Checkbox("Night Vision", &scripts::night_vision))
+					if(ImGui::Checkbox("Night Vision", &scripts::flags::night_vision))
 					{
 						scripts::toggle_night_vision();
 					}
