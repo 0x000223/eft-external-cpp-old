@@ -59,7 +59,7 @@ auto raid_instance::release() -> void
 auto raid_instance::get_registered_players() -> std::vector<player>
 {
 	auto players = 
-		list_t<player>( memory_handler::read<uintptr_t>(scripting_class + offset::game_world::registered_players) );
+		generic_list<player>( memory_handler::read<uintptr_t>(scripting_class + offset::game_world::registered_players) );
 
 	return players.data;
 }

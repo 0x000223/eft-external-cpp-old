@@ -5,6 +5,8 @@
 
 class player_body
 {
+	// EFT.PlayerBody
+	
 	uintptr_t address;
 	
 public:

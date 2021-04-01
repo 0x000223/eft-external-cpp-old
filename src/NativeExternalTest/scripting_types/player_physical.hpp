@@ -5,6 +5,8 @@
 
 class player_physical
 {
+	// \uE20C
+	
 	uintptr_t address;
 
 	uintptr_t stamina_address;

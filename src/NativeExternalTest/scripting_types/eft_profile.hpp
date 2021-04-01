@@ -7,6 +7,8 @@
 
 class player_profile
 {
+	// EFT.Profile
+	
 	uintptr_t address;
 
 	std::wstring id;

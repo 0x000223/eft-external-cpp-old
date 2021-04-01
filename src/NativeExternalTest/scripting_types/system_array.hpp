@@ -9,8 +9,10 @@
 #define ARRAY_T_HPP
 
 template<typename T>
-class array_t
+class system_array
 {
+	// System.Array
+	
 public:
 
 	uintptr_t address;
@@ -19,7 +21,7 @@ public:
 	
 	std::vector<T> data;
 
-	explicit array_t(const uintptr_t addr) : address(addr)
+	explicit system_array(const uintptr_t addr) : address(addr)
 	{
 		count = 
 			memory_handler::read<uint32_t>(addr + offset::array::count);

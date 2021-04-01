@@ -6,6 +6,8 @@
 
 class brightness_contrast_gamma
 {
+	// CC_BrightnessContrastGamma
+	
 	float brightness;
 
 	float contrast;

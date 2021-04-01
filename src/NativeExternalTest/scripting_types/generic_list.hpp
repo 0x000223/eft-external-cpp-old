@@ -9,8 +9,10 @@
 #define LIST_T_HPP
 
 template<typename T>
-class list_t
+class generic_list
 {
+	// System.Collections.Geenric.List<T>
+	
 public:
 
 	uintptr_t address;
@@ -19,7 +21,7 @@ public:
 
 	std::vector<T> data;
 	
-	explicit list_t(const uintptr_t addr) : address(addr)
+	explicit generic_list(const uintptr_t addr) : address(addr)
 	{
 		count = 
 			memory_handler::read<uint32_t>(addr + offset::generic_list::count);

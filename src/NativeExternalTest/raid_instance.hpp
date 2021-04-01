@@ -4,7 +4,7 @@
 #include "offset.hpp"
 #include "memory_handler.hpp"
 #include "game_object.hpp"
-#include "list_t.hpp"
+#include "generic_list.hpp"
 #include "eft_player.hpp"
 
 struct raid_instance

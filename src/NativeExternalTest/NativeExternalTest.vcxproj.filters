@@ -148,7 +148,7 @@
     <ClInclude Include="raid_instance.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scripting_types\array_t.hpp">
+    <ClInclude Include="scripting_types\system_array.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
     <ClInclude Include="scripting_types\brightness_contrast_gamma.hpp">
@@ -163,7 +163,7 @@
     <ClInclude Include="scripting_types\eft_profile.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
-    <ClInclude Include="scripting_types\list_t.hpp">
+    <ClInclude Include="scripting_types\generic_list.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
     <ClInclude Include="scripting_types\night_vision.hpp">
@@ -172,7 +172,7 @@
     <ClInclude Include="scripting_types\player_physical.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
-    <ClInclude Include="scripting_types\string_t.hpp">
+    <ClInclude Include="scripting_types\system_string.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
     <ClInclude Include="scripting_types\thermal_vision.hpp">
@@ -186,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="unity_types\unity.hpp">
       <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\skeleton.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

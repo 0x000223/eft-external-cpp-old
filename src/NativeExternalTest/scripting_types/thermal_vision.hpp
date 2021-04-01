@@ -5,6 +5,8 @@
 
 class thermal_vision
 {
+	// ThermalVision
+	
 	uintptr_t address;
 	
 public:

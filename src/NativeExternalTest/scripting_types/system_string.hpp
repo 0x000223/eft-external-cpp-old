@@ -8,8 +8,10 @@
 #ifndef STRING_T_HPP
 #define STRING_T_HPP
 
-class string_t
+class system_string
 {
+	// System.String
+	
 public:
 
 	uintptr_t address;
@@ -18,7 +20,7 @@ public:
 
 	std::wstring data;
 	
-	explicit string_t(const uintptr_t addr) : address(addr)
+	explicit system_string(const uintptr_t addr) : address(addr)
 	{
 		length = 
 			memory_handler::read<uint32_t>(addr + offset::string::length);

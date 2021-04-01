@@ -8,6 +8,8 @@
 
 class player
 {
+	// EFT.Player
+	
 	uintptr_t address;
 	
 public:

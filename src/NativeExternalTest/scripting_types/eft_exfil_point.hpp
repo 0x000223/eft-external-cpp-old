@@ -6,6 +6,8 @@
 
 class exfil_point
 {
+	// EFT.Interactive.ExfiltrationPoint
+	
 	uintptr_t address;
 
 	std::wstring name;
