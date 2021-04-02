@@ -142,9 +142,6 @@
     <ClInclude Include="scripts.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="render.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="raid_instance.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

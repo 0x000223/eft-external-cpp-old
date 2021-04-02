@@ -3,8 +3,11 @@
 
 #include "offset.hpp"
 #include "memory_handler.hpp"
+#include "utility.hpp"
+#include "transform.hpp"
 #include "eft_profile.hpp"
 #include "player_physical.hpp"
+#include "eft_player_body.hpp"
 
 class player
 {
@@ -20,7 +23,9 @@ public:
 
 	std::shared_ptr<player_physical> physical;
 
-	std::wstring name;
+	std::shared_ptr<player_body> body;
+	
+	std::string name;
 	
 	explicit player(const uintptr_t addr) : address(addr)
 	{
@@ -35,12 +40,32 @@ public:
 			std::make_shared<player_physical>(
 				memory_handler::read<uintptr_t>(
 					addr + offset::player::player_physical));
+
+		body =
+			std::make_shared<player_body>(
+				memory_handler::read<uintptr_t>(addr + offset::player::player_body));
+
 		
-		name = profile->get_nickname();
+		name = utility::wide_to_narrow(profile->get_nickname());
 	}
 
 	auto get_address() const -> uintptr_t
 	{
 		return address;
+	}
+
+	bool operator ! () const
+	{
+		return !this->address;
+	}
+	
+	bool operator == (player& other) const
+	{
+		return this->address == other.address;
+	}
+
+	bool operator != (player& other) const
+	{
+		return this->address != other.address;
 	}
 };

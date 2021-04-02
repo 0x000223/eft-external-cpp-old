@@ -34,9 +34,7 @@ class skeleton
 		
 		for(unsigned index = 0; index < count; index++)
 		{
-			auto wide_string_address = memory_handler::read<uintptr_t>(base + index * 8);
-
-			ret_keys.push_back( memory_handler::read_wide_string( wide_string_address ) );
+			ret_keys.push_back( memory_handler::read_wide_string( base + index * 8 ) );
 		}
 
 		return ret_keys;

@@ -54,7 +54,7 @@ auto render::init() -> BOOL
 
 	ImGuiIO& io = ImGui::GetIO();
 	
-	font_cascadia = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\CascadiaCode-Regular.ttf)", 13.f);
+	font_cascadia = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\CascadiaCode-Regular.ttf)", 13.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
 	
 	menu::set_menu_style();
 	
@@ -96,8 +96,10 @@ auto render::render_frame() -> void
 		menu::main_menu_window();
 	}
 
-	// Check if in raid
-	overlay_window();
+	if(process_state::is_in_raid)
+	{
+		overlay_window();
+	}
 	
 	ImGui::Render();
 
@@ -159,7 +161,22 @@ auto render::overlay_window() -> void
 	{
 		// Check draw distance
 
-		// Player iteration
+		for(auto& player : raid_instance::players)
+		{
+			auto head3 = transform::get_position(player.body->bones->head);
+			auto head2 = camera::world_to_screen(head3);
+
+			if(!head2 || player == *raid_instance::local_player)
+			{
+				continue;
+			}
+
+			auto local_head_3 = transform::get_position(raid_instance::local_player->body->bones->head);
+			auto local_head_2 = camera::world_to_screen(local_head_3);
+			
+			draw_text( ImVec2(head2.x, head2.y), ImColor(0, 255, 0, 255), player.name );
+			draw_text( ImVec2( head2.x, head2.y - 10.f ), ImColor( 255, 255, 255, 255 ), std::to_string(local_head_3.distance(head3)));
+		}
 		
 	}
 	
@@ -170,7 +187,7 @@ auto render::draw_text(const ImVec2 pos, const ImColor color, std::string text) 
 {
 	ImGui::PushFont(font_cascadia);
 	
-	ImGui::GetWindowDrawList()->AddText(pos, color, text.data(), text.data() + text.length());
+	ImGui::GetWindowDrawList()->AddText(pos, color, text.c_str());
 
 	ImGui::PopFont();
 }

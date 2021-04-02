@@ -210,7 +210,6 @@
     <ClInclude Include="offset.hpp" />
     <ClInclude Include="process_state.hpp" />
     <ClInclude Include="raid_instance.hpp" />
-    <ClInclude Include="render.hpp" />
     <ClInclude Include="scripting_types\system_array.hpp" />
     <ClInclude Include="scripting_types\brightness_contrast_gamma.hpp" />
     <ClInclude Include="scripting_types\eft_exfil_point.hpp" />

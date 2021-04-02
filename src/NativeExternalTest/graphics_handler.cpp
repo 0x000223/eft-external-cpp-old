@@ -31,7 +31,7 @@ auto graphics_handler::create_native_window(HWND& window_handle, WNDCLASSEX& win
 
 	RegisterClassEx(&window_class);
 
-	window_handle = CreateWindowExW
+	window_handle = CreateWindowEx
 	(
 		extended_window_style,
 		class_name,

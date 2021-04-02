@@ -30,8 +30,9 @@ public:
 	{
 		// TODO
 	}
+
+	virtual ~object();
 	
-	// GetInstanceID
 	auto get_instance_id() const -> int
 	{ 
 		// TODO
@@ -78,3 +79,8 @@ public:
 		// Parse each derived class
 	}
 };
+
+inline object::~object()
+{
+	// TEST
+}

@@ -1,6 +1,6 @@
 #include "menu.hpp"
 
-bool menu::show_menu		= false;
+bool menu::show_menu = false;
 
 auto menu::set_menu_style() -> void
 {
@@ -67,7 +67,6 @@ auto menu::main_menu_window() -> void
 					{
 						
 					}
-					
 				}
 
 			ImGui::EndChild();

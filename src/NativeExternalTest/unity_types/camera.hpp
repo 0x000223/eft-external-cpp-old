@@ -7,6 +7,8 @@
 #include "game_object.hpp"
 #include "unity.hpp"
 #include "component.hpp"
+#include "utility.hpp"
+#include "raid_instance.hpp"
 
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
@@ -42,8 +44,59 @@ public:
 	{
 		return memory_handler::write(address + offset::camera::depth, new_depth);
 	}
+
+	auto get_view_matrix() const -> matrix44
+	{
+		return memory_handler::read<matrix44>(address + offset::camera::view_matrix);
+	}
+
+	static auto world_to_screen(const vector3& pos) -> vector2
+	{
+		auto temp = raid_instance::main_camera_component->get_view_matrix();
+		
+		auto view_matrix = matrix44::transpose(temp);
+
+		const vector3 up			= { view_matrix._21, view_matrix._22, view_matrix._23 };
+		const vector3 right			= { view_matrix._11, view_matrix._12, view_matrix._13 };
+
+		vector2 ret { 0 };
+		
+		const float w =
+			{
+				view_matrix._41 * pos.x +
+				view_matrix._42 * pos.y +
+				view_matrix._43 * pos.z +
+				view_matrix._44
+			};
+
+		if(w < 0.1f)
+		{
+			return vector2 { 0 };
+		}
+		
+		ret.x =
+			{
+				view_matrix._11 * pos.x +
+				view_matrix._12 * pos.y +
+				view_matrix._13 * pos.z +
+				view_matrix._14
+			};
+
+		ret.y =
+			{
+				view_matrix._21 * pos.x +
+				view_matrix._22 * pos.y +
+				view_matrix._23 * pos.z +
+				view_matrix._24
+			};
+
+		ret.x = ( 1920.f / 2.f ) * ( 1.f + ret.x / w ); // TODO - refactor hardcoded monitor dimensions
+		ret.y = ( 1080.f / 2.f ) * ( 1.f - ret.y / w );
+
+		return ret;
+	}
 	
-	static auto get_main_camera() -> std::shared_ptr<component>
+	static auto get_main_camera() -> std::shared_ptr<camera>
 	{
 		uint16_t main_camera_tag = 5;
 		
@@ -51,7 +104,9 @@ public:
 
 		auto camera_type = unity::find_type_by_name("Camera");
 		
-		return game_object::query_component_by_type(camera_game_object.get(), camera_type);
+		auto camera_component = game_object::query_component_by_type(camera_game_object.get(), camera_type);
+
+		return std::make_shared<camera>(camera_component->address);
 	}
 
 	static auto get_all_cameras_count() -> unsigned

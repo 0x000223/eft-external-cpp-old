@@ -1,8 +1,10 @@
 #include "raid_instance.hpp"
+#include "camera.hpp"
 
 std::shared_ptr<game_object>				raid_instance::attached_game_object		= nullptr;
-std::shared_ptr<game_object>				raid_instance::main_camera_game_object	= nullptr;
+std::shared_ptr<camera>					    raid_instance::main_camera_component	= nullptr;
 std::shared_ptr<player>						raid_instance::local_player				= nullptr;
+std::vector<player>							raid_instance::players					= std::vector<player>();
 std::vector<std::shared_ptr<component>>		raid_instance::attached_components		= std::vector<std::shared_ptr<component>>();
 uintptr_t									raid_instance::scripting_class			= 0;
 
@@ -24,14 +26,16 @@ auto raid_instance::init() -> BOOL
 		return FALSE;
 	}
 	
-	main_camera_game_object = game_object::find_with_tag(5);
+	main_camera_component = camera::get_main_camera();
 	
-	if(!main_camera_game_object)
+	if(!main_camera_component)
 	{
 		return FALSE;
 	}
-
+	
 	local_player = get_local_player();
+
+	players = get_registered_players();
 	
 	process_state::is_in_raid = true;
 	
@@ -49,8 +53,8 @@ auto raid_instance::release() -> void
 
 	scripting_class = 0;
 
-	main_camera_game_object.reset();
-
+	main_camera_component.reset();
+	
 	local_player.reset();
 
 	process_state::is_in_raid = false;

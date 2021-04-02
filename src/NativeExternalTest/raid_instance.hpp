@@ -7,6 +7,8 @@
 #include "generic_list.hpp"
 #include "eft_player.hpp"
 
+class camera;
+
 struct raid_instance
 {
 	static std::shared_ptr<game_object> attached_game_object;
@@ -15,12 +17,12 @@ struct raid_instance
 	
 	static uintptr_t scripting_class;
 
-	static std::shared_ptr<game_object> main_camera_game_object;
-
-	static std::shared_ptr<player> local_player;
+	static std::shared_ptr<camera> main_camera_component;
 	
-	// Player list
+	static std::shared_ptr<player> local_player;
 
+	static std::vector<player> players;
+	
 	// Loot list
 
 	// Corpse list
