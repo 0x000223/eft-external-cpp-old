@@ -6,6 +6,8 @@
 
 struct managers
 {
+	// TODO - refactor into a container
+	
 	static uintptr_t context;
 	
 	static uintptr_t type_manager;
@@ -15,6 +17,8 @@ struct managers
 	static uintptr_t render_manager;
 
 	static uintptr_t scripting_manager;
+
+	static uintptr_t persistent_manager;
 	
 	static auto init() -> BOOL;
 
@@ -33,4 +37,6 @@ struct managers
 	static auto get_network_manager() -> uintptr_t;
 
 	static auto get_scripting_manager() -> uintptr_t;
+
+	static auto get_persistent_manager() -> uintptr_t;
 };

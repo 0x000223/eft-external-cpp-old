@@ -15,6 +15,6 @@ public:
 	auto toggle(const bool value) const -> void
 	{
 		return memory_handler::write<bool>(
-			address + offset::scripting::NightVision::is_on, value);
+			address + offset::night_vision::is_on, value);
 	}
 };

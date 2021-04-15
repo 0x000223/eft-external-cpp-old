@@ -11,7 +11,7 @@
 #include "managers.hpp"
 
 
-class game_object : public object
+class game_object
 {
 	// GameObject
 	// https://docs.unity3d.com/2018.4/Documentation/ScriptReference/GameObject.html
@@ -29,6 +29,8 @@ class game_object : public object
 	
 public:
 
+	uintptr_t address;
+	
 	bool is_active_self;
 	
 	bool is_active;
@@ -42,8 +44,10 @@ public:
 	uintptr_t transform;
 	
 	uintptr_t component_count;
+
+	game_object() = default;
 	
-	explicit game_object(const uintptr_t addr) : object(addr)
+	explicit game_object(const uintptr_t addr) : address(addr)
 	{
 		auto name_address =
 			memory_handler::read<uintptr_t>(addr + offset::game_object::name);
@@ -70,6 +74,18 @@ public:
 			memory_handler::read<uintptr_t>(addr + offset::game_object::component_count);
 	}
 
+	game_object(const game_object& other)
+	{
+		address			= other.address;
+		name			= other.name;
+		tag				= other.tag;
+		layer			= other.layer;
+		is_active_self	= other.is_active_self;
+		is_active		= other.is_active;
+		transform		= other.transform;
+		component_count = other.component_count;
+	}
+	
 	auto reset() const -> void
 	{
 		// Unity internal
@@ -78,7 +94,7 @@ public:
 		memory_handler::write<uint16_t>(address + 0x54, 0);
 	}
 	
-	auto get_transform() const -> uintptr_t // TODO - retrun transform component type instead of address
+	auto get_transform() const -> uintptr_t
 	{
 		auto component_array = 
 			memory_handler::read<uintptr_t>(address + offset::game_object::component_array);
@@ -86,10 +102,11 @@ public:
 		auto transform_component = 
 			memory_handler::read<uintptr_t>(component_array + offset::component::next_component);
 
-		return memory_handler::read<uintptr_t>(transform_component + offset::component::scripting_class);
+		return memory_handler::read<uintptr_t>(
+			transform_component + offset::component::scripting_class);
 	}
 
-	auto get_component_by_name(std::string component_name) const -> std::shared_ptr<component>
+	auto get_component_by_name(const std::string component_name) const -> component
 	{
 		auto component_array = 
 			memory_handler::read<uintptr_t>(address + offset::game_object::component_array);
@@ -97,48 +114,47 @@ public:
 		for(unsigned index = 0; index < component_count; index++)
 		{
 			auto temp_component = 
-				std::make_shared<component>(
+				component(
 					memory_handler::read<uintptr_t>(component_array + 0x10 * index + 0x8));
 
-			if(temp_component->class_name.find(component_name) != std::string::npos)
+			if(temp_component.class_name.find(component_name) != std::string::npos)
 			{
 				return temp_component;
 			}
 		}
 
-		return nullptr;
+		return component { 0 };
 	}
 
-	auto get_all_components() const -> std::vector<std::shared_ptr<component>>
+	auto get_all_components() const -> std::vector<component>
 	{
 		auto component_array =
 			memory_handler::read<uintptr_t>(address + offset::game_object::component_array);
 
-		std::vector<std::shared_ptr<component>> components;
+		std::vector<component> components;
 		
 		for(unsigned index = 0; index < component_count; index++)
 		{
-			components.push_back(
-				std::make_shared<component>(
-					memory_handler::read<uintptr_t>(component_array + 0x10 * index + 0x8)));
+			components.emplace_back(
+				memory_handler::read<uintptr_t>(component_array + 0x10 * index + 0x8));
 		}
 
 		return components;
 	}
 	
-	static auto query_component_by_type(const game_object* game_object, const uintptr_t unity_type) -> std::shared_ptr<component>
+	static auto query_component_by_type(const game_object& game_object, const uintptr_t unity_type) -> component
 	{
 		// Unity internal
 
 		auto temp_component_array = 
-			memory_handler::read<uintptr_t>(game_object->address + offset::game_object::component_array);
+			memory_handler::read<uintptr_t>(game_object.address + offset::game_object::component_array);
 		
 		auto last_component =
-			memory_handler::read<uintptr_t>(temp_component_array + 0x10 * game_object->component_count);
+			memory_handler::read<uintptr_t>(temp_component_array + 0x10 * game_object.component_count);
 
 		if(temp_component_array == last_component)
 		{
-			return nullptr;
+			return component { 0 };
 		}
 
 		auto uint32_1 = memory_handler::read<uint32_t>(unity_type + 0x30);
@@ -151,14 +167,14 @@ public:
 
 			if(temp_component_array == last_component)
 			{
-				return nullptr;
+				return component { 0 };
 			}
 		}
 
 		auto component_address = 
 			memory_handler::read<uintptr_t>(temp_component_array + 0x8);
 
-		return std::make_shared<component>(component_address);
+		return component(component_address);
 	}
 	
 	static auto get_active_objects() -> std::vector<game_object>
@@ -221,7 +237,7 @@ public:
 		return tagged_objects;
 	}
 	
-	static auto find(std::string game_object_name) -> std::shared_ptr<game_object>
+	static auto find(const std::string game_object_name) -> game_object*
 	{
 		// https://docs.unity3d.com/ScriptReference/GameObject.Find.html
 		
@@ -238,27 +254,43 @@ public:
 			memory_handler::read<uintptr_t>(
 				managers::game_object_manager + offset::game_object_manager::active_objects);
 
+		if(active_object == 0)
+		{
+			return nullptr;
+		}
+		
 		auto last_active_object =
 			managers::game_object_manager + offset::game_object_manager::last_active_object;
 
 		while(tagged_object != managers::game_object_manager) // Iterate tagged objects
 		{
+			if(!tagged_object)
+			{
+				return nullptr;
+			}
+			
 			auto object_address =
 				memory_handler::read<uintptr_t>(tagged_object + 0x10);
 
-			auto ret_game_object = std::make_shared<game_object>( object_address );
+			if(!object_address)
+			{
+				continue;
+			}
+			
+			auto ret_game_object = game_object ( object_address );
 
 			auto ret_transform =
-				find_active_transform_with_path(game_object_name, ret_game_object.get());
+				find_active_transform_with_path(game_object_name, ret_game_object);
 
 			if(ret_transform)
 			{
-				return ret_game_object;
+				return new game_object ( object_address );
 			}
 			
 			tagged_object = 
 				memory_handler::read<uintptr_t>(
 					tagged_object + offset::game_object_manager::next_object);
+				
 		}
 
 		if(active_object == last_active_object) // Check if there are any active objects
@@ -267,25 +299,36 @@ public:
 
 			return nullptr;
 		}
-
+		
 		while(active_object != last_active_object) // Iterate active objects
 		{
+			if(active_object == 0)
+			{
+				return nullptr;
+			}
+			
 			auto object_address = 
 				memory_handler::read<uintptr_t>(active_object + 0x10);
 
-			auto ret_game_object = std::make_shared<game_object>( object_address );
+			if(!object_address)
+			{
+				continue;
+			}
+			
+			auto ret_game_object = game_object ( object_address ); 
 			
 			auto ret_transform = 
-				find_active_transform_with_path(game_object_name, ret_game_object.get());
+				find_active_transform_with_path(game_object_name, ret_game_object);
 
 			if(ret_transform)
 			{
-				return ret_game_object;
+				return new game_object ( object_address );
 			}
 			
 			active_object = 
 				memory_handler::read<uintptr_t>(
 					active_object + offset::game_object_manager::next_object);
+				
 		}
 		
 		return nullptr;
@@ -327,13 +370,13 @@ public:
 		return ret_game_objects;
 	}
 	
-	static auto find_with_tag(const uint16_t target_tag) -> std::shared_ptr<game_object>
+	static auto find_with_tag(const uint16_t target_tag) -> game_object
 	{
 		// https://docs.unity3d.com/ScriptReference/GameObject.FindWithTag.html
 		
 		if(!managers::game_object_manager)
 		{
-			return nullptr;
+			return game_object { };
 		}
 		
 		auto tagged_object = 
@@ -342,16 +385,16 @@ public:
 
 		if(tagged_object == managers::game_object_manager)
 		{
-			return nullptr;
+			return game_object { };
 		}
 
 		while(tagged_object != managers::game_object_manager)
 		{
 			auto ret = 
-				std::make_shared<game_object>(
+				game_object(
 					memory_handler::read<uintptr_t>(tagged_object + 0x10));
 				
-			if(ret->tag == target_tag)
+			if(ret.tag == target_tag)
 			{
 				return ret;
 			}
@@ -360,14 +403,14 @@ public:
 				memory_handler::read<uintptr_t>(tagged_object + offset::game_object_manager::next_object);
 		}
 
-		return nullptr;
+		return game_object { };
 	}
 	
-	static auto find_active_transform_with_path(std::string game_object_name, game_object* target_game_object) -> uintptr_t
+	static auto find_active_transform_with_path(const std::string& game_object_name, game_object& target_game_object) -> uintptr_t
 	{
 		// Unity internal
 
-		if(target_game_object->name != game_object_name)
+		if(target_game_object.name != game_object_name)
 		{
 			return 0;
 		}
@@ -382,13 +425,18 @@ public:
 
 		auto attached_game_object = game_object( 
 			memory_handler::read<uintptr_t>(
-				ret_transform->address + offset::component::attached_game_object) );
+				ret_transform.get_address() + offset::component::attached_game_object) );
 
 		if(attached_game_object.is_active)
 		{
-			return ret_transform->address;
+			return ret_transform.get_address();
 		}
 
 		return 0;
+	}
+
+	auto operator ! () const -> bool
+	{
+		return !this->address;
 	}
 };

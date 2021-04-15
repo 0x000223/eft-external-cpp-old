@@ -19,6 +19,7 @@ auto WinMain(HINSTANCE, HINSTANCE, char*, int) -> int
 	render::init();
 
 	std::thread thread_state_monitor { process_state::process_state_monitor };
+	thread_state_monitor.detach();
 	
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));

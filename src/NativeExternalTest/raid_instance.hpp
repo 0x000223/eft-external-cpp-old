@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <mutex>
 
 #include "offset.hpp"
 #include "memory_handler.hpp"
@@ -11,23 +12,22 @@ class camera;
 
 struct raid_instance
 {
-	static std::shared_ptr<game_object> attached_game_object;
+private:
 
-	static std::vector<std::shared_ptr<component>> attached_components;
-	
 	static uintptr_t scripting_class;
+	
+public:
+	
+	static std::unique_ptr<game_object> attached_game_object;
 
+	static std::vector<component> attached_components;
+	
 	static std::shared_ptr<camera> main_camera_component;
 	
 	static std::shared_ptr<player> local_player;
 
 	static std::vector<player> players;
-	
-	// Loot list
 
-	// Corpse list
-
-	// Exfils
 	
 	static auto init() -> BOOL;
 
@@ -35,7 +35,9 @@ struct raid_instance
 
 	static auto get_registered_players() -> std::vector<player>;
 
-	static auto get_local_player() -> std::shared_ptr<player>;
+	static auto get_local_player() -> player*;
 
-	// Thread - monitor registered players list
+	static auto update_instance() -> void;
+
+	static auto update_players() -> void;
 };

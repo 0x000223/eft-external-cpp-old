@@ -21,6 +21,9 @@
     <Filter Include="Header Files\Unity Types">
       <UniqueIdentifier>{97e8ffb9-3373-469c-b601-e5cfeb7e234c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripting Types\Enum Types">
+      <UniqueIdentifier>{49529bf3-616f-4285-84a7-a16502480678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -185,6 +188,69 @@
       <Filter>Header Files\Unity Types</Filter>
     </ClInclude>
     <ClInclude Include="scripting_types\skeleton.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\ballistics_calculator.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\shot.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="render.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\firearm_controller.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\procedural_weapon_animation.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\character_controller_spawner.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\active_health_controller.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\health_controller.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\value_type.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\e_body_part.hpp">
+      <Filter>Header Files\Scripting Types\Enum Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\health.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\generic_dictionary.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\body_part_state.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\e_player_side.h">
+      <Filter>Header Files\Scripting Types\Enum Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\cc_sharpen.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\shader.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\material.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\persistent_manager.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\color.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_types\time_manager.hpp">
+      <Filter>Header Files\Unity Types</Filter>
+    </ClInclude>
+    <ClInclude Include="scripting_types\movement_context.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
   </ItemGroup>

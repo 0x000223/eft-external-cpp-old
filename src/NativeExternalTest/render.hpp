@@ -34,20 +34,27 @@ private:
 	static ID2D1RenderTarget* d2d1_render_target;
 
 	static ImFont* font_cascadia;
-
+	static ImFont* font_roboto;
+	
 	static LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	static auto overlay_window() -> void;
 	
 	static auto draw_text(ImVec2 pos, ImColor color, std::string text) -> void;
 
+	static auto draw_text_stroke(ImVec2 pos, ImColor color, std::string text) -> void;
+	
 	static auto draw_line(ImVec2 from, ImVec2 to, ImColor color) -> void;
 
+	static auto draw_line_stroke(ImVec2 from, ImVec2 to, ImColor color) -> void;
+	
 	static auto draw_rect(ImVec2 pos, ImVec2 length, ImColor color) -> void;
 
-	static auto draw_filled_rect(ImVec2 pos, ImVec2 length, ImColor color) -> void;
+	static auto draw_rect_stroke(ImVec2 pos, ImVec2 length, ImColor color, ImColor outline_color = ImColor(0,0,0,255)) -> void;
+	
+	static auto draw_rect_filled(ImVec2 pos, ImVec2 length, ImColor color) -> void;
 
-	static auto draw_edged_rect(ImVec2 pos, ImVec2 length, ImColor color, float percent = 0.4f, float thickness = 1.f) -> void;
+	static auto draw_edged_rect(ImVec2 pos, ImVec2 length, ImColor color, float percent = 0.4f, float thickness = 1.f, bool outline = true) -> void;
 
 public:
 	
@@ -56,19 +63,6 @@ public:
 	static auto terminate() -> BOOL;
 
 	static auto render_frame() -> void;
-
-	struct flags
-	{
-		static float draw_distance;
-		
-		static bool name;
-
-		static bool health;
-		
-		static bool edged_box;
-
-		static bool snapline;
-	};
 };
 
 #endif

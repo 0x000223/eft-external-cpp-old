@@ -2,8 +2,11 @@
 
 bool scripts::flags::thermal_vision		= false;
 bool scripts::flags::night_vision		= false;
-bool scripts::flags::no_recoil			= false;
-bool scripts::flags::unlimited_stamina	= false;
+bool scripts::flags::no_recoil			= true;
+bool scripts::flags::unlimited_stamina	= true;
+bool scripts::flags::fov_aim			= false;
+
+float scripts::flags::fov				= 1.f;
 
 auto scripts::run_scripts() -> void
 {
@@ -11,20 +14,34 @@ auto scripts::run_scripts() -> void
 	{
 		unlimited_stamina();	
 	}
+
+	if(flags::no_recoil)
+	{
+		no_recoil();
+	}
+
+	if(flags::fov_aim) // TODO - refactor into settings structure with custom keybinds
+	{
+		if(GetAsyncKeyState(0x46) & 0x01) // 'F'
+		{
+			fov_aim();
+		}
+	}
 }
 
 auto scripts::reset() -> void
 {
-	// TODO
+	// Run once upon enetering a new raid
+
 }
 
 auto scripts::toggle_thermal_vision() -> void
 {
 	auto main_camera = game_object::find_with_tag(5);
 
-	auto thermal_component = main_camera->get_component_by_name("ThermalVision")->scripting_class;
+	auto thermal_component = main_camera.get_component_by_name("ThermalVision");
 	
-	auto thermal_script = std::make_shared<thermal_vision>(thermal_component);
+	auto thermal_script = std::make_shared<thermal_vision>(thermal_component.scripting_class);
 
 	thermal_script->toggle(flags::thermal_vision);
 
@@ -43,11 +60,16 @@ auto scripts::toggle_night_vision() -> void
 {
 	auto main_camera = game_object::find_with_tag(5);
 
-	auto nvg_component = main_camera->get_component_by_name("NightVision")->scripting_class;
+	auto nvg_component = main_camera.get_component_by_name("NightVision");
 
-	auto nvg_script = std::make_shared<night_vision>(nvg_component);
+	auto nvg_script = std::make_shared<night_vision>(nvg_component.scripting_class);
 
 	nvg_script->toggle(flags::night_vision);
+}
+
+auto scripts::toggle_no_visor() -> void
+{
+	
 }
 
 auto scripts::unlimited_stamina() -> void
@@ -57,9 +79,94 @@ auto scripts::unlimited_stamina() -> void
 		return;
 	}
 	
-	auto physical = raid_instance::local_player->physical;
+	raid_instance::local_player->physical->set_stamina(300.f);
+	raid_instance::local_player->physical->set_hands_stamina(300.f);
+	raid_instance::local_player->physical->set_oxygen(300.f);
+}
 
-	physical->set_stamina(300.f);
-	physical->set_hands_stamina(300.f);
-	physical->set_oxygen(300.f);
+auto scripts::no_recoil() -> void
+{
+	if(!raid_instance::local_player)
+	{
+		return;
+	}
+
+	raid_instance::local_player->procedural_wep_anim->set_shot_effector_strength( vector2(0,0) );
+}
+
+auto scripts::fov_aim() -> void
+{
+	if(!raid_instance::local_player)
+	{
+		return;
+	}
+
+	auto final_distance = 9999.f;
+	auto final_angle = vector2();
+	
+	for(auto& player : raid_instance::players)
+	{
+		if(player == raid_instance::local_player)
+		{
+			continue;
+		}
+
+		auto const fireport_pos = 
+			raid_instance::local_player->hands_controller->fireport->get_position();
+		
+		auto const target_angle = 
+			vector3::calculate_angle(fireport_pos, player.body->bones->head.get_position());
+
+		auto const distance = 
+			raid_instance::local_player->movement_context->get_rotation().distance(target_angle);
+
+		if(distance < flags::fov && distance < final_distance)
+		{
+			final_distance = distance;
+			final_angle = target_angle;
+		}
+	}
+	
+	raid_instance::local_player->movement_context->set_rotation(final_angle);
+}
+
+auto scripts::find_closest_target() -> player
+{
+	if(!raid_instance::local_player)
+	{
+		return player (0);
+	}
+
+	auto const local_player_pos = raid_instance::local_player->body->bones->root.get_position();
+
+	player ret (0);
+	
+	for(float distance = 10000; auto& player : raid_instance::players)
+	{
+		auto const temp_distance = player.body->bones->root.get_position().distance(local_player_pos);
+		
+		if(temp_distance < distance)
+		{
+			distance = temp_distance;
+
+			ret = player;
+		}
+	}
+
+	return ret;
+}
+
+auto scripts::test() -> void
+{
+	auto main_camera = game_object::find_with_tag(5);
+
+	auto thermal_component = main_camera.get_component_by_name("ThermalVision");
+	
+	auto thermal_script = std::make_shared<thermal_vision>(thermal_component.scripting_class);
+
+	auto temp = memory_handler::read<uintptr_t>(thermal_script->get_address() + 0x90);
+	
+	auto test_material = material( memory_handler::read<uintptr_t>(temp + 0x10) );
+
+	auto test_color = test_material.get_color();
 }

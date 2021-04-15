@@ -2,6 +2,7 @@
 #include <string>
 #include <locale>
 #include <codecvt>
+#include <cmath>
 
 #pragma warning (disable : 4996)
 
@@ -13,28 +14,74 @@ struct vector2
 	{
 		return !this->x && !this->y;
 	}
+
+	auto distance(const vector2 other) const -> float
+	{
+		auto const a = this->x - other.x;
+		auto const b = this->y - other.y;
+
+		return sqrtf(a * a + b * b);
+	}
 };
 
 struct vector3
 {
 	float x,y,z;
 
-	auto distance(vector3& other) const -> float
+	auto operator -(const vector3 other) const -> vector3
 	{
-		auto a = this->x - other.x;
-		auto b = this->y - other.y;
-		auto c = this->z - other.z;
+		vector3 ret
+		{
+			ret.x = this->x - other.x,
+			ret.y = this->y - other.y,
+			ret.z = this->z - other.z,
+		};
+
+		return ret;
+	}
+
+	auto operator *(const float other) const -> vector3
+	{
+		return vector3(this->x * other, this->y * other);
+	}
+	
+	auto distance(const vector3 other) const -> float
+	{
+		auto const a = this->x - other.x;
+		auto const b = this->y - other.y;
+		auto const c = this->z - other.z;
 
 		return sqrtf(a * a + b * b + c * c);
+	}
+
+	auto length() const -> float
+	{
+		auto const temp = powf(this->x, 2.f) + powf(this->y, 2.f) + powf(this->z, 2.f);
+
+		return sqrtf(temp);
 	}
 	
 	static auto distance(vector3& first, vector3& second) -> float
 	{
-		auto a = first.x - second.x;
-		auto b = first.y - second.y;
-		auto c = first.z - second.z;
+		auto const a = first.x - second.x;
+		auto const b = first.y - second.y;
+		auto const c = first.z - second.z;
 
 		return sqrtf(a * a + b * b + c * c);
+	}
+
+	static auto calculate_angle(const vector3 from, const vector3 to) -> vector2
+	{
+		auto const diff = from - to;
+		auto const length = diff.length();
+
+		vector2 ret
+		{
+			ret.x = asinf(diff.y / length),
+			ret.y = - atan2(diff.x, -diff.z),
+		};
+
+		return vector2(ret.x * 57.29578, ret.y * 57.29578);
 	}
 };
 

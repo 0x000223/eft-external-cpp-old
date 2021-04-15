@@ -52,14 +52,19 @@ public:
 
 	static auto world_to_screen(const vector3& pos) -> vector2
 	{
+		if(!raid_instance::main_camera_component)
+		{
+			return vector2(0,0);
+		}
+			
 		auto temp = raid_instance::main_camera_component->get_view_matrix();
 		
-		auto view_matrix = matrix44::transpose(temp);
+		auto const view_matrix = matrix44::transpose(temp);
 
-		const vector3 up			= { view_matrix._21, view_matrix._22, view_matrix._23 };
-		const vector3 right			= { view_matrix._11, view_matrix._12, view_matrix._13 };
+		const vector3 up	= { view_matrix._21, view_matrix._22, view_matrix._23 };
+		const vector3 right	= { view_matrix._11, view_matrix._12, view_matrix._13 };
 
-		vector2 ret { 0 };
+		vector2 ret { 0,0 };
 		
 		const float w =
 			{
@@ -96,17 +101,22 @@ public:
 		return ret;
 	}
 	
-	static auto get_main_camera() -> std::shared_ptr<camera>
+	static auto get_main_camera() -> camera*
 	{
 		uint16_t main_camera_tag = 5;
 		
 		auto camera_game_object = game_object::find_with_tag(main_camera_tag);
 
+		if(!camera_game_object)
+		{
+			return nullptr;
+		}
+		
 		auto camera_type = unity::find_type_by_name("Camera");
 		
-		auto camera_component = game_object::query_component_by_type(camera_game_object.get(), camera_type);
+		auto camera_component = game_object::query_component_by_type(camera_game_object, camera_type);
 
-		return std::make_shared<camera>(camera_component->address);
+		return new camera( camera_component.get_address() );
 	}
 
 	static auto get_all_cameras_count() -> unsigned

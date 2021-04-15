@@ -32,72 +32,72 @@ public:
 	auto get_brightness() const -> float
 	{
 		return memory_handler::read<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::brightness);
+			address + offset::cc_brightness_contrast_gamma::brightness);
 	}
 	
 	auto set_brightness(float value)
 	{
 		return memory_handler::write<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::brightness, value);
+			address + offset::cc_brightness_contrast_gamma::brightness, value);
 	}
 	
 	auto get_contrast() const -> float
 	{
 		return memory_handler::read<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::contrast);
+			address + offset::cc_brightness_contrast_gamma::contrast);
 	}
 
 	auto set_contrast(float value)
 	{
 		return memory_handler::write<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::contrast, value);
+			address + offset::cc_brightness_contrast_gamma::contrast, value);
 	}
 
 	auto get_red_coeff() const -> float
 	{
 		return memory_handler::read<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::red_coeff);
+			address + offset::cc_brightness_contrast_gamma::red_coeff);
 	}
 
 	auto set_red_coeff(float value)
 	{
 		return memory_handler::write<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::red_coeff, value);
+			address + offset::cc_brightness_contrast_gamma::red_coeff, value);
 	}
 
 	auto get_green_coeff() const -> float
 	{
 		return memory_handler::read<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::green_coeff);
+			address + offset::cc_brightness_contrast_gamma::green_coeff);
 	}
 
 	auto set_green_coeff(float value)
 	{
 		return memory_handler::write<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::green_coeff, value);
+			address + offset::cc_brightness_contrast_gamma::green_coeff, value);
 	}
 
 	auto get_blue_coeff() const -> float
 	{
 		return memory_handler::read<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::blue_coeff);
+			address + offset::cc_brightness_contrast_gamma::blue_coeff);
 	}
 
 	auto set_blue_coeff(float value)
 	{
 		return memory_handler::write<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::blue_coeff, value);
+			address + offset::cc_brightness_contrast_gamma::blue_coeff, value);
 	}
 
 	auto get_gamma() const -> float
 	{
 		return memory_handler::read<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::gamma);
+			address + offset::cc_brightness_contrast_gamma::gamma);
 	}
 
 	auto set_gamma(float value)
 	{
 		return memory_handler::write<float>(
-			address + offset::scripting::CC_BrightnessContrastGamma::gamma, value);
+			address + offset::cc_brightness_contrast_gamma::gamma, value);
 	}
 };

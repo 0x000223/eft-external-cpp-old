@@ -13,51 +13,56 @@ public:
 
 	explicit thermal_vision(const uintptr_t addr) : address(addr) {  }
 
+	auto get_address() const -> uintptr_t
+	{
+		return address;
+	}
+	
 	auto toggle(const bool value) const -> void
 	{
 		return memory_handler::write(
-			address + offset::scripting::ThermalVision::is_on, value);
+			address + offset::thermal_vision::is_on, value);
 	}
 	
 	auto enable() const -> void
 	{
 		return memory_handler::write<bool>(
-			address + offset::scripting::ThermalVision::is_on, true);
+			address + offset::thermal_vision::is_on, true);
 	}
 
 	auto disable() const -> void
 	{
 		return memory_handler::write<bool>(
-			address + offset::scripting::ThermalVision::is_on, false);
+			address + offset::thermal_vision::is_on, false);
 	}
 
 	auto is_noisy(const bool value) const -> void
 	{
 		return memory_handler::write<bool>(
-			address + offset::scripting::ThermalVision::is_noisy, value);
+			address + offset::thermal_vision::is_noisy, value);
 	}
 
 	auto is_fps_stuck(const bool value) const -> void
 	{
 		return memory_handler::write<bool>(
-			address + offset::scripting::ThermalVision::is_fps_stuck, value);
+			address + offset::thermal_vision::is_fps_stuck, value);
 	}
 
 	auto is_motion_blurred(const bool value) const -> void
 	{
 		return memory_handler::write<bool>(
-			address + offset::scripting::ThermalVision::is_motion_blurred, value);
+			address + offset::thermal_vision::is_motion_blurred, value);
 	}
 
 	auto is_glitch(const bool value) const -> void
 	{
 		return memory_handler::write<bool>(
-			address + offset::scripting::ThermalVision::is_glitch, value);
+			address + offset::thermal_vision::is_glitch, value);
 	}
 
 	auto is_pixelated(const bool value) const -> void
 	{
 		return memory_handler::write<bool>(
-			address + offset::scripting::ThermalVision::is_pixelated, value);
+			address + offset::thermal_vision::is_pixelated, value);
 	}
 };

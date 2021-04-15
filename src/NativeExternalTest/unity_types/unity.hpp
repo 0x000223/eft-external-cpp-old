@@ -129,4 +129,46 @@ public:
 
 		return derived_types;
 	}
+
+	static auto get_built_in_matrix_param_name(const uint32_t param) -> std::string
+	{
+		if(param > 0x14)
+		{
+			auto temp = process_state::module_address + 0x1519348;
+
+			return memory_handler::read_narrow_string(temp);
+		}
+
+		auto temp = process_state::module_address + 0x1519A10;
+
+		return memory_handler::read_narrow_string(temp + 0x8 * param);
+	}
+
+	static auto get_built_in_text_env_param_name(const uint32_t param)
+	{
+		if(param > 0x18)
+		{
+			auto temp = process_state::module_address + 0x1519348;
+
+			return memory_handler::read_narrow_string(temp);
+		}
+
+		auto temp = process_state::module_address + 0x1519AC0;
+
+		return memory_handler::read_narrow_string(temp + 0x8 * param);
+	}
+
+	static auto get_built_in_vector_param_name(const uint32_t param)
+	{
+		if(param > 0x78)
+		{
+			auto temp = process_state::module_address + 0x1519348;
+
+			return memory_handler::read_narrow_string(temp);
+		}
+
+		auto temp = process_state::module_address + 0x1519640;
+
+		return memory_handler::read_narrow_string(temp + 0x8 * param);
+	}
 };

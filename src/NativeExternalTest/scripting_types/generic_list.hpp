@@ -31,9 +31,9 @@ public:
 		
 		for(unsigned index = 0; index < count; index++)
 		{
-			auto address = memory_handler::read<uintptr_t>(base + index * 8);
+			auto temp_address = memory_handler::read<uintptr_t>(base + index * 8);
 
-			data.push_back(T(address));	// Try to invoke constructor on generic type
+			data.push_back( T(temp_address) );
 		}
 	}
 };

@@ -140,6 +140,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,6 +166,7 @@
       <LanguageStandard_C>Default</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -210,6 +212,21 @@
     <ClInclude Include="offset.hpp" />
     <ClInclude Include="process_state.hpp" />
     <ClInclude Include="raid_instance.hpp" />
+    <ClInclude Include="render.hpp" />
+    <ClInclude Include="scripting_types\active_health_controller.hpp" />
+    <ClInclude Include="scripting_types\ballistics_calculator.hpp" />
+    <ClInclude Include="scripting_types\body_part_state.hpp" />
+    <ClInclude Include="scripting_types\cc_sharpen.hpp" />
+    <ClInclude Include="scripting_types\character_controller_spawner.hpp" />
+    <ClInclude Include="scripting_types\e_body_part.hpp" />
+    <ClInclude Include="scripting_types\e_player_side.h" />
+    <ClInclude Include="scripting_types\firearm_controller.hpp" />
+    <ClInclude Include="scripting_types\generic_dictionary.hpp" />
+    <ClInclude Include="scripting_types\health.hpp" />
+    <ClInclude Include="scripting_types\health_controller.hpp" />
+    <ClInclude Include="scripting_types\movement_context.hpp" />
+    <ClInclude Include="scripting_types\procedural_weapon_animation.hpp" />
+    <ClInclude Include="scripting_types\shot.hpp" />
     <ClInclude Include="scripting_types\system_array.hpp" />
     <ClInclude Include="scripting_types\brightness_contrast_gamma.hpp" />
     <ClInclude Include="scripting_types\eft_exfil_point.hpp" />
@@ -222,13 +239,19 @@
     <ClInclude Include="scripting_types\skeleton.hpp" />
     <ClInclude Include="scripting_types\system_string.hpp" />
     <ClInclude Include="scripting_types\thermal_vision.hpp" />
+    <ClInclude Include="scripting_types\value_type.hpp" />
     <ClInclude Include="scripts.hpp" />
     <ClInclude Include="unity_types\camera.hpp" />
+    <ClInclude Include="unity_types\color.hpp" />
     <ClInclude Include="unity_types\component.hpp" />
     <ClInclude Include="unity_types\debug.hpp" />
     <ClInclude Include="unity_types\game_object.hpp" />
+    <ClInclude Include="unity_types\material.hpp" />
     <ClInclude Include="unity_types\object.hpp" />
+    <ClInclude Include="unity_types\persistent_manager.hpp" />
     <ClInclude Include="unity_types\scripting.hpp" />
+    <ClInclude Include="unity_types\shader.hpp" />
+    <ClInclude Include="unity_types\time_manager.hpp" />
     <ClInclude Include="unity_types\transform.hpp" />
     <ClInclude Include="unity_types\unity.hpp" />
     <ClInclude Include="utility.hpp" />

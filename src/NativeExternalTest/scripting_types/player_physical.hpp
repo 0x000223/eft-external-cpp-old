@@ -5,7 +5,7 @@
 
 class player_physical
 {
-	// \uE20C
+	// E20C
 	
 	uintptr_t address;
 

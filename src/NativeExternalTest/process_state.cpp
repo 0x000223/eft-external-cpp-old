@@ -1,11 +1,12 @@
 #include "process_state.hpp"
 #include "game_object.hpp"
 #include "raid_instance.hpp"
+#include "scripts.hpp"
 
 DWORD		process_state::process_id		= 0;
 uintptr_t	process_state::module_address	= 0;
 bool		process_state::is_heartbeat		= false;
-bool		process_state::is_in_raid			= false;
+bool		process_state::is_in_raid		= false;
 
 auto process_state::init() -> BOOL
 {
@@ -32,13 +33,10 @@ auto process_state::init() -> BOOL
 
 auto process_state::release() -> void
 {
-	process_id = 0;
-
-	module_address = 0;
-
-	is_heartbeat = false;
-
-	is_in_raid = false;
+	process_id		= 0;
+	module_address	= 0;
+	is_heartbeat	= false;
+	is_in_raid		= false;
 }
 
 auto process_state::get_process_id(std::string process_name) -> DWORD
@@ -62,18 +60,20 @@ auto process_state::check_heartbeat() -> bool
 
 auto process_state::check_in_raid() -> bool
 {
-	return game_object::find("GameWorld") != nullptr;
+	return game_object::find("GameWorld");
 }
 
 auto process_state::process_state_monitor() -> void
 {
 	// Runs on a separate thread 
 	// monitors process state (heartbeat / raid status) & updates state flags
+
+	std::thread instance_updater; // TODO
 	
 	while(true)
 	{
 		Sleep(1000);
-		
+
 		if(!check_heartbeat() || (check_heartbeat() && !is_heartbeat))
 		{
 			// Capture if process not running OR just launched
@@ -108,12 +108,22 @@ auto process_state::process_state_monitor() -> void
 				// Release raid instance resources
 
 				raid_instance::release();
+
+				is_in_raid = false;
 			}
 			else
 			{
 				// !is_in_raid => requires initialization
 
-				raid_instance::init();
+				if(raid_instance::init())
+				{
+					is_in_raid = true;
+
+					scripts::reset();
+					
+					instance_updater = std::thread( raid_instance::update_instance );
+					instance_updater.detach();
+				}
 			}
 		}
 	}

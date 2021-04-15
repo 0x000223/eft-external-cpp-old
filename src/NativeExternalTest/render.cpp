@@ -1,4 +1,5 @@
 #include "render.hpp"
+#include "menu.hpp"
 
 float					render::clear_color[4]			= { 0.f, 0.f, 0.f, 0.f };
 int						render::window_height			= 0;
@@ -14,6 +15,7 @@ ID2D1DeviceContext*		render::d2d1_device_context		= nullptr;
 ID2D1RenderTarget*		render::d2d1_render_target		= nullptr;
 
 ImFont*					render::font_cascadia			= nullptr;
+ImFont*					render::font_roboto				= nullptr;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -45,6 +47,8 @@ auto render::init() -> BOOL
 	UpdateWindow(window_handle);
 
 	graphics_handler::get_window_size(window_handle, window_height, window_width);
+
+	MoveWindow(window_handle, 0, 0, window_width, window_height, FALSE);
 	
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -55,8 +59,9 @@ auto render::init() -> BOOL
 	ImGuiIO& io = ImGui::GetIO();
 	
 	font_cascadia = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\CascadiaCode-Regular.ttf)", 13.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+	font_roboto = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\Roboto-Regular.ttf)", 13.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
 	
-	menu::set_menu_style();
+	menu::menu_style_default();
 	
 	return TRUE;
 }
@@ -93,7 +98,7 @@ auto render::render_frame() -> void
 
 	if(menu::show_menu)
 	{
-		menu::main_menu_window();
+		menu::main_window();
 	}
 
 	if(process_state::is_in_raid)
@@ -157,27 +162,106 @@ auto render::overlay_window() -> void
 	ImGui::SetNextWindowPos(ImVec2( 0.f, 0.f ), ImGuiCond_Always);
 	
 	ImGui::Begin("Overlay", nullptr, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration);
-
+	
+	for(auto& player : raid_instance::players)
 	{
-		// Check draw distance
-
-		for(auto& player : raid_instance::players)
+		try
 		{
-			auto head3 = transform::get_position(player.body->bones->head);
-			auto head2 = camera::world_to_screen(head3);
-
-			if(!head2 || player == *raid_instance::local_player)
+			if(!player || !raid_instance::local_player || player == raid_instance::local_player)
 			{
 				continue;
 			}
 
-			auto local_head_3 = transform::get_position(raid_instance::local_player->body->bones->head);
-			auto local_head_2 = camera::world_to_screen(local_head_3);
+			auto head3 = player.body->bones->head.get_position();
+			auto head2 = camera::world_to_screen(head3);
+
+			auto root3 = player.body->bones->root.get_position();
+			auto root2 = camera::world_to_screen(root3);
 			
-			draw_text( ImVec2(head2.x, head2.y), ImColor(0, 255, 0, 255), player.name );
-			draw_text( ImVec2( head2.x, head2.y - 10.f ), ImColor( 255, 255, 255, 255 ), std::to_string(local_head_3.distance(head3)));
+			auto local_root3 = raid_instance::local_player->body->bones->root.get_position();
+			
+			auto distance = vector3::distance(local_root3, root3);
+
+			auto player_height = root2.y - head2.y;
+			auto player_width  = player_height * 0.35f;
+
+			auto player_health = player.get_health();
+
+			if(distance > menu::settings::float_player_distance)
+			{
+				continue;
+			}
+			
+			if(!head2)
+			{
+				continue;
+			}
+			
+			if(menu::settings::player_name)
+			{
+				auto const pos = ImVec2(head2.x - 30.f, head2.y - 35.f);
+
+				ImGui::PushFont(font_roboto);
+				draw_text_stroke( pos, ImColor(255, 0, 205, 255), player.name);
+				ImGui::PopFont();
+			}
+
+			if(menu::settings::player_health)
+			{
+				auto const pos = ImVec2( head2.x - 8.f, head2.y - 20.f );
+				
+				draw_text_stroke( pos, ImColor(255, 0, 0, 255), std::to_string( static_cast<int>(player_health) ));
+			}
+			
+			if(menu::settings::player_distance)
+			{
+				auto const pos = ImVec2(root2.x - 5.f, root2.y + 10.f);
+				
+				draw_text_stroke( pos, ImColor( 255, 255, 255, 255 ), std::to_string( static_cast<int>(distance) ));
+			}
+
+			if(menu::settings::player_faction)
+			{
+				auto const pos = ImVec2(head2.x - 20.f, head2.y - 50.f);
+
+				ImGui::PushFont(font_roboto);
+				draw_text_stroke(pos, ImColor(255,255,255,255), player.faction);
+				ImGui::PopFont();
+			}
+
+			if(menu::settings::player_bones)
+			{
+				for(auto& [from, to] : player.body->bone_links)
+				{
+					auto from3 = from.get_position();
+					auto to3 = to.get_position();
+
+					auto const from2 = camera::world_to_screen(from3);
+					auto const to2 = camera::world_to_screen(to3);
+
+					draw_line( ImVec2(from2.x, from2.y), ImVec2(to2.x, to2.y), ImColor(0,255,0,255));
+				}
+			}
+			
+			if(menu::settings::player_snapline)
+			{
+				draw_line_stroke( ImVec2(1920.f / 2.f, 0.f), ImVec2(head2.x, head2.y), ImColor(255,0,0,255) );
+				ImGui::GetWindowDrawList()->AddCircleFilled( ImVec2(head2.x, head2.y), 2.f, ImColor(178,40,40,255));
+			}
+
+			if(menu::settings::player_box)
+			{
+				auto const pos = ImVec2(head2.x - 15.f, head2.y - 10.f);
+				
+				draw_rect_stroke( pos, ImVec2(head2.x + player_width, head2.y + player_height), ImColor(0,0,205,255) );
+			}
+
+			if(scripts::flags::fov_aim)
+			{
+				ImGui::GetWindowDrawList()->AddCircle( ImVec2(1920.f / 2.f, 1080.f / 2.f), scripts::flags::fov, ImColor(0,0,255,255) );
+			}
 		}
-		
+		catch (...) { }
 	}
 	
 	ImGui::End();
@@ -192,8 +276,26 @@ auto render::draw_text(const ImVec2 pos, const ImColor color, std::string text) 
 	ImGui::PopFont();
 }
 
+auto render::draw_text_stroke(const ImVec2 pos, const ImColor color, const std::string text) -> void
+{
+	auto draw_list = ImGui::GetWindowDrawList();
+	
+	draw_list->AddText( ImVec2(pos.x + 1.f, pos.y + 1.f), ImColor(0,0,0,255), text.c_str() );
+	draw_list->AddText( ImVec2(pos.x + 1.f, pos.y - 1.f), ImColor(0,0,0,255), text.c_str() );
+	draw_list->AddText( ImVec2(pos.x - 1.f, pos.y - 1.f), ImColor(0,0,0,255), text.c_str() );
+	draw_list->AddText( ImVec2(pos.x - 1.f, pos.y + 1.f), ImColor(0,0,0,255), text.c_str() );
+	
+	draw_list->AddText( pos, color, text.c_str() );
+}
+
 auto render::draw_line(const ImVec2 from, const ImVec2 to, const ImColor color) -> void
 {
+	ImGui::GetWindowDrawList()->AddLine(from, to, color);
+}
+
+auto render::draw_line_stroke(const ImVec2 from, const ImVec2 to, const ImColor color) -> void
+{
+	ImGui::GetWindowDrawList()->AddLine(from, to, ImColor(0,0,0,255), 1.5f);
 	ImGui::GetWindowDrawList()->AddLine(from, to, color);
 }
 
@@ -202,17 +304,24 @@ auto render::draw_rect(const ImVec2 pos, const ImVec2 length, const ImColor colo
 	ImGui::GetWindowDrawList()->AddRect(pos, ImVec2(pos.x + length.x, pos.y + length.y), color, 0, ImDrawFlags_None);
 }
 
-auto render::draw_filled_rect(const ImVec2 pos, const ImVec2 length, const ImColor color) -> void
+auto render::draw_rect_stroke(const ImVec2 pos, const ImVec2 length, const ImColor color, const ImColor outline_color) -> void
+{
+	ImGui::GetWindowDrawList()->AddRect(pos, length, outline_color, 0.f, 0, 1.5f);
+
+	ImGui::GetWindowDrawList()->AddRect(pos, length, color);
+}
+
+auto render::draw_rect_filled(const ImVec2 pos, const ImVec2 length, const ImColor color) -> void
 {
 	ImGui::GetWindowDrawList()->AddRectFilled(pos, ImVec2( pos.x + length.x, pos.y + length.y ), color);
 }
 
-auto render::draw_edged_rect(const ImVec2 pos, const ImVec2 length, const ImColor color, const float percent, const float thickness) -> void
+auto render::draw_edged_rect(const ImVec2 pos, const ImVec2 length, const ImColor color, const float percent, const float thickness, const bool outline) -> void
 {
 	auto* draw_list = ImGui::GetWindowDrawList();
 
 	ImVec2 max = { pos.x + length.x, pos.y + length.y };
-
+	
 	draw_list->AddLine(pos, ImVec2( pos.x + length.x * percent, pos.y ), color, thickness);
 	draw_list->AddLine(ImVec2( max.x, pos.y ), ImVec2( max.x - length.x * percent, pos.y), color, thickness);
 

@@ -8,9 +8,8 @@
 #include "thermal_vision.hpp"
 #include "night_vision.hpp"
 #include "raid_instance.hpp"
-
-#ifndef SCRIPTS_HPP
-#define SCRIPTS_HPP
+#include "material.hpp"
+#include "time_manager.hpp"
 
 struct scripts
 {
@@ -23,17 +22,29 @@ struct scripts
 		static bool no_recoil;
 
 		static bool unlimited_stamina;
+
+		static bool fov_aim;
+
+		static float fov;
 	};
 	
 	static auto run_scripts() -> void;
 
-	static auto reset() -> void; // Reset script flags upon entering new instance
+	static auto reset() -> void;
 	
 	static auto toggle_thermal_vision() -> void;
 
 	static auto toggle_night_vision() -> void;
 
+	static auto toggle_no_visor() -> void;
+	
 	static auto unlimited_stamina() -> void;
-};
 
-#endif
+	static auto no_recoil() -> void;
+
+	static auto fov_aim() -> void;
+	
+	static auto find_closest_target() -> player;
+
+	static auto test() -> void;
+};

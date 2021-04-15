@@ -1,4 +1,5 @@
 #include "memory_handler.hpp"
+#include "offset.hpp"
 
 #pragma warning (disable : 26451)
 
@@ -34,7 +35,7 @@ auto memory_handler::read_chain(const uintptr_t base, const std::vector<uintptr_
 
 	for(const auto& offset : offsets)
 	{
-		auto temp_ptr = read<uintptr_t>(pointer + offset);
+		auto const temp_ptr = read<uintptr_t>(pointer + offset);
 
 		pointer = temp_ptr;
 	}
@@ -44,6 +45,11 @@ auto memory_handler::read_chain(const uintptr_t base, const std::vector<uintptr_
 
 auto memory_handler::read_narrow_string(const uintptr_t string_address) -> std::string
 {
+	if(string_address < 0x1000)
+	{
+		return std::string();
+	}
+	
 	auto* buffer = static_cast<char*>(read_bytes(string_address, 265)); // Magic
 
 	std::string ret;
@@ -57,18 +63,39 @@ auto memory_handler::read_narrow_string(const uintptr_t string_address) -> std::
 
 	ret.assign(buffer, count);
 
+	free(buffer);
+	
 	return ret;
 }
 
 auto memory_handler::read_wide_string(const uintptr_t string_address) -> std::wstring
 {
 	auto string_class = read<uintptr_t>(string_address);
+
+	if(string_class < 0x1000 || string_class > 0x7FFFFFFFFFF)
+	{
+		return std::wstring();
+	}
 	
 	auto length = read<int32_t>(string_class + offset::string::length);
 
+	if(length < 0 || length > INT_MAX)
+	{
+		return std::wstring();
+	}
+	
 	auto* buffer = read_bytes(string_class + offset::string::start, length * 2);
 
-	return std::wstring().assign(static_cast<const wchar_t*>(buffer), length);
+	if(!buffer)
+	{
+		return std::wstring();
+	}
+	
+	auto ret = std::wstring().assign(static_cast<const wchar_t*>(buffer), length);
+
+	free(buffer);
+
+	return ret;
 }
 
 auto memory_handler::get_module_address(const wchar_t* module_name) -> uintptr_t

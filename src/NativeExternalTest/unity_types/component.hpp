@@ -4,8 +4,6 @@
 #include "memory_handler.hpp"
 #include "object.hpp"
 
-class game_object;
-
 class component : public object
 {
 	// Component
@@ -20,6 +18,8 @@ public:
 	uintptr_t scripting_class;
 
 	uintptr_t mono_class;
+
+	component() = default;
 	
 	explicit component(const uintptr_t addr) : object(addr)
 	{
@@ -48,10 +48,9 @@ public:
 		return memory_handler::read_narrow_string(namespace_address);
 	}
 
-	auto get_game_object() const -> std::shared_ptr<game_object>
+	auto get_game_object() const -> uintptr_t
 	{
-		return std::make_shared<game_object>(
-			memory_handler::read<uintptr_t>(
-				address + offset::component::attached_game_object));
+		return memory_handler::read<uintptr_t>(
+			address + offset::component::attached_game_object);
 	}
 };

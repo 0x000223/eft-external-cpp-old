@@ -1,29 +1,42 @@
 #pragma once
 #include <string>
 
-#include "graphics_handler.hpp"
-#include "managers.hpp"
-#include "game_object.hpp"
-#include "camera.hpp"
 #include "scripts.hpp"
-
-#include "brightness_contrast_gamma.hpp"
-#include "thermal_vision.hpp"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
-#ifndef MENU_HPP
-#define MENU_HPP
-
 struct menu
 {
 	static bool show_menu;
 	
-	static auto set_menu_style() -> void;
+	static auto menu_style_default() -> void;
 
-	static auto main_menu_window() -> void;
+	static auto main_window() -> void;
+
+	static auto visuals_tab_window() -> void;
+
+	static auto aim_tab_window() -> void;
+
+	static auto data_tab_window() -> void;
+	
+	struct settings
+	{
+		static float float_player_distance;
+
+		static bool player_name;
+
+		static bool player_health;
+		
+		static bool player_faction;
+		
+		static bool player_distance;
+		
+		static bool player_box;
+
+		static bool player_snapline;
+
+		static bool player_bones;
+	};
 };
-
-#endif

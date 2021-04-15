@@ -1,9 +1,11 @@
-
 #pragma once
 #include <string>
 
 #include "offset.hpp"
 #include "memory_handler.hpp"
+#include "e_player_side.h"
+
+#pragma warning (disable : 26812)
 
 class player_profile
 {
@@ -19,8 +21,28 @@ class player_profile
 
 	std::wstring group_id;
 
-	int32_t side;
-	
+	e_player_side side;
+
+	std::string side_name;
+
+	auto parse_side_name() const -> std::string
+	{
+		switch(side)
+		{
+		case Bear:
+			return std::string("Bear");
+
+		case Usec:
+			return std::string("Usec");
+
+		case Savage:
+			return std::string("Savage");
+
+		default:
+			return std::string("");
+		}
+	}
+
 public:
 
 	explicit player_profile(const uintptr_t addr) : address(addr)
@@ -40,8 +62,11 @@ public:
 		group_id =
 			memory_handler::read_wide_string(info + offset::profile::info::group_id);
 
-		side =
-			memory_handler::read<int32_t>(info + offset::profile::info::side);
+		side = 
+			static_cast<e_player_side>(
+				memory_handler::read<int>(info + offset::profile::info::side));
+
+		side_name = parse_side_name();
 	}
 
 	auto get_address() const -> uintptr_t
@@ -67,5 +92,15 @@ public:
 	auto get_group_id() const -> std::wstring
 	{
 		return group_id;
+	}
+
+	auto get_side() const -> e_player_side
+	{
+		return side;
+	}
+
+	auto get_side_name() const -> std::string
+	{
+		return side_name;
 	}
 };
