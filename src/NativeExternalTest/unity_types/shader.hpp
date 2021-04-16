@@ -20,6 +20,7 @@ class shader
 	// GetPropertyNameId()
 	// GetPropertyType()
 	// Find(string name)
+
 private:
 
 	uintptr_t address;

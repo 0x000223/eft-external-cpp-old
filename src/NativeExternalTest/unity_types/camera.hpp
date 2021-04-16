@@ -10,9 +10,6 @@
 #include "utility.hpp"
 #include "raid_instance.hpp"
 
-#ifndef CAMERA_HPP
-#define CAMERA_HPP
-
 class camera : public component
 {
 	// UnityEngine.Camera
@@ -147,5 +144,3 @@ private:
 		Reflection,
 	};
 };
-
-#endif

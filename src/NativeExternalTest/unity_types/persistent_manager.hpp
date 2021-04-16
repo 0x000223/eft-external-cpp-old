@@ -6,7 +6,7 @@
 
 class persistent_manager
 {
-	// Unity internal type
+	// Internal structure
 	
 private:
 
@@ -28,7 +28,7 @@ public:
 
 		auto v4 = memory_handler::read<uintptr_t>(v1);
 
-		auto v5 = (0x21 * ((0x1001 * instance_id + 0x7ED55D16) ^ ((unsigned int)(0x1001 * instance_id + 0x7ED55D16) >> 0x13) ^ 0xC761C23C) + 0x165667B1) << 0x9;
+		auto v5 = (0x21 * ((0x1001 * instance_id + 0x7ED55D16) ^ ((unsigned)(0x1001 * instance_id + 0x7ED55D16) >> 0x13) ^ 0xC761C23C) + 0x165667B1) << 0x9;
 
 		// TODO - finish this mess
 	}

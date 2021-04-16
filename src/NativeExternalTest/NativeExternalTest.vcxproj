@@ -240,6 +240,7 @@
     <ClInclude Include="scripting_types\system_string.hpp" />
     <ClInclude Include="scripting_types\thermal_vision.hpp" />
     <ClInclude Include="scripting_types\value_type.hpp" />
+    <ClInclude Include="scripting_types\visor_effect.hpp" />
     <ClInclude Include="scripts.hpp" />
     <ClInclude Include="unity_types\camera.hpp" />
     <ClInclude Include="unity_types\color.hpp" />

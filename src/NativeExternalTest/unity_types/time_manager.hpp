@@ -6,6 +6,7 @@
 
 class time_manager
 {
+	// Internal structure
 
 private:
 

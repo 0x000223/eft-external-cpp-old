@@ -4,9 +4,6 @@
 #include "offset.hpp"
 #include "unity.hpp"
 
-#ifndef DEBUG_HPP
-#define DEBUG_HPP
-
 struct debug
 {
 	static auto is_debug_build()
@@ -16,5 +13,3 @@ struct debug
 		// TODO
 	}
 };
-
-#endif

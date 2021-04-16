@@ -2,6 +2,7 @@
 
 bool scripts::flags::thermal_vision		= false;
 bool scripts::flags::night_vision		= false;
+bool scripts::flags::no_visor			= false;
 bool scripts::flags::no_recoil			= true;
 bool scripts::flags::unlimited_stamina	= true;
 bool scripts::flags::fov_aim			= false;
@@ -69,7 +70,15 @@ auto scripts::toggle_night_vision() -> void
 
 auto scripts::toggle_no_visor() -> void
 {
-	
+	auto main_camera = game_object::find_with_tag(5);
+
+	auto visor_component = main_camera.get_component_by_name("VisorEffect");
+
+	auto visor_script = std::make_unique<visor_effect>(visor_component.scripting_class);
+
+	auto const value = flags::no_visor ? 0.f : 1.f;
+
+	visor_script->set_intensity(value);
 }
 
 auto scripts::unlimited_stamina() -> void
@@ -158,15 +167,5 @@ auto scripts::find_closest_target() -> player
 
 auto scripts::test() -> void
 {
-	auto main_camera = game_object::find_with_tag(5);
-
-	auto thermal_component = main_camera.get_component_by_name("ThermalVision");
-	
-	auto thermal_script = std::make_shared<thermal_vision>(thermal_component.scripting_class);
-
-	auto temp = memory_handler::read<uintptr_t>(thermal_script->get_address() + 0x90);
-	
-	auto test_material = material( memory_handler::read<uintptr_t>(temp + 0x10) );
-
-	auto test_color = test_material.get_color();
+	// ...
 }

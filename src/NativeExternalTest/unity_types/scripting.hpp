@@ -7,9 +7,6 @@
 
 #pragma warning (disable : 26451)
 
-#ifndef SCRIPTING_HPP
-#define SCRIPTING_HPP
-
 struct scripting
 {
 	static auto type_to_scripting_type(const uintptr_t unity_type)
@@ -41,5 +38,3 @@ struct scripting
 		return 0;
 	}
 };
-
-#endif

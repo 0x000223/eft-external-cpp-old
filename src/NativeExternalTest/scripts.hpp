@@ -7,6 +7,7 @@
 #include "camera.hpp"
 #include "thermal_vision.hpp"
 #include "night_vision.hpp"
+#include "visor_effect.hpp"
 #include "raid_instance.hpp"
 #include "material.hpp"
 #include "time_manager.hpp"
@@ -19,6 +20,8 @@ struct scripts
 
 		static bool night_vision;
 
+		static bool no_visor;
+		
 		static bool no_recoil;
 
 		static bool unlimited_stamina;

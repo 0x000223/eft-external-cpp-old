@@ -253,5 +253,8 @@
     <ClInclude Include="scripting_types\movement_context.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
+    <ClInclude Include="scripting_types\visor_effect.hpp">
+      <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

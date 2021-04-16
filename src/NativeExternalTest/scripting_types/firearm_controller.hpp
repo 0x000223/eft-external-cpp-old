@@ -2,7 +2,6 @@
 
 #include "offset.hpp"
 #include "memory_handler.hpp"
-#include "shot.hpp"
 
 class firearm_controller
 {
@@ -47,13 +46,5 @@ public:
 	{
 		return memory_handler::read<bool>(
 			address + offset::firearm_controller::is_aiming);
-	}
-
-	auto get_shot_list() const -> std::vector<shot>
-	{
-		auto const list_address = 
-			memory_handler::read<uintptr_t>(address + offset::firearm_controller::shot_list);
-		
-		return generic_list<shot>( list_address ).data;
 	}
 };

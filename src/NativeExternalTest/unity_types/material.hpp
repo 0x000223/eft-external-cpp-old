@@ -11,8 +11,6 @@ class material
 	// UnityEngine.Material
 	// https://docs.unity3d.com/2018.4/Documentation/ScriptReference/Material.html
 
-typedef uintptr_t retard_autist_clown;
-
 private:
 
 	uintptr_t address;

@@ -145,6 +145,11 @@ auto menu::visuals_tab_window() -> void
 			{
 				scripts::toggle_night_vision();
 			}
+
+			if(ImGui::Checkbox("No Visor", &scripts::flags::no_visor))
+			{
+				scripts::toggle_no_visor();
+			}
 		}
 		
 		ImGui::EndChild();
