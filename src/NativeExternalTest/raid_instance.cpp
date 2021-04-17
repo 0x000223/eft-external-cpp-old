@@ -81,7 +81,8 @@ auto raid_instance::get_registered_players() -> std::vector<player>
 			scripting_class + offset::game_world::registered_players);
 
 	auto count = 
-		memory_handler::read<uint32_t>(list_address + offset::generic_list::count);
+		memory_handler::read<uint32_t>(
+			list_address + offset::generic_list::count);
 
 	auto base =
 		memory_handler::read<uintptr_t>(
@@ -91,7 +92,7 @@ auto raid_instance::get_registered_players() -> std::vector<player>
 	{
 		auto temp = memory_handler::read<uintptr_t>(base + index * 8);
 
-		ret_list.push_back( player(temp) );
+		ret_list.emplace_back(temp);
 	}
 	
 	return ret_list;
@@ -105,16 +106,8 @@ auto raid_instance::get_local_player() -> player*
 	{
 		return nullptr;
 	}
-	
-	for(auto& object : list)
-	{
-		if(object.is_local)
-		{
-			return new player ( object.get_address() );
-		}
-	}
 
-	return nullptr;
+	return new player { list[0].get_address() };
 }
 
 auto raid_instance::update_instance() -> void

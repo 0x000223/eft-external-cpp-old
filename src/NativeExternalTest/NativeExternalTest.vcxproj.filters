@@ -74,6 +74,9 @@
     <ClCompile Include="raid_instance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.hpp">
@@ -205,9 +208,6 @@
     <ClInclude Include="scripting_types\procedural_weapon_animation.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
-    <ClInclude Include="scripting_types\character_controller_spawner.hpp">
-      <Filter>Header Files\Scripting Types</Filter>
-    </ClInclude>
     <ClInclude Include="scripting_types\active_health_controller.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
@@ -255,6 +255,9 @@
     </ClInclude>
     <ClInclude Include="scripting_types\visor_effect.hpp">
       <Filter>Header Files\Scripting Types</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,15 +2,6 @@
 
 bool menu::show_menu = false;
 
-float	menu::settings::float_player_distance	= 300.f;
-bool	menu::settings::player_box				= false;
-bool	menu::settings::player_snapline			= false;
-bool	menu::settings::player_name				= true;
-bool	menu::settings::player_health			= true;
-bool	menu::settings::player_faction			= false;
-bool	menu::settings::player_distance			= false;
-bool	menu::settings::player_bones			= true;
-
 auto menu::menu_style_default() -> void
 {
 	auto& style = ImGui::GetStyle();
@@ -114,7 +105,7 @@ auto menu::visuals_tab_window() -> void
 		{
 			ImGui::Text("Player Draw Distance");
 			
-			ImGui::SliderFloat("", &settings::float_player_distance, 0.f, 2000.f);
+			ImGui::SliderFloat("", &settings::player_draw_distance, 0.f, 2000.f);
 
 			ImGui::Checkbox("Name", &settings::player_name);
 
@@ -136,17 +127,17 @@ auto menu::visuals_tab_window() -> void
 		ImGui::BeginChild("camera_child_window", ImVec2(245.f,60.f), true, ImGuiWindowFlags_ChildWindow);
 
 		{
-			if(ImGui::Checkbox("Thermal Vision", &scripts::flags::thermal_vision))
+			if(ImGui::Checkbox("Thermal Vision", &settings::thermal_vision))
 			{
 				scripts::toggle_thermal_vision();
 			}
 
-			if(ImGui::Checkbox("Night Vision", &scripts::flags::night_vision))
+			if(ImGui::Checkbox("Night Vision", &settings::night_vision))
 			{
 				scripts::toggle_night_vision();
 			}
 
-			if(ImGui::Checkbox("No Visor", &scripts::flags::no_visor))
+			if(ImGui::Checkbox("No Visor", &settings::no_visor))
 			{
 				scripts::toggle_no_visor();
 			}
@@ -159,9 +150,9 @@ auto menu::visuals_tab_window() -> void
 		ImGui::BeginChild("character_child_window", ImVec2(245.f, 60.f), true, ImGuiWindowFlags_ChildWindow);
 
 		{
-			ImGui::Checkbox("Stamina", &scripts::flags::unlimited_stamina);
+			ImGui::Checkbox("Stamina", &settings::infinite_stamina);
 
-			ImGui::Checkbox("No Recoil", &scripts::flags::no_recoil);
+			ImGui::Checkbox("No Recoil", &settings::no_recoil);
 		}
 	
 		ImGui::EndChild();
@@ -178,11 +169,11 @@ auto menu::aim_tab_window() -> void
 {
 	ImGui::BeginChild("aim_child_window", ImVec2(0,0), ImGuiWindowFlags_ChildWindow);
 
-	ImGui::Checkbox("FOV Aimbot", &scripts::flags::fov_aim);
+	ImGui::Checkbox("FOV Aimbot", &settings::fov_aim);
 
 	ImGui::Text("FOV");
 
-	ImGui::SliderFloat("", &scripts::flags::fov, 1.f, 2000.f);
+	ImGui::SliderFloat("", &settings::fov, 1.f, 2000.f);
 	
 	ImGui::EndChild();
 }

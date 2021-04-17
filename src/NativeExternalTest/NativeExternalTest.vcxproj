@@ -194,6 +194,7 @@
     <ClCompile Include="raid_instance.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="scripts.cpp" />
+    <ClCompile Include="settings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bypass_handler.hpp" />
@@ -217,7 +218,6 @@
     <ClInclude Include="scripting_types\ballistics_calculator.hpp" />
     <ClInclude Include="scripting_types\body_part_state.hpp" />
     <ClInclude Include="scripting_types\cc_sharpen.hpp" />
-    <ClInclude Include="scripting_types\character_controller_spawner.hpp" />
     <ClInclude Include="scripting_types\e_body_part.hpp" />
     <ClInclude Include="scripting_types\e_player_side.h" />
     <ClInclude Include="scripting_types\firearm_controller.hpp" />
@@ -242,6 +242,7 @@
     <ClInclude Include="scripting_types\value_type.hpp" />
     <ClInclude Include="scripting_types\visor_effect.hpp" />
     <ClInclude Include="scripts.hpp" />
+    <ClInclude Include="settings.hpp" />
     <ClInclude Include="unity_types\camera.hpp" />
     <ClInclude Include="unity_types\color.hpp" />
     <ClInclude Include="unity_types\component.hpp" />

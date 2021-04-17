@@ -10,11 +10,16 @@ struct vector2
 {
 	float x,y;
 
-	auto operator ! () const -> bool
+	auto operator !() const -> bool
 	{
 		return !this->x && !this->y;
 	}
 
+	auto operator +(vector2 other) const -> vector2
+	{
+		return vector2( this->x + other.x, this->y + other.y );
+	}
+	
 	auto distance(const vector2 other) const -> float
 	{
 		auto const a = this->x - other.x;
@@ -146,6 +151,11 @@ namespace utility
 
 	inline auto wide_to_narrow(const std::wstring& wide_string)
 	{
+		if(wide_string.size() > 1000)
+		{
+			return std::string();
+		}
+		
 		using convert_type = std::codecvt_utf8<wchar_t>;
 		
 		std::wstring_convert<convert_type, wchar_t> converter;

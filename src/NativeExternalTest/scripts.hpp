@@ -3,6 +3,7 @@
 
 #include "offset.hpp"
 #include "memory_handler.hpp"
+#include "settings.hpp"
 
 #include "camera.hpp"
 #include "thermal_vision.hpp"
@@ -14,23 +15,6 @@
 
 struct scripts
 {
-	struct flags
-	{
-		static bool thermal_vision;
-
-		static bool night_vision;
-
-		static bool no_visor;
-		
-		static bool no_recoil;
-
-		static bool unlimited_stamina;
-
-		static bool fov_aim;
-
-		static float fov;
-	};
-	
 	static auto run_scripts() -> void;
 
 	static auto reset() -> void;

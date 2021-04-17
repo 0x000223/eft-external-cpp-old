@@ -14,8 +14,8 @@ ID3D11RenderTargetView* render::d3d11_render_target		= nullptr;
 ID2D1DeviceContext*		render::d2d1_device_context		= nullptr;
 ID2D1RenderTarget*		render::d2d1_render_target		= nullptr;
 
-ImFont*					render::font_cascadia			= nullptr;
-ImFont*					render::font_roboto				= nullptr;
+ImFont*					render::font_mbender			= nullptr;
+ImFont*					render::font_mbender_bold		= nullptr;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -58,8 +58,8 @@ auto render::init() -> BOOL
 
 	ImGuiIO& io = ImGui::GetIO();
 	
-	font_cascadia = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\CascadiaCode-Regular.ttf)", 13.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
-	font_roboto = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\Roboto-Regular.ttf)", 13.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+	font_mbender = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\MBender.otf)", 14.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+	font_mbender_bold = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\MBender-Bold.otf)", 14.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
 	
 	menu::menu_style_default();
 	
@@ -172,13 +172,13 @@ auto render::overlay_window() -> void
 				continue;
 			}
 
-			auto head3 = player.body->bones->head.get_position();
+			auto head3 = player.get_head_position();
 			auto head2 = camera::world_to_screen(head3);
 
-			auto root3 = player.body->bones->root.get_position();
+			auto root3 = player.get_root_position();
 			auto root2 = camera::world_to_screen(root3);
 			
-			auto local_root3 = raid_instance::local_player->body->bones->root.get_position();
+			auto local_root3 = raid_instance::local_player->get_root_position();
 			
 			auto distance = vector3::distance(local_root3, root3);
 
@@ -187,7 +187,7 @@ auto render::overlay_window() -> void
 
 			auto player_health = player.get_health();
 
-			if(distance > menu::settings::float_player_distance)
+			if(distance > settings::player_draw_distance)
 			{
 				continue;
 			}
@@ -197,39 +197,39 @@ auto render::overlay_window() -> void
 				continue;
 			}
 			
-			if(menu::settings::player_name)
+			if(settings::player_name)
 			{
 				auto const pos = ImVec2(head2.x - 30.f, head2.y - 35.f);
-
-				ImGui::PushFont(font_roboto);
-				draw_text_stroke( pos, ImColor(255, 0, 205, 255), player.name);
-				ImGui::PopFont();
+				auto const color = ImColor(255, 255, 205, 255);
+				
+				draw_text_stroke( pos, color, player.name);
 			}
 
-			if(menu::settings::player_health)
+			if(settings::player_health)
 			{
-				auto const pos = ImVec2( head2.x - 8.f, head2.y - 20.f );
+				auto const pos = ImVec2( head2.x - 10.f, head2.y - 20.f );
+				auto const color = ImColor(255, 0, 0, 255);
 				
-				draw_text_stroke( pos, ImColor(255, 0, 0, 255), std::to_string( static_cast<int>(player_health) ));
+				draw_text_stroke( pos, color, std::to_string( static_cast<int>(player_health) ));
 			}
 			
-			if(menu::settings::player_distance)
+			if(settings::player_distance)
 			{
 				auto const pos = ImVec2(root2.x - 5.f, root2.y + 10.f);
+				auto const color = ImColor(255, 255, 255, 255);
 				
-				draw_text_stroke( pos, ImColor( 255, 255, 255, 255 ), std::to_string( static_cast<int>(distance) ));
+				draw_text_stroke( pos, color, std::to_string( static_cast<int>(distance) ));
 			}
 
-			if(menu::settings::player_faction)
+			if(settings::player_faction)
 			{
 				auto const pos = ImVec2(head2.x - 20.f, head2.y - 50.f);
-
-				ImGui::PushFont(font_roboto);
-				draw_text_stroke(pos, ImColor(255,255,255,255), player.faction);
-				ImGui::PopFont();
+				auto const color = ImColor(255, 255, 255, 255);
+				
+				draw_text_stroke(pos, color, player.faction);
 			}
 
-			if(menu::settings::player_bones)
+			if(settings::player_bones)
 			{
 				for(auto& [from, to] : player.body->bone_links)
 				{
@@ -239,26 +239,33 @@ auto render::overlay_window() -> void
 					auto const from2 = camera::world_to_screen(from3);
 					auto const to2 = camera::world_to_screen(to3);
 
-					draw_line( ImVec2(from2.x, from2.y), ImVec2(to2.x, to2.y), ImColor(0,255,0,255));
+					auto const color = ImColor(0, 255, 0, 255);
+					
+					draw_line( ImVec2(from2.x, from2.y), ImVec2(to2.x, to2.y), color);
 				}
 			}
 			
-			if(menu::settings::player_snapline)
+			if(settings::player_snapline)
 			{
-				draw_line_stroke( ImVec2(1920.f / 2.f, 0.f), ImVec2(head2.x, head2.y), ImColor(255,0,0,255) );
+				auto const color = ImColor(255, 0, 0, 255);
+				
+				draw_line_stroke( ImVec2(1920.f / 2.f, 0.f), ImVec2(head2.x, head2.y), color);
 				ImGui::GetWindowDrawList()->AddCircleFilled( ImVec2(head2.x, head2.y), 2.f, ImColor(178,40,40,255));
 			}
 
-			if(menu::settings::player_box)
+			if(settings::player_box)
 			{
 				auto const pos = ImVec2(head2.x - 15.f, head2.y - 10.f);
+				auto const color = ImColor(0,0,205,255);
 				
-				draw_rect_stroke( pos, ImVec2(head2.x + player_width, head2.y + player_height), ImColor(0,0,205,255) );
+				draw_rect_stroke( pos, ImVec2(head2.x + player_width, head2.y + player_height), color);
 			}
 
-			if(scripts::flags::fov_aim)
+			if(settings::fov_aim)
 			{
-				ImGui::GetWindowDrawList()->AddCircle( ImVec2(1920.f / 2.f, 1080.f / 2.f), scripts::flags::fov, ImColor(0,0,255,255) );
+				auto const color = ImColor(0,0,255,255);
+				
+				ImGui::GetWindowDrawList()->AddCircle( ImVec2(1920.f / 2.f, 1080.f / 2.f), settings::fov, color);
 			}
 		}
 		catch (...) { }
@@ -269,11 +276,7 @@ auto render::overlay_window() -> void
 
 auto render::draw_text(const ImVec2 pos, const ImColor color, std::string text) -> void
 {
-	ImGui::PushFont(font_cascadia);
-	
 	ImGui::GetWindowDrawList()->AddText(pos, color, text.c_str());
-
-	ImGui::PopFont();
 }
 
 auto render::draw_text_stroke(const ImVec2 pos, const ImColor color, const std::string text) -> void

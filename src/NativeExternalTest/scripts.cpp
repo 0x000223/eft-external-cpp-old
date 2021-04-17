@@ -1,27 +1,18 @@
 #include "scripts.hpp"
 
-bool scripts::flags::thermal_vision		= false;
-bool scripts::flags::night_vision		= false;
-bool scripts::flags::no_visor			= false;
-bool scripts::flags::no_recoil			= true;
-bool scripts::flags::unlimited_stamina	= true;
-bool scripts::flags::fov_aim			= false;
-
-float scripts::flags::fov				= 1.f;
-
 auto scripts::run_scripts() -> void
 {
-	if(flags::unlimited_stamina)
+	if(settings::infinite_stamina)
 	{
 		unlimited_stamina();	
 	}
 
-	if(flags::no_recoil)
+	if(settings::no_recoil)
 	{
 		no_recoil();
 	}
 
-	if(flags::fov_aim) // TODO - refactor into settings structure with custom keybinds
+	if(settings::fov_aim) // TODO - refactor into settings structure with custom keybinds
 	{
 		if(GetAsyncKeyState(0x46) & 0x01) // 'F'
 		{
@@ -44,7 +35,7 @@ auto scripts::toggle_thermal_vision() -> void
 	
 	auto thermal_script = std::make_shared<thermal_vision>(thermal_component.scripting_class);
 
-	thermal_script->toggle(flags::thermal_vision);
+	thermal_script->toggle(settings::thermal_vision);
 
 	thermal_script->is_noisy(false);
 
@@ -65,7 +56,7 @@ auto scripts::toggle_night_vision() -> void
 
 	auto nvg_script = std::make_shared<night_vision>(nvg_component.scripting_class);
 
-	nvg_script->toggle(flags::night_vision);
+	nvg_script->toggle(settings::night_vision);
 }
 
 auto scripts::toggle_no_visor() -> void
@@ -76,7 +67,7 @@ auto scripts::toggle_no_visor() -> void
 
 	auto visor_script = std::make_unique<visor_effect>(visor_component.scripting_class);
 
-	auto const value = flags::no_visor ? 0.f : 1.f;
+	auto const value = settings::no_visor ? 0.f : 1.f;
 
 	visor_script->set_intensity(value);
 }
@@ -129,7 +120,7 @@ auto scripts::fov_aim() -> void
 		auto const distance = 
 			raid_instance::local_player->movement_context->get_rotation().distance(target_angle);
 
-		if(distance < flags::fov && distance < final_distance)
+		if(distance < settings::fov && distance < final_distance)
 		{
 			final_distance = distance;
 			final_angle = target_angle;

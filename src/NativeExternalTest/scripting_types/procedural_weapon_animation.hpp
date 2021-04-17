@@ -62,4 +62,10 @@ public:
 		memory_handler::write<vector3>(
 			address + offset::procedural_weapon_animation::camera_position, value);
 	}
+
+	auto get_shot_direction() const -> vector3
+	{
+		return memory_handler::read<vector3>(
+			address + offset::procedural_weapon_animation::shot_direction);
+	}
 };

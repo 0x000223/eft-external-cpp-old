@@ -21,8 +21,6 @@ class player
 	
 public:
 
-	bool is_local;
-	
 	std::shared_ptr<player_profile> profile;
 
 	std::shared_ptr<player_physical> physical;
@@ -45,10 +43,6 @@ public:
 	
 	explicit player(const uintptr_t addr) : address(addr)
 	{
-		is_local =
-			memory_handler::read<bool>(
-				address + offset::player::is_local);
-		
 		profile = 
 			std::make_shared<player_profile>(
 				memory_handler::read<uintptr_t>(
@@ -104,6 +98,16 @@ public:
 	auto get_max_health() const -> float
 	{
 		return health_controller->get_player_max_health();
+	}
+
+	auto get_root_position() const -> vector3
+	{
+		return body->bones->root.get_position();
+	}
+
+	auto get_head_position() const -> vector3
+	{
+		return body->bones->head.get_position();
 	}
 	
 	auto operator ! () const -> bool

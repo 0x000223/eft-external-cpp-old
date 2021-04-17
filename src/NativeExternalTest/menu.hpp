@@ -20,23 +20,4 @@ struct menu
 	static auto aim_tab_window() -> void;
 
 	static auto data_tab_window() -> void;
-	
-	struct settings
-	{
-		static float float_player_distance;
-
-		static bool player_name;
-
-		static bool player_health;
-		
-		static bool player_faction;
-		
-		static bool player_distance;
-		
-		static bool player_box;
-
-		static bool player_snapline;
-
-		static bool player_bones;
-	};
 };

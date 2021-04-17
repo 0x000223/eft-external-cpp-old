@@ -138,4 +138,9 @@ public:
 
 		return vector3( result.m128_f32[0], result.m128_f32[1], result.m128_f32[2] );
 	}
+
+	auto transform_direction(vector3 direction)
+	{
+		
+	}
 };

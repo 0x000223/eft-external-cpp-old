@@ -3,13 +3,11 @@
 
 #include "graphics_handler.hpp"
 #include "menu.hpp"
+#include "settings.hpp"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
-
-#ifndef RENDER_HPP
-#define RENDER_HPP
 
 struct render
 {
@@ -32,9 +30,9 @@ private:
 	static ID2D1DeviceContext* d2d1_device_context;
 
 	static ID2D1RenderTarget* d2d1_render_target;
-
-	static ImFont* font_cascadia;
-	static ImFont* font_roboto;
+	
+	static ImFont* font_mbender;
+	static ImFont* font_mbender_bold;
 	
 	static LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -64,5 +62,3 @@ public:
 
 	static auto render_frame() -> void;
 };
-
-#endif
