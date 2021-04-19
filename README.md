@@ -1,6 +1,6 @@
 This project is still under development (in my spare time) and is for educational purposes only. 
 
-Currently im target Unity version 2018.4 ([Official API](https://docs.unity3d.com/2018.4/Documentation/ScriptReference/))
+Currently im targeting Unity version 2018.4 ([Official API](https://docs.unity3d.com/2018.4/Documentation/ScriptReference/))
 
 Some of the classes being looked into:
 
@@ -21,4 +21,4 @@ In the near future I will add short writeups on how to locate interesting data &
 
 ![Older iteration of the menu](/images/image02.jpg)
 
-![Changing night vision colors via the camera component](/images/iamge03.png)
+![Changing night vision colors via the camera component](/images/image03.png)
