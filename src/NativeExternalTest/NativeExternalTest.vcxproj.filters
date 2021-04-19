@@ -154,9 +154,6 @@
     <ClInclude Include="scripting_types\system_array.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>
-    <ClInclude Include="scripting_types\brightness_contrast_gamma.hpp">
-      <Filter>Header Files\Scripting Types</Filter>
-    </ClInclude>
     <ClInclude Include="scripting_types\eft_exfil_point.hpp">
       <Filter>Header Files\Scripting Types</Filter>
     </ClInclude>

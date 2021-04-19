@@ -228,7 +228,6 @@
     <ClInclude Include="scripting_types\procedural_weapon_animation.hpp" />
     <ClInclude Include="scripting_types\shot.hpp" />
     <ClInclude Include="scripting_types\system_array.hpp" />
-    <ClInclude Include="scripting_types\brightness_contrast_gamma.hpp" />
     <ClInclude Include="scripting_types\eft_exfil_point.hpp" />
     <ClInclude Include="scripting_types\eft_player.hpp" />
     <ClInclude Include="scripting_types\eft_player_body.hpp" />

@@ -142,8 +142,14 @@ public:
 				{
 					
 				}
+
+				auto test_red = memory_handler::read<float>(color_address);
+				auto test_green = memory_handler::read<float>(color_address + 0x4);
+				auto test_blue = memory_handler::read<float>(color_address + 0x8);
+
+				// TEST
 				
-				return color( color_address );
+				/*return color( color_address );*/
 			}
 			
 			if(property_index > v8)

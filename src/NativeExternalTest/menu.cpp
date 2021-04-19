@@ -100,8 +100,8 @@ auto menu::visuals_tab_window() -> void
 {
 	ImGui::BeginChild("visuals_child_window", ImVec2(0,0), true, ImGuiWindowFlags_ChildWindow);
 
-		ImGui::BeginChild("esp_child_window", ImVec2(500.f, 170.f), true, ImGuiWindowFlags_ChildWindow | ImGuiWindowFlags_NoScrollbar);
-
+		ImGui::TextColored( ImVec4(255,255,255,255), "Visuals" );
+	
 		{
 			ImGui::Text("Player Draw Distance");
 			
@@ -122,19 +122,32 @@ auto menu::visuals_tab_window() -> void
 			ImGui::Checkbox("Box", &settings::player_box);
 		}
 	
-		ImGui::EndChild();
+		ImGui::TextColored( ImVec4(255,255,255,255), "Camera" );
 	
-		ImGui::BeginChild("camera_child_window", ImVec2(245.f,60.f), true, ImGuiWindowFlags_ChildWindow);
-
 		{
-			if(ImGui::Checkbox("Thermal Vision", &settings::thermal_vision))
-			{
-				scripts::toggle_thermal_vision();
-			}
-
 			if(ImGui::Checkbox("Night Vision", &settings::night_vision))
 			{
 				scripts::toggle_night_vision();
+			}
+
+			if(ImGui::SliderFloat("Red", &settings::nvg_color_red, 0.f, 1.f))
+			{
+				scripts::nvg_set_red(settings::nvg_color_red);
+			}
+
+			if(ImGui::SliderFloat("Green", &settings::nvg_color_green, 0.f, 1.f))
+			{
+				scripts::nvg_set_green(settings::nvg_color_green);
+			}
+
+			if(ImGui::SliderFloat("Blue", &settings::nvg_color_blue, 0.f, 1.f))
+			{
+				scripts::nvg_set_blue(settings::nvg_color_blue);
+			}
+		
+			if(ImGui::Checkbox("Thermal Vision", &settings::thermal_vision))
+			{
+				scripts::toggle_thermal_vision();
 			}
 
 			if(ImGui::Checkbox("No Visor", &settings::no_visor))
@@ -142,21 +155,17 @@ auto menu::visuals_tab_window() -> void
 				scripts::toggle_no_visor();
 			}
 		}
-		
-		ImGui::EndChild();
 
-		ImGui::SameLine(0.f, 10.f);
+		ImGui::TextColored( ImVec4(255,255,255,255), "Misc" );
 	
-		ImGui::BeginChild("character_child_window", ImVec2(245.f, 60.f), true, ImGuiWindowFlags_ChildWindow);
-
 		{
 			ImGui::Checkbox("Stamina", &settings::infinite_stamina);
 
 			ImGui::Checkbox("No Recoil", &settings::no_recoil);
 		}
-	
-		ImGui::EndChild();
 
+		ImGui::TextColored( ImVec4(255,255,255,255), "Test" );
+	
 		if(ImGui::Button("TEST"))
 		{
 			scripts::test();

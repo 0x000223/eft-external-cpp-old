@@ -7,6 +7,10 @@ struct settings
 	static bool night_vision;
 	static bool no_visor;
 
+	static float nvg_color_red;
+	static float nvg_color_green;
+	static float nvg_color_blue;
+	
 	// Character related
 	static bool no_recoil;
 	static bool infinite_stamina;

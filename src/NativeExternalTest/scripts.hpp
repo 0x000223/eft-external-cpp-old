@@ -23,6 +23,12 @@ struct scripts
 
 	static auto toggle_night_vision() -> void;
 
+	static auto nvg_set_red(const float value) -> void;
+	
+	static auto nvg_set_green(const float value) -> void;
+
+	static auto nvg_set_blue(const float value) -> void;
+	
 	static auto toggle_no_visor() -> void;
 	
 	static auto unlimited_stamina() -> void;

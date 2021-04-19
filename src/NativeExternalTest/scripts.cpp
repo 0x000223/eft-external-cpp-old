@@ -59,6 +59,39 @@ auto scripts::toggle_night_vision() -> void
 	nvg_script->toggle(settings::night_vision);
 }
 
+auto scripts::nvg_set_red(const float value) -> void
+{
+	auto main_camera = game_object::find_with_tag(5);
+
+	auto nvg_component = main_camera.get_component_by_name("NightVision");
+
+	auto nvg_script = std::make_shared<night_vision>(nvg_component.scripting_class);
+
+	nvg_script->set_red(value);
+}
+
+auto scripts::nvg_set_green(const float value) -> void
+{
+	auto main_camera = game_object::find_with_tag(5);
+
+	auto nvg_component = main_camera.get_component_by_name("NightVision");
+
+	auto nvg_script = std::make_shared<night_vision>(nvg_component.scripting_class);
+
+	nvg_script->set_green(value);
+}
+
+auto scripts::nvg_set_blue(const float value) -> void
+{
+	auto main_camera = game_object::find_with_tag(5);
+
+	auto nvg_component = main_camera.get_component_by_name("NightVision");
+
+	auto nvg_script = std::make_shared<night_vision>(nvg_component.scripting_class);
+
+	nvg_script->set_blue(value);
+}
+
 auto scripts::toggle_no_visor() -> void
 {
 	auto main_camera = game_object::find_with_tag(5);
@@ -158,5 +191,9 @@ auto scripts::find_closest_target() -> player
 
 auto scripts::test() -> void
 {
-	// ...
+	auto player_body = raid_instance::local_player->body->get_address();
+
+	auto body_skins_dict = generic_dictionary<unsigned, uintptr_t>( memory_handler::read<uintptr_t>(player_body + 0x38) );
+
+	auto test = body_skins_dict.entries;
 }

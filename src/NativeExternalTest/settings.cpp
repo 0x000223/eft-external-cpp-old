@@ -4,6 +4,10 @@ bool settings::thermal_vision = false;
 bool settings::night_vision = false;
 bool settings::no_visor = false;
 
+float settings::nvg_color_red = 0.f;
+float settings::nvg_color_green = 0.f;
+float settings::nvg_color_blue = 0.f;
+
 bool settings::no_recoil = true;
 bool settings::infinite_stamina = true;
 
