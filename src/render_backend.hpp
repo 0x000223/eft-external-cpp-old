@@ -1,15 +1,19 @@
-#pragma once
+/**
+ * @file render_backend.hpp
+ * @date 11/02/2022
+ * 
+ * @brief 
+ */
+
+#ifndef GRAPHICS_HANDLER_HPP
+#define GRAPHICS_HANDLER_HPP
+
 #include <Windows.h>
 #include <d3d11.h>
 #include <d2d1.h>
 #include <d2d1_1.h>
 
 #include "utility.hpp"
-
-#pragma warning(disable : 26495)
-
-#ifndef GRAPHICS_HANDLER_HPP
-#define GRAPHICS_HANDLER_HPP
 
 class graphics_handler
 {
