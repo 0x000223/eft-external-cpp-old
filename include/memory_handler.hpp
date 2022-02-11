@@ -1,54 +1,92 @@
-#pragma once
+/**
+ * @file memory_handler.hpp
+ * @author Max Penkov
+ * @date 11/02/2022
+ * @brief
+ * 
+ */
+
+#ifndef MEMORY_HANDLER_HPP
+#define MEMORY_HANDLER_HPP
+
 #include <string>
 #include <vector>
 
-#include "bypass_handler.hpp"
+typedef unsigned long long address_t;
 
-#pragma warning(disable : 26495)
+typedef unsigned long pid_t;
 
-struct process_state;
+namespace memory {
+	/**
+	 * @brief Process id of 'EscapeFromTarkov.exe'
+	 */
+	static pid_t process_id;
 
-class memory_handler
-{
-	static unsigned long process_id;
+	/**
+	 * @brief Initializes memory connection - each with his own implementation
+	 */
+	bool init();
+
+	/**
+	 * @brief Terminates memory connection - each with his own implementation
+	 */
+	void terminate();
 	
-public:
-
-	static auto init() -> bool;
-
-	static auto terminate() -> void;
-
-	static auto attach(unsigned long proc_id) -> void;
-	
+	/**
+	 * @param Address to read from
+	 */
 	template<typename T>
-	static auto read(uintptr_t from) -> T;
+	T read(const address_t address);
 
+	/**
+	 * @param Address to write to
+	 * @param Data to write
+	 */
 	template<typename T>
-	static auto write(uintptr_t to, T value) -> void;
+	void write(const address_t address, T data);
 
-	static auto read_bytes(uintptr_t from, size_t length) -> void*;
+	/**
+	 * @param Address to read from
+	 * @param Number of bytes to read
+	 * @brief
+	 */
+	void* read_bytes(const address_t address, const size_t length);
 
-	static auto read_chain(uintptr_t base, const std::vector<uintptr_t>& offsets) -> uintptr_t;
+	/**
+	 * @param Starting address
+	 * @param List of offsets to dereference from base
+	 * @brief
+	 */
+	address_t read_chain(address_t base, const std::vector<address_t>& offsets);
 	
-	static auto read_narrow_string(uintptr_t string_address) -> std::string;
+	/**
+	 * @param Address of string
+	 * @brief Reads UTF-8 string from a target address
+	 */
+	std::string read_narrow_string(const address_t address);
 
-	static auto read_wide_string(uintptr_t string_address) -> std::wstring;
-	
-	static auto get_module_address(const wchar_t* module_name) -> uintptr_t;
-};
-
-template <typename T>
-auto memory_handler::read(const uintptr_t from) -> T
-{
-	T ret;
-
-	bypass_handler::read_memory(process_id, reinterpret_cast<void*>(from), &ret, sizeof(ret));
-
-	return ret;
+	/**
+	 * @param Address of string
+	 * @brief Reads unicode string from a target address
+	 */
+	std::wstring read_wide_string(const address_t address);
 }
 
-template <typename T>
-auto memory_handler::write(const uintptr_t to, T value) -> void
-{
-	bypass_handler::write_memory(process_id, reinterpret_cast<void*>(to), &value, sizeof(value));
+namespace process {
+	/**
+	 * @brief Address of 'UnityPlayer.dll' module
+	 */
+	static address_t module_addres;
+
+	/**
+	 * @brief Returns target process id
+	 */
+	pid_t get_process_id(const std::string process_name);
+
+	/**
+	 * @brief Returns address of the requested module in attached process
+	 */
+	address_t get_module_address(const wchar_t* module_name);
 }
+
+#endif
