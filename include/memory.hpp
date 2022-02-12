@@ -16,7 +16,6 @@ typedef unsigned long long address_t;
 
 typedef unsigned long pid_t;
 
-namespace memory {
 
 namespace process {
 
