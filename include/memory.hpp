@@ -17,10 +17,31 @@ typedef unsigned long long address_t;
 typedef unsigned long pid_t;
 
 namespace memory {
+
+namespace process {
+
 	/**
 	 * @brief Process id of 'EscapeFromTarkov.exe'
 	 */
-	static pid_t process_id;
+	extern pid_t process_id;
+
+	/**
+	 * @brief Address of 'UnityPlayer.dll' module
+	 */
+	extern address_t module_address;
+
+	/**
+	 * @brief Returns target process id
+	 */
+	pid_t get_process_id(const std::string process_name);
+
+	/**
+	 * @brief Returns address of the requested module in attached process
+	 */
+	address_t get_module_address(const std::wstring module_name);
+}
+
+namespace memory {
 
 	/**
 	 * @brief Initializes memory connection - each with his own implementation
@@ -57,7 +78,6 @@ namespace memory {
 	 * @param List of offsets to dereference from base
 	 * @brief
 	 */
-	address_t read_chain(address_t base, const std::vector<address_t>& offsets);
 	address_t read_chain(const address_t base, const std::vector<address_t>& offsets);
 	
 	/**
@@ -71,23 +91,6 @@ namespace memory {
 	 * @brief Reads unicode string from a target address
 	 */
 	std::wstring read_wide_string(const address_t address);
-}
-
-namespace process {
-	/**
-	 * @brief Address of 'UnityPlayer.dll' module
-	 */
-	static address_t module_addres;
-
-	/**
-	 * @brief Returns target process id
-	 */
-	pid_t get_process_id(const std::string process_name);
-
-	/**
-	 * @brief Returns address of the requested module in attached process
-	 */
-	address_t get_module_address(const std::wstring module_name);
 }
 
 #endif
