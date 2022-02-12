@@ -1,8 +1,16 @@
-#pragma once
+/**
+ * @file player.hpp
+ * @date 12/02/2022
+ * 
+ */
+
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
+
 #include <memory>
 
 #include "offset.hpp"
-#include "memory_handler.hpp"
+#include "memory.hpp"
 #include "utility.hpp"
 #include "transform.hpp"
 #include "eft_profile.hpp"
@@ -13,11 +21,11 @@
 #include "procedural_weapon_animation.hpp"
 #include "movement_context.hpp"
 
-class player
+/**
+ * @brief Class which represents EFT.Player
+ */
+class player : public component
 {
-	// EFT.Player
-	
-	uintptr_t address;
 	
 public:
 
@@ -39,10 +47,12 @@ public:
 
 	std::string faction;
 
-	player() = default;
+	player()
+		: component()
+	{}
 	
-	explicit player(const uintptr_t addr) : address(addr)
-	{
+	explicit player(const address_t address) {
+
 		profile = 
 			std::make_shared<player_profile>(
 				memory_handler::read<uintptr_t>(
@@ -85,11 +95,6 @@ public:
 
 	~player() = default;
 	
-	auto get_address() const -> uintptr_t
-	{
-		return address;
-	}
-
 	auto get_health() const -> float
 	{
 		return health_controller->get_player_health();
@@ -155,3 +160,5 @@ public:
 		return first.address != second.address;
 	}
 };
+
+#endif
