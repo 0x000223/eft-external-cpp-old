@@ -58,6 +58,7 @@ namespace memory {
 	 * @brief
 	 */
 	address_t read_chain(address_t base, const std::vector<address_t>& offsets);
+	address_t read_chain(const address_t base, const std::vector<address_t>& offsets);
 	
 	/**
 	 * @param Address of string
@@ -86,7 +87,7 @@ namespace process {
 	/**
 	 * @brief Returns address of the requested module in attached process
 	 */
-	address_t get_module_address(const wchar_t* module_name);
+	address_t get_module_address(const std::wstring module_name);
 }
 
 #endif
