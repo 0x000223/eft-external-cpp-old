@@ -1,56 +1,48 @@
-#pragma once
+/**
+ * @file component.hpp
+ * @date 12/02/2022
+ * 
+ */
+
+#ifndef COMPONENT_HPP
+#define COMPONENT_HPP
 
 #include "offset.hpp"
-#include "memory_handler.hpp"
+#include "memory.hpp"
 #include "object.hpp"
 
+/**
+ * @brief Class which represents UnityEngine::Component
+ * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/Component.html
+ */
 class component : public object
 {
-	// Component
-	// https://docs.unity3d.com/ScriptReference/Component.html
+protected:
+
+	/**
+	 * @brief Address of game object this component is attached to
+	 */
+	address_t m_game_object;
 
 public:
 
-	std::string class_name;
-
-	std::string class_namespace;
-
-	uintptr_t scripting_class;
-
-	uintptr_t mono_class;
-
-	component() = default;
+	component()
+		: object(0)
+	{}
 	
-	explicit component(const uintptr_t addr) : object(addr)
+	explicit component(const address_t address)
+		: object(address)
 	{
-		scripting_class = memory_handler::read<uintptr_t>(addr + offset::component::scripting_class);
-
-		mono_class = memory_handler::read_chain(scripting_class, offset::component::mono_class);
-		
-		class_name = get_name();
-
-		class_namespace = get_namespace();
+		set_scripting_object();
+		set_scripting_class();
+		set_scripting_class_name();
+		set_scripting_class_namespace();
 	}
 	
-	auto get_name() const -> std::string
-	{
-		auto name_address = 
-			memory_handler::read<uintptr_t>(mono_class + offset::mono::class_name);
-
-		return memory_handler::read_narrow_string(name_address);
-	}
-
-	auto get_namespace() const -> std::string
-	{
-		auto namespace_address =
-			memory_handler::read<uintptr_t>(mono_class + offset::mono::class_namespace);
-
-		return memory_handler::read_narrow_string(namespace_address);
-	}
-
-	auto get_game_object() const -> uintptr_t
-	{
-		return memory_handler::read<uintptr_t>(
-			address + offset::component::attached_game_object);
-	}
+	/**
+	 * @brief Returns all components of the game object this component is attached to
+	 */
+	std::vector<component> get_components() const;
 };
+
+#endif
