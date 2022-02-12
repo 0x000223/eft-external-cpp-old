@@ -142,11 +142,6 @@ namespace imported
 
 namespace utility
 {
-	inline auto get_process_id(std::wstring process_name) -> DWORD
-	{
-		return imported::get_process_id(process_name.data());
-	}
-
 	inline auto wide_to_narrow(const std::wstring& wide_string)
 	{
 		if(wide_string.size() > 1000)
