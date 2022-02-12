@@ -137,8 +137,6 @@ struct matrix44
 
 namespace imported
 {
-	extern "C" __declspec(dllimport) auto get_process_id(const wchar_t* process_name) -> DWORD;
-
 	extern "C" __declspec(dllimport) auto create_overlay(const wchar_t* text) -> HWND;
 }
 
