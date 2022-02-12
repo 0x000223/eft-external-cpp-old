@@ -1,50 +1,68 @@
-#pragma once
+/**
+ * @file camera.hpp
+ * @date 12/02/2022
+ * 
+ */
+
+#ifndef CAMERA_HPP
+#define CAMERA_HPP
+
 #include <cstdint>
 
-#include "memory_handler.hpp"
+#include "memory.hpp"
 #include "offset.hpp"
-#include "managers.hpp"
 #include "game_object.hpp"
 #include "unity.hpp"
 #include "component.hpp"
 #include "utility.hpp"
 #include "raid_instance.hpp"
 
+/**
+ * @see https://docs.unity3d.com/ScriptReference/Camera.html
+ */
 class camera : public component
 {
-	// UnityEngine.Camera
-	// https://docs.unity3d.com/ScriptReference/Camera.html
+private:
+
+	enum camera_type : int
+	{
+		Game,
+		SceneView,
+		Preview,
+		VR,
+		Reflection,
+	};
 
 public:
 
-	explicit camera(const uintptr_t addr) : component(addr)
+	explicit camera(const address_t addr) : component(addr)
 	{
 		// Handle constructor
 	}
 
 	auto get_fov() const -> float
 	{
-		return memory_handler::read<float>(address + offset::camera::fov);
+		return memory::read<float>(m_address + offset::camera::fov);
 	}
 
 	auto set_fov(const float new_fov) const -> void
 	{
-		return memory_handler::write(address + offset::camera::fov, new_fov);
+		return memory::write(m_address + offset::camera::fov, new_fov);
 	}
 
 	auto get_depth() const -> float
 	{
-		return memory_handler::read<float>(address + offset::camera::depth);
+		return memory::read<float>(m_address + offset::camera::depth);
 	}
 
 	auto set_depth(const float new_depth) const -> void
 	{
-		return memory_handler::write(address + offset::camera::depth, new_depth);
+		return memory::write(m_address + offset::camera::depth, new_depth);
 	}
 
 	auto get_view_matrix() const -> matrix44
 	{
-		return memory_handler::read<matrix44>(address + offset::camera::view_matrix);
+		return memory::read<matrix44>(m_address + offset::camera::view_matrix);
 	}
 
 	static auto world_to_screen(const vector3& pos) -> vector2
@@ -100,7 +118,7 @@ public:
 	
 	static auto get_main_camera() -> camera*
 	{
-		uint16_t main_camera_tag = 5;
+		static uint16_t main_camera_tag = 5;
 		
 		auto camera_game_object = game_object::find_with_tag(main_camera_tag);
 
@@ -116,11 +134,11 @@ public:
 		return new camera( camera_component.get_address() );
 	}
 
+	/**
+	 * @see https://docs.unity3d.com/2018.4/Documentation/ScriptReference/Camera-allCamerasCount.html
+	 */
 	static auto get_all_cameras_count() -> unsigned
 	{
-		// Camera.allCamerasCount
-		// https://docs.unity3d.com/2018.4/Documentation/ScriptReference/Camera-allCamerasCount.html
-		
 		if(!managers::render_manager)
 		{
 			return 0;
@@ -132,15 +150,6 @@ public:
 
 		return n1 + n2;
 	}
-	
-private:
-
-	enum camera_type : int
-	{
-		Game,
-		SceneView,
-		Preview,
-		VR,		
-		Reflection,
-	};
 };
+
+#endif
