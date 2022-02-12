@@ -1,442 +1,110 @@
-#pragma once
-#include <string>
+/**
+ * @file game_object_hpp
+ * @date 12/02/2022
+ * @brief
+ * 
+ */
+
+#ifndef GAMEOBJECT_HPP
+#define GAMEOBJECT_HPP
+
 #include <memory>
-#include <vector>
 
-#include "offset.hpp"
-#include "memory_handler.hpp"
-#include "component.hpp"
 #include "object.hpp"
-#include "unity.hpp"
-#include "managers.hpp"
+#include "component.hpp"
 
+/**
+ * @brief Address of GameObjectManager
+ */
+extern address_t g_GOM;
 
-class game_object
+/**
+ * @brief Class which represents UnityEngine::GameObject 
+ * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/GameObject.html
+ */
+class game_object : public object
 {
-	// GameObject
-	// https://docs.unity3d.com/2018.4/Documentation/ScriptReference/GameObject.html
+private:
 
-	// TODO
-	// GetComponent(),
-	// GetComponents(),
-	// GetComponentInChildren(),
-	// GetComponentInParent(),
-	// QueryComponentByExactType(Unity::Type const* )
-	// GetComponentPtrAtIndex(int)
-	// GetCullSceneMask(void)
-	// GetComponentIndex(Unity::Component)
-	// SwapComponents(int, int)
+	/**
+	 * @brief Address of attached components array
+	 */
+	const address_t m_component_array;
+
+	/**
+	 * @brief Number of attached components
+	 */
+	const uint64_t m_component_count;
+
+	/**
+	 * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/GameObject-transform.html
+	 */
+	address_t get_transform() const;
+
+protected:
 	
+
 public:
 
-	uintptr_t address;
+	/**
+	 * @brief Used to identify a GameObject
+	 */
+	const uint16_t m_tag;
+
+	/**
+	 * @brief Name of the GameObject
+	 */
+	const std::string m_name;
+
+	/**
+	 * @brief Address of the attached transform component
+	 */
+	const address_t m_transform;
+
+	game_object()
+		: object(), m_tag(0), m_name("EMPTY_OBJECT"), m_transform(0), m_component_array(0), m_component_count(0)
+	{}
+
+	explicit game_object(const address_t address)
+		: object(address),
+		m_component_array(memory::read<address_t>(m_address + O_GAMEOBJECT_COMPONENT_ARRAY)),
+		m_component_count(memory::read<uint64_t>(m_address + O_GAMEOBJECT_COMPONENT_SIZE)),
+		m_name(memory::read_narrow_string(m_address + O_GAMEOBJECT_NAME)),
+		m_tag(memory::read<uint16_t>(m_address + O_GAMEOBJECT_TAG)),
+		m_transform(get_transform())
+	{}
+
+	/**
+	 * @brief
+	 */
+	component get_component_by_name(const std::string component_name) const;
+
+	/**
+	 * @brief Retruns all components which are attached to this GameObject
+	 */
+	std::vector<component> get_components() const;
 	
-	bool is_active_self;
+	/**
+	 * @brief
+	 */
+	static std::vector<game_object> get_active_objects();
 	
-	bool is_active;
+	/**
+	 * @brief
+	 */
+	static std::vector<game_object> get_tagged_objects();
 
-	int layer;
+	/**
+	 * @brief Returns an array of active GameObjects
+	 * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/GameObject.FindGameObjectsWithTag.html
+	 */
+	static std::vector<game_object> find_game_objects_with_tag(const uint16_t tag);
 	
-	uint16_t tag;
-
-	std::string name;
-
-	uintptr_t transform;
-	
-	uintptr_t component_count;
-
-	game_object() = default;
-	
-	explicit game_object(const uintptr_t addr) : address(addr)
-	{
-		auto name_address =
-			memory_handler::read<uintptr_t>(addr + offset::game_object::name);
-
-		name =
-			memory_handler::read_narrow_string(name_address);
-
-		tag =
-			memory_handler::read<uint16_t>(addr + offset::game_object::tag);
-
-		layer =
-			memory_handler::read<int>(addr + offset::game_object::layer);
-
-		is_active_self =
-			memory_handler::read<bool>(addr + offset::game_object::active_self);
-
-		is_active =
-			memory_handler::read<bool>(addr + offset::game_object::is_active);
-
-		transform =
-			get_transform();
-
-		component_count =
-			memory_handler::read<uintptr_t>(addr + offset::game_object::component_count);
-	}
-
-	game_object(const game_object& other)
-	{
-		address			= other.address;
-		name			= other.name;
-		tag				= other.tag;
-		layer			= other.layer;
-		is_active_self	= other.is_active_self;
-		is_active		= other.is_active;
-		transform		= other.transform;
-		component_count = other.component_count;
-	}
-	
-	auto reset() const -> void
-	{
-		// Unity internal
-
-		memory_handler::write<uint32_t>(address + 0x50, 0);
-		memory_handler::write<uint16_t>(address + 0x54, 0);
-	}
-	
-	auto get_transform() const -> uintptr_t
-	{
-		auto component_array = 
-			memory_handler::read<uintptr_t>(address + offset::game_object::component_array);
-
-		auto transform_component = 
-			memory_handler::read<uintptr_t>(component_array + offset::component::next_component);
-
-		return memory_handler::read<uintptr_t>(
-			transform_component + offset::component::scripting_class);
-	}
-
-	auto get_component_by_name(const std::string component_name) const -> component
-	{
-		auto component_array = 
-			memory_handler::read<uintptr_t>(address + offset::game_object::component_array);
-
-		for(unsigned index = 0; index < component_count; index++)
-		{
-			auto temp_component = 
-				component(
-					memory_handler::read<uintptr_t>(component_array + 0x10 * index + 0x8));
-
-			if(temp_component.class_name.find(component_name) != std::string::npos)
-			{
-				return temp_component;
-			}
-		}
-
-		return component { 0 };
-	}
-
-	auto get_all_components() const -> std::vector<component>
-	{
-		auto component_array =
-			memory_handler::read<uintptr_t>(address + offset::game_object::component_array);
-
-		std::vector<component> components;
-		
-		for(unsigned index = 0; index < component_count; index++)
-		{
-			components.emplace_back(
-				memory_handler::read<uintptr_t>(component_array + 0x10 * index + 0x8));
-		}
-
-		return components;
-	}
-	
-	static auto query_component_by_type(const game_object& game_object, const uintptr_t unity_type) -> component
-	{
-		// Unity internal
-
-		auto temp_component_array = 
-			memory_handler::read<uintptr_t>(game_object.address + offset::game_object::component_array);
-		
-		auto last_component =
-			memory_handler::read<uintptr_t>(temp_component_array + 0x10 * game_object.component_count);
-
-		if(temp_component_array == last_component)
-		{
-			return component { 0 };
-		}
-
-		auto uint32_1 = memory_handler::read<uint32_t>(unity_type + 0x30);
-		auto uint32_2 = memory_handler::read<uint32_t>(unity_type + 0x34);
-
-		// Paste from IDA
-		while(memory_handler::read<uint32_t>(temp_component_array) - uint32_1 >= uint32_2)
-		{
-			temp_component_array += 0x10;
-
-			if(temp_component_array == last_component)
-			{
-				return component { 0 };
-			}
-		}
-
-		auto component_address = 
-			memory_handler::read<uintptr_t>(temp_component_array + 0x8);
-
-		return component(component_address);
-	}
-	
-	static auto get_active_objects() -> std::vector<game_object>
-	{
-		if(!managers::game_object_manager)
-		{
-			return std::vector<game_object>();
-		}
-
-		std::vector<game_object> active_objects;
-
-		auto active_object = 
-			memory_handler::read<uintptr_t>(
-				managers::game_object_manager + offset::game_object_manager::active_objects);
-
-		auto last_active_object =
-			memory_handler::read<uintptr_t>(
-				managers::game_object_manager + offset::game_object_manager::last_active_object);
-
-		do
-		{
-			auto game_object_address = 
-				memory_handler::read<uintptr_t>(active_object + 0x10);
-
-			active_objects.emplace_back( game_object(game_object_address) );
-
-			active_object = 
-				memory_handler::read<uintptr_t>(
-					active_object + offset::game_object_manager::next_object);
-			
-		} while(active_object != last_active_object);
-
-		return active_objects;
-	}
-	
-	static auto get_tagged_objects() -> std::vector<game_object>
-	{
-		if(!managers::game_object_manager)
-		{
-			return std::vector<game_object>();
-		}
-		
-		std::vector<game_object> tagged_objects;
-
-		auto tagged_object = 
-			memory_handler::read<uintptr_t>(
-				managers::game_object_manager + offset::game_object_manager::tagged_objects);
-
-		while(tagged_object != managers::game_object_manager)
-		{
-			auto game_object_address = 
-				memory_handler::read<uintptr_t>(tagged_object + 0x10);
-
-			tagged_objects.emplace_back( game_object(game_object_address) );
-
-			tagged_object = 
-				memory_handler::read<uintptr_t>(tagged_object + offset::game_object_manager::next_object);
-		}
-
-		return tagged_objects;
-	}
-	
-	static auto find(const std::string game_object_name) -> game_object*
-	{
-		// https://docs.unity3d.com/ScriptReference/GameObject.Find.html
-		
-		if(!managers::game_object_manager)
-		{
-			return nullptr;
-		}
-
-		auto tagged_object = 
-			memory_handler::read<uintptr_t>(
-				managers::game_object_manager + offset::game_object_manager::tagged_objects);
-
-		auto active_object =
-			memory_handler::read<uintptr_t>(
-				managers::game_object_manager + offset::game_object_manager::active_objects);
-
-		if(active_object == 0)
-		{
-			return nullptr;
-		}
-		
-		auto last_active_object =
-			managers::game_object_manager + offset::game_object_manager::last_active_object;
-
-		while(tagged_object != managers::game_object_manager) // Iterate tagged objects
-		{
-			if(!tagged_object)
-			{
-				return nullptr;
-			}
-			
-			auto object_address =
-				memory_handler::read<uintptr_t>(tagged_object + 0x10);
-
-			if(!object_address)
-			{
-				continue;
-			}
-			
-			auto ret_game_object = game_object ( object_address );
-
-			auto ret_transform =
-				find_active_transform_with_path(game_object_name, ret_game_object);
-
-			if(ret_transform)
-			{
-				return new game_object ( object_address );
-			}
-			
-			tagged_object = 
-				memory_handler::read<uintptr_t>(
-					tagged_object + offset::game_object_manager::next_object);
-				
-		}
-
-		if(active_object == last_active_object) // Check if there are any active objects
-		{
-			// No game objects available
-
-			return nullptr;
-		}
-		
-		while(active_object != last_active_object) // Iterate active objects
-		{
-			if(active_object == 0)
-			{
-				return nullptr;
-			}
-			
-			auto object_address = 
-				memory_handler::read<uintptr_t>(active_object + 0x10);
-
-			if(!object_address)
-			{
-				continue;
-			}
-			
-			auto ret_game_object = game_object ( object_address ); 
-			
-			auto ret_transform = 
-				find_active_transform_with_path(game_object_name, ret_game_object);
-
-			if(ret_transform)
-			{
-				return new game_object ( object_address );
-			}
-			
-			active_object = 
-				memory_handler::read<uintptr_t>(
-					active_object + offset::game_object_manager::next_object);
-				
-		}
-		
-		return nullptr;
-	}
-
-	static auto find_game_objects_with_tag(const uint16_t target_tag) -> std::vector<game_object>
-	{
-		// https://docs.unity3d.com/ScriptReference/GameObject.FindGameObjectsWithTag.html
-		
-		if(!managers::game_object_manager)
-		{
-			return std::vector<game_object>();
-		}
-
-		auto tagged_object = 
-			memory_handler::read<uintptr_t>(managers::game_object_manager + offset::game_object_manager::tagged_objects);
-
-		if(tagged_object == managers::game_object_manager)
-		{
-			return std::vector<game_object>();
-		}
-
-		std::vector<game_object> ret_game_objects;
-		
-		while(tagged_object != managers::game_object_manager)
-		{
-			auto ret = 
-				game_object ( memory_handler::read<uintptr_t>(tagged_object + 0x10) ); // Catched ptr
-
-			if(ret.tag == target_tag)
-			{
-				ret_game_objects.push_back(ret);
-			}
-
-			tagged_object = 
-				memory_handler::read<uintptr_t>(tagged_object + offset::game_object_manager::next_object);
-		}
-
-		return ret_game_objects;
-	}
-	
-	static auto find_with_tag(const uint16_t target_tag) -> game_object
-	{
-		// https://docs.unity3d.com/ScriptReference/GameObject.FindWithTag.html
-		
-		if(!managers::game_object_manager)
-		{
-			return game_object { };
-		}
-		
-		auto tagged_object = 
-			memory_handler::read<uintptr_t>(
-				managers::game_object_manager + offset::game_object_manager::tagged_objects);
-
-		if(tagged_object == managers::game_object_manager)
-		{
-			return game_object { };
-		}
-
-		while(tagged_object != managers::game_object_manager)
-		{
-			auto ret = 
-				game_object(
-					memory_handler::read<uintptr_t>(tagged_object + 0x10));
-				
-			if(ret.tag == target_tag)
-			{
-				return ret;
-			}
-
-			tagged_object = 
-				memory_handler::read<uintptr_t>(tagged_object + offset::game_object_manager::next_object);
-		}
-
-		return game_object { };
-	}
-	
-	static auto find_active_transform_with_path(const std::string& game_object_name, game_object& target_game_object) -> uintptr_t
-	{
-		// Unity internal
-
-		if(target_game_object.name != game_object_name)
-		{
-			return 0;
-		}
-
-		auto ret_transform = 
-			query_component_by_type(target_game_object, unity::find_type_by_name("Transform") );
-
-		if(!ret_transform)
-		{
-			return 0;
-		}
-
-		auto attached_game_object = game_object( 
-			memory_handler::read<uintptr_t>(
-				ret_transform.get_address() + offset::component::attached_game_object) );
-
-		if(attached_game_object.is_active)
-		{
-			return ret_transform.get_address();
-		}
-
-		return 0;
-	}
-
-	auto operator ! () const -> bool
-	{
-		return !this->address;
-	}
+	/**
+	 * @brief Returns single active GameObject
+	 * @see https://docs.unity3d.com/ScriptReference/GameObject.FindWithTag.html
+	 */
+	static game_object find_with_tag(const uint16_t tag);
 };
+
+#endif
