@@ -1,89 +1,92 @@
-#pragma once
+/**
+ * @file object.hpp
+ * @date 12/02/2022
+ * 
+ */
+
+#ifndef OBJECT_HPP
+#define OBJECT_HPP
 
 #include "offset.hpp"
-#include "memory_handler.hpp"
+#include "memory.hpp"
 #include "unity.hpp"
 
+/**
+ * @brief 
+ */
+enum ScriptingGHandleWeakness {
+	GCHANDLE_INVALID = 0,
+	GCHANDLE_WEAK = 1,
+	GCHANDLE_STRONG = 2
+};
+
+/**
+ * @brief Class which represents UnityEngine::Object
+ * @see https://docs.unity3d.com/2018.4/Documentation/ScriptReference/Object.html
+ */
 class object
 {
-	// UnityEngine.Object
-	// https://docs.unity3d.com/2018.4/Documentation/ScriptReference/Object.html
-
-	// TODO
-	// FindSceneObjectsOfType(MonoObject* ),
-	// FindObjectsOfTypeIncludingAssets(MonoObject* ),
-	// FindObjectsOfTypeImplementation
-	// FindObjectFromInstanceID(int)
-	// FindAllLiveObjects()
-	// FindInstanceIDsOfTypeImplementation()
-	// FindInstanceIDsOfType(Unity::Type, dynamic_array<int ,0> &, bool)
-	// FindObjectOfType(),
-	// FindObjectsOfType()
-
 protected:
 	
-	uintptr_t address;
+	/**
+	 * @brief Address of Unity object
+	 */
+	const address_t m_address;
+
+	/**
+	 * @brief Unique instance id of Unity object
+	 */
+	const int m_instance_id;
+
+	/**
+	 * @brief 
+	 */
+	int64_t m_scripting_handle;
+
+	/**
+	 * @brief
+	 */
+	ScriptingGHandleWeakness m_scripting_handle_weakness;
+
+	/**
+	 * @brief Address of attached scripting backend object (C# classes which derive from 'MonoBehaviour')
+	 * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/MonoBehaviour.html
+	 */
+	address_t m_scripting_object;
+
+	/**
+	 * @brief
+	 */
+	address_t m_scripting_class;
+
+	void set_scripting_object();
+
+	void set_scripting_class();
+	
+	void set_scripting_class_name();
+	
+	void set_scripting_class_namespace();
 
 public:
 
-	object() = default;
+	/**
+	 * @brief
+	 */
+	std::string m_scripting_class_name;
+
+	/**
+	 * @brief
+	 */
+	std::string m_scripting_class_namespace;
+
+	object()
+		: m_address(0), m_instance_id(0)
+	{}
 	
-	explicit object(const uintptr_t addr) : address(addr) { }
-
-	auto get_address() const -> uintptr_t
-	{
-		return address;
-	}
-
-	auto set_hide_flags(const uint8_t hide_flags) const -> void
-	{
-		// Unity internal
-		
-		auto bit_mask = memory_handler::read<uint32_t>(address + 0xC);
-
-		bit_mask &= 0xFFF01FFF;
-
-		bit_mask |= (hide_flags & 0x7F) << 13;
-
-		memory_handler::write(address + 0xC, bit_mask);
-	}
-	
-	auto get_type() const -> uintptr_t
-	{
-		// Unity internal
-
-		auto runtime_type_array = 
-			memory_handler::read<uintptr_t>(
-				process_state::module_address + offset::global::runtime_type_array);
-
-		auto type_index = 
-			memory_handler::read<uint32_t>(address + 0x3) >> 0x21;
-
-		return memory_handler::read<uintptr_t>(
-			runtime_type_array + type_index + 1); // Unity::Type
-	}
-	
-	static auto find_objects_of_type(const uintptr_t unity_type)
-	{
-		auto type_to_object_set = 
-			memory_handler::read<uintptr_t>(
-				0x0 + process_state::module_address); // TODO - add type_to_object_set offset(!!!)
-
-		// Get list of derived classes from target type
-		auto derived_types = unity::find_all_derived_types(unity_type);
-
-		// Check derived types count != 0
-
-		// Parse each derived class
-	}
-
-	auto operator ! () const -> bool
-	{
-		if(!this)
-		{
-			return true;
-		}
-		
-		return !this->address;
-	}
+	explicit object(const address_t address)
+		: m_address(address),
+		m_instance_id(memory::read<int>(address + O_OBJECT_INSTANCEID))
+	{}
 };
+
+#endif
