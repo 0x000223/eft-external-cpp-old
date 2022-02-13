@@ -1,6 +1,6 @@
 /**
  * @file offest.hpp
- * @date 11/02/2022
+ * @date 13/02/2022
  * @brief Updated for 0.12.12.15.16778
  * 
  */
@@ -63,5 +63,21 @@ typedef unsigned long long offset_t;
  */
 #define O_STRING_LENGTH 0x10
 #define O_STRING_FIRSTCHAR 0x14
+
+/**
+ * EFT.Profile
+ */
+#define O_PROFILE_ID 0x10
+#define O_PROFILE_ACCOUNTID 0x18
+#define O_PROFILE_INFO 0x28
+#define O_PROFILE_INFO_NICKNAME 0x10
+#define O_PROFILE_INFO_GROUPID 0x18
+#define O_PROFILE_INFO_SIDE 0x58
+#define O_PROFILE_INFO_REGISTRATION_DATE 0x5C
+#define O_PROFILE_INFO_SAVAGE_LOCKTIME 0x60
+#define O_PROFILE_INFO_MEMBER_CATEGORY 0x70
+#define O_PROFILE_INVENTORY 0x48
+#define O_PROFILE_SKILLS 0x60
+#define O_PROFILE_STATS 0xE8
 
 #endif
