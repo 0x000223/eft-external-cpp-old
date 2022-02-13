@@ -1,17 +1,28 @@
-#pragma once
+/**
+ * @file profile.hpp
+ * @date 12/02/2022
+ */
+
+#ifndef PROFILE_HPP
+#define PROFILE_HPP
+
 #include <string>
 
 #include "offset.hpp"
-#include "memory_handler.hpp"
+#include "memory.hpp"
 #include "e_player_side.h"
 
-#pragma warning (disable : 26812)
-
-class player_profile
+/**
+ * @brief Class which represents EFT.Profile
+ */
+class profile
 {
-	// EFT.Profile
-	
-	uintptr_t address;
+private:
+
+	/**
+	 * @brief Address of this instance
+	 */
+	address_t m_address;
 
 	std::wstring id;
 
@@ -45,7 +56,12 @@ class player_profile
 
 public:
 
-	explicit player_profile(const uintptr_t addr) : address(addr)
+	profile() 
+		: m_address(0)
+	{}
+
+	explicit profile(const address_t address) 
+		: m_address(address)
 	{
 		id = 
 			memory_handler::read_wide_string(addr + offset::player::profile::id);
@@ -67,11 +83,6 @@ public:
 				memory_handler::read<int>(info + offset::profile::info::side));
 
 		side_name = parse_side_name();
-	}
-
-	auto get_address() const -> uintptr_t
-	{
-		return address;
 	}
 
 	auto get_id() const -> std::wstring
@@ -104,3 +115,5 @@ public:
 		return side_name;
 	}
 };
+
+#endif
