@@ -1,14 +1,18 @@
-#pragma once
-#include <string>
-#include <locale>
-#include <codecvt>
-#include <cmath>
+/**
+ * @file math.hpp
+ * @date 14/02/2022
+ * 
+ */
 
-#pragma warning (disable : 4996)
+#ifndef MATH_HPP
+#define MATH_HPP
 
+/**
+ * @brief
+ */
 struct vector2
 {
-	float x,y;
+	float x, y;
 
 	auto operator !() const -> bool
 	{
@@ -17,9 +21,9 @@ struct vector2
 
 	auto operator +(vector2 other) const -> vector2
 	{
-		return vector2( this->x + other.x, this->y + other.y );
+		return vector2(this->x + other.x, this->y + other.y);
 	}
-	
+
 	auto distance(const vector2 other) const -> float
 	{
 		auto const a = this->x - other.x;
@@ -29,9 +33,12 @@ struct vector2
 	}
 };
 
+/**
+ * @brief
+ */
 struct vector3
 {
-	float x,y,z;
+	float x, y, z;
 
 	auto operator -(const vector3 other) const -> vector3
 	{
@@ -49,7 +56,7 @@ struct vector3
 	{
 		return vector3(this->x * other, this->y * other);
 	}
-	
+
 	auto distance(const vector3 other) const -> float
 	{
 		auto const a = this->x - other.x;
@@ -65,7 +72,7 @@ struct vector3
 
 		return sqrtf(temp);
 	}
-	
+
 	static auto distance(vector3& first, vector3& second) -> float
 	{
 		auto const a = first.x - second.x;
@@ -83,18 +90,24 @@ struct vector3
 		vector2 ret
 		{
 			ret.x = asinf(diff.y / length),
-			ret.y = - atan2(diff.x, -diff.z),
+			ret.y = -atan2(diff.x, -diff.z),
 		};
 
 		return vector2(ret.x * 57.29578, ret.y * 57.29578);
 	}
 };
 
+/**
+ * @brief
+ */
 struct vector4
 {
-	float x,y,z,w;
+	float x, y, z, w;
 };
 
+/**
+ * @brief
+ */
 struct matrix34
 {
 	vector4 vec0;
@@ -102,12 +115,15 @@ struct matrix34
 	vector4 vec2;
 };
 
+/**
+ * @brief
+ */
 struct matrix44
 {
-	float _11,_12,_13,_14;
-	float _21,_22,_23,_24;
-	float _31,_32,_33,_34;
-	float _41,_42,_43,_44;
+	float _11, _12, _13, _14;
+	float _21, _22, _23, _24;
+	float _31, _32, _33, _34;
+	float _41, _42, _43, _44;
 
 	auto static transpose(matrix44& other) -> matrix44
 	{
@@ -134,27 +150,5 @@ struct matrix44
 		return ret;
 	}
 };
-
-namespace imported
-{
-	extern "C" __declspec(dllimport) auto create_overlay(const wchar_t* text) -> HWND;
-}
-
-namespace utility
-{
-	inline auto wide_to_narrow(const std::wstring& wide_string)
-	{
-		if(wide_string.size() > 1000)
-		{
-			return std::string();
-		}
-		
-		using convert_type = std::codecvt_utf8<wchar_t>;
-		
-		std::wstring_convert<convert_type, wchar_t> converter;
-
-		return std::string { converter.to_bytes(wide_string) };
-	}
-}
 
 #endif
