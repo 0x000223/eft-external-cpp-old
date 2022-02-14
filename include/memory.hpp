@@ -1,13 +1,12 @@
 /**
  * @file memory_handler.hpp
- * @author Max Penkov
- * @date 11/02/2022
+ * @date 14/02/2022
  * @brief
  * 
  */
 
-#ifndef MEMORY_HANDLER_HPP
-#define MEMORY_HANDLER_HPP
+#ifndef MEMORY_HPP
+#define MEMORY_HPP
 
 #include <string>
 #include <vector>
