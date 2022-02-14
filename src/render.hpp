@@ -1,7 +1,10 @@
-#pragma once
+
+#ifndef RENDER_HPP
+#define RENDER_HPP
+
 #include <cstdint>
 
-#include "graphics_handler.hpp"
+#include "render_backend.hpp"
 #include "menu.hpp"
 #include "settings.hpp"
 
@@ -57,4 +60,6 @@ public:
 	static auto terminate() -> BOOL;
 
 	static auto render_frame() -> void;
-};
+};};
+
+#endif
