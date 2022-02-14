@@ -1,12 +1,15 @@
 /**
  * @file render_backend.hpp
  * @date 11/02/2022
+ * @date 14/02/2022
  * 
  * @brief 
  */
 
 #ifndef GRAPHICS_HANDLER_HPP
 #define GRAPHICS_HANDLER_HPP
+#ifndef RENDER_BACKEND_HPP
+#define RENDER_BACKEND_HPP
 
 #include <Windows.h>
 #include <d3d11.h>
