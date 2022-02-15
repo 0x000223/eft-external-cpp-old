@@ -5,15 +5,6 @@ float					render::clear_color[4]			= { 0.f, 0.f, 0.f, 0.f };
 int						render::window_height			= 0;
 int						render::window_width			= 0;
 
-HWND					render::window_handle			= nullptr;
-
-IDXGISwapChain*			render::swapchain				= nullptr;
-ID3D11Device*			render::d3d11_device			= nullptr;
-ID3D11DeviceContext*	render::d3d11_device_context	= nullptr;
-ID3D11RenderTargetView* render::d3d11_render_target		= nullptr;
-ID2D1DeviceContext*		render::d2d1_device_context		= nullptr;
-ID2D1RenderTarget*		render::d2d1_render_target		= nullptr;
-
 ImFont*					render::font_mbender			= nullptr;
 ImFont*					render::font_mbender_bold		= nullptr;
 
