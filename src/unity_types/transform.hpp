@@ -7,13 +7,9 @@
 #ifndef TRANSFORM_HPP
 #define TRANSFORM_HPP
 
-#include <cstdint>
-#include <emmintrin.h>
-#include <xmmintrin.h>
-
-#include "memory.hpp"
 #include "offset.hpp"
-#include "utility.hpp"
+#include "memory.hpp"
+#include "math.hpp"
 #include "component.hpp"
 
 class transform : public component
