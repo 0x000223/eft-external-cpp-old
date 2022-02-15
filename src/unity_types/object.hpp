@@ -22,7 +22,7 @@ enum ScriptingGHandleWeakness {
 
 /**
  * @brief Class which represents UnityEngine::Object
- * @see https://docs.unity3d.com/2018.4/Documentation/ScriptReference/Object.html
+ * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/Object.html
  */
 class object
 {
