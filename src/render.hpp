@@ -14,21 +14,7 @@ private:
 
 	static float clear_color[4];
 	
-	static HWND window_handle;
-
 	static int window_height, window_width;
-	
-	static IDXGISwapChain* swapchain;
-
-	static ID3D11Device* d3d11_device;
-	
-	static ID3D11DeviceContext* d3d11_device_context;
-
-	static ID3D11RenderTargetView* d3d11_render_target;
-
-	static ID2D1DeviceContext* d2d1_device_context;
-
-	static ID2D1RenderTarget* d2d1_render_target;
 	
 	static ImFont* font_mbender;
 	static ImFont* font_mbender_bold;
@@ -60,6 +46,6 @@ public:
 	static auto terminate() -> BOOL;
 
 	static auto render_frame() -> void;
-};};
+};
 
 #endif
