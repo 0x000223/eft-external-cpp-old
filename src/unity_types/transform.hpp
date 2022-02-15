@@ -1,6 +1,6 @@
 /**
  * @file transform.hpp
- * @date 12/02/2022
+ * @date 15/02/2022
  * 
  */
 
@@ -12,6 +12,9 @@
 #include "math.hpp"
 #include "component.hpp"
 
+/**
+ * @brief Class which represents UnityEngine::Transform
+ */
 class transform : public component
 {
 	
