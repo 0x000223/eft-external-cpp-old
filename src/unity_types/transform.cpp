@@ -1,10 +1,13 @@
 #include "transform.hpp"
 
+#include <emmintrin.h>
+#include <xmmintrin.h>
+
 vector3 transform::get_position() const {
 
-	constexpr __m128 mul_vec0 = { -2.f,  2.f, -2.f, 0.f };
-	constexpr __m128 mul_vec1 = { 2.f, -2.f, -2.f, 0.f };
-	constexpr __m128 mul_vec2 = { -2.f, -2.f,  2.f, 0.f };
+	static __m128 mul_vec0 = { -2.f,  2.f, -2.f, 0.f };
+	static __m128 mul_vec1 = { 2.f, -2.f, -2.f, 0.f };
+	static __m128 mul_vec2 = { -2.f, -2.f,  2.f, 0.f };
 
 	void* matrix_buffer = nullptr;
 	void* index_buffer = nullptr;
@@ -13,13 +16,13 @@ vector3 transform::get_position() const {
 
 	try
 	{
-		auto transform_internal = memory_handler::read<uintptr_t>(address + 0x10);
+		auto transform_internal = memory::read<uintptr_t>(m_address + 0x10);
 
-		auto matrix = memory_handler::read<uintptr_t>(transform_internal + 0x38);
-		index = memory_handler::read<int>(transform_internal + 0x40);
+		auto matrix = memory::read<address_t>(transform_internal + 0x38);
+		index = memory::read<int>(transform_internal + 0x40);
 
-		auto matrix_list = memory_handler::read<uintptr_t>(matrix + 0x18);
-		auto index_list = memory_handler::read<uintptr_t>(matrix + 0x20);
+		auto matrix_list = memory::read<uintptr_t>(matrix + 0x18);
+		auto index_list = memory::read<uintptr_t>(matrix + 0x20);
 
 		auto matrix_size = sizeof(matrix34) * index + sizeof(matrix34);
 		auto index_size = sizeof(int) * index + sizeof(int);
@@ -29,8 +32,8 @@ vector3 transform::get_position() const {
 			return vector3(0, 0, 0); // TODO - bandaid temp fix
 		}
 
-		matrix_buffer = memory_handler::read_bytes(matrix_list, matrix_size);
-		index_buffer = memory_handler::read_bytes(index_list, index_size);
+		matrix_buffer = memory::read_bytes(matrix_list, matrix_size);
+		index_buffer = memory::read_bytes(index_list, index_size);
 	}
 	catch (...) { return vector3(0, 0, 0); }
 
