@@ -102,7 +102,7 @@ public:
 	
 	/**
 	 * @brief Returns single active GameObject
-	 * @see https://docs.unity3d.com/ScriptReference/GameObject.FindWithTag.html
+	 * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/GameObject.FindWithTag.html
 	 */
 	static game_object find_with_tag(const uint16_t tag);
 };
