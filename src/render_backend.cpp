@@ -1,7 +1,7 @@
-#include "graphics_handler.hpp"
+#include "render_backend.hpp"
 
-#pragma warning (disable : 6387)
-#pragma warning (disable : 4996)
+#include <cstdint>
+#include "imgui/imgui.h"
 
 auto graphics_handler::create_window(const wchar_t* title_name = L"Default IME") -> HWND
 {
