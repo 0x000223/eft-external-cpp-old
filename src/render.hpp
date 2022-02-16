@@ -21,14 +21,9 @@ private:
 
 	static float clear_color[4];
 	
-	static int window_height, window_width;
-	
 	static ImFont* font_mbender;
 	static ImFont* font_mbender_bold;
-	
-	static LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	static auto overlay_window() -> void;
 	
 	static auto draw_text(ImVec2 pos, ImColor color, std::string text) -> void;
 
