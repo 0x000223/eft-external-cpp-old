@@ -1,9 +1,10 @@
-/**
- * @file render_backend.hpp
- * @date 14/02/2022
+/*****************************************************************//**
+ * \file   render_backend.hpp
+ * \brief  
  * 
- * @brief 
- */
+ * \author Max
+ * \date   February 2022
+ *********************************************************************/
 
 #ifndef RENDER_BACKEND_HPP
 #define RENDER_BACKEND_HPP
