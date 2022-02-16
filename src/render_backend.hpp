@@ -24,6 +24,11 @@ namespace render_backend {
 	/**
 	 * @brief
 	 */
+	extern int g_window_height, g_window_width;
+
+	/**
+	 * @brief
+	 */
 	extern IDXGISwapChain* g_swapchain;
 
 	/**
