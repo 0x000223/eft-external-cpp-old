@@ -48,11 +48,7 @@ private:
 
 public:
 	
-	static auto init() -> BOOL;
-
-	static auto terminate() -> BOOL;
-
-	static auto render_frame() -> void;
+	static void frame();
 };
 
 #endif
