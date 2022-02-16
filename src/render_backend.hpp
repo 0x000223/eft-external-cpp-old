@@ -79,6 +79,21 @@ namespace render_backend {
 	/**
 	 * @brief
 	 */
+	static BOOL create_window(HWND& window_handle, WNDCLASSEX& window_class, WNDPROC wndproc, const char* class_name, const char* window_name, int posX, int posY, int width, int height, DWORD extended_window_style = 0, DWORD window_style = 0);
+
+	/**
+	 * @brief
+	 */
+	BOOL get_window_size(HWND handle, int& height, int& width);
+
+	/**
+	 * @brief
+	 */
+	static LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+	/**
+	 * @brief
+	 */
 	BOOL initialize();
 
 	/**
@@ -86,12 +101,5 @@ namespace render_backend {
 	 */
 	void terminate();
 }
-
-namespace window {
-
-	BOOL create_window(HWND& window_handle, WNDCLASSEX& window_class, WNDPROC wndproc, const char* class_name, const char* window_name, int posX, int posY, int width, int height, DWORD extended_window_style = 0, DWORD window_style = 0);
-
-	BOOL get_window_size(HWND handle, int& height, int& width);
-};
 
 #endif
