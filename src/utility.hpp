@@ -9,11 +9,6 @@
 
 #pragma warning (disable : 4996)
 
-namespace imported
-{
-	extern "C" __declspec(dllimport) auto create_overlay(const wchar_t* text) -> HWND;
-}
-
 namespace utility
 {
 	inline auto wide_to_narrow(const std::wstring& wide_string)
