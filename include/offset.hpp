@@ -66,6 +66,12 @@ typedef unsigned long long offset_t;
 #define O_STRING_FIRSTCHAR 0x14
 
 /**
+ * EFT.Player
+ */
+#define O_PLAYER_PLAYERBODY 0xA8
+#define O_PLAYER_PROFILE 0x4b8
+
+/**
  * EFT.Profile
  */
 #define O_PROFILE_ID 0x10
