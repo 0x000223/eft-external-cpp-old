@@ -1,9 +1,10 @@
-/**
- * @file offest.hpp
- * @date 13/02/2022
- * @brief Updated for 0.12.12.15.16778
+/*****************************************************************//**
+ * \file   offset.hpp
+ * \brief  Updated for 0.12.12.15.16778
  * 
- */
+ * \author Max
+ * \date   February 2022
+ *********************************************************************/
 
 #ifndef OFFSET_H
 #define OFFSET_H
