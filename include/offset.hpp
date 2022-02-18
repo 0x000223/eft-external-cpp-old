@@ -22,8 +22,8 @@ typedef unsigned long long offset_t;
 #define O_GOM_NODE_PREVIOUS 0x0
 #define O_GOM_NODE_NEXT 0x8
 #define O_GOM_NODE_DATA 0x10
-#define O_GOM_TAGGED_NODES 0x0
-#define O_GOM_ACTIVE_NODES 0x20
+#define O_GOM_TAGGED_NODES 0x8
+#define O_GOM_ACTIVE_NODES 0x28
 
 /**
  * Game Object
