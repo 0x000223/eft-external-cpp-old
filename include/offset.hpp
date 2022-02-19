@@ -99,4 +99,12 @@ typedef unsigned long long offset_t;
 #define O_PROFILE_SKILLS 0x60
 #define O_PROFILE_STATS 0xE8
 
+/**
+ * EFT.GameWorld
+ */
+#define O_GAMEWORLD_LOOTLIST 0x60
+#define O_GAMEWORLD_LOOTITEMS 0x70
+#define O_GAMEWORLD_ALLLOOT 0x78
+#define O_GAMEWORLD_REGISTEREDPLAYERS 0x80
+
 #endif
