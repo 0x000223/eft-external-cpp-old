@@ -4,4 +4,5 @@ target_sources (client
 		object.cpp
 		game_object.cpp
 		component.cpp
-		transform.cpp)
+		transform.cpp
+		camera.cpp)
