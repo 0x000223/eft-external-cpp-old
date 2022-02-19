@@ -23,10 +23,19 @@ typedef unsigned long long offset_t;
 #define O_GOM_NODE_NEXT 0x8
 #define O_GOM_NODE_DATA 0x10
 #define O_GOM_TAGGED_NODES 0x8
+#define O_GOM_MAINCAMERA_TAGGED_NODES 0x10
 #define O_GOM_ACTIVE_NODES 0x28
 
 /**
- * Game Object
+ * UnityEngine::Object
+ */
+#define O_OBJECT_INSTANCEID 0x8
+#define O_OBJECT_SCRIPTING_HANDLE 0x18		// 'ScriptingGCHandle'
+#define O_OBJECT_SCRIPTING_WEAKNESS 0x20	// 'ScriptingGCHandleWeakness'
+#define O_OBJECT_SCRIPTING_OBJECT 0x28		// 'ScriptingObjectPtr'
+
+/**
+ * UnityEngine::GameObject
  */
 #define O_GAMEOBJECT_COMPONENT_ARRAY 0x30
 #define O_GAMEOBJECT_COMPONENT_SIZE 0x40
@@ -38,18 +47,21 @@ typedef unsigned long long offset_t;
 #define O_GAMEOBJECT_NAME 0x60
 
 /**
- * Component
+ * UnityEngine::Component
  */
 #define O_COMPONENT_SCRIPTING_OBJECT 0x28
 #define O_COMPONENT_GAMEOBJECT 0x30
 
 /**
- * Object
+ * UnityEngine::Camera
  */
-#define O_OBJECT_INSTANCEID 0x8
-#define O_OBJECT_SCRIPTING_HANDLE 0x18		// 'ScriptingGCHandle'
-#define O_OBJECT_SCRIPTING_WEAKNESS 0x20	// 'ScriptingGCHandleWeakness'
-#define O_OBJECT_SCRIPTING_OBJECT 0x28		// 'ScriptingObjectPtr'
+#define O_CAMERA_STATE 0x40
+#define O_CAMERA_STATE_WORLDTOCAMERA_MATRIX 0x1C
+#define O_CAMERA_STATE_PROJECTION_MATRIX 0x5C
+#define O_CAMERA_STATE_FOV 0x11C
+#define O_CAMERA_STATE_BACKGROUND_COLOR 0x3B4
+#define O_CAMERA_STATE_DEPTH 0x41C
+#define O_CAMERA_STATE_CAMERATYPE 0x4D0
 
 /**
  * Mono Class
@@ -66,10 +78,10 @@ typedef unsigned long long offset_t;
 #define O_STRING_FIRSTCHAR 0x14
 
 /**
- * System.Collections.ArrayList
+ * System.Array
  */
-#define O_ARRAY_ITEMS 0x10
-#define O_ARRAY_SIZE 0x20
+#define O_ARRAY_SIZE 0x18
+#define O_ARRAY_BASE 0x20
 
 /**
  * System.Collections.Generic.List
