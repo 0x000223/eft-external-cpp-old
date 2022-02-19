@@ -9,7 +9,6 @@
 
 #include "offset.hpp"
 #include "memory.hpp"
-#include "unity.hpp"
 
 /**
  * @brief 
@@ -31,12 +30,12 @@ protected:
 	/**
 	 * @brief Address of Unity object
 	 */
-	const address_t m_address;
+	address_t m_address;
 
 	/**
 	 * @brief Unique instance id of Unity object
 	 */
-	const int m_instance_id;
+	int m_instance_id;
 
 	/**
 	 * @brief 
@@ -47,12 +46,6 @@ protected:
 	 * @brief
 	 */
 	ScriptingGHandleWeakness m_scripting_handle_weakness;
-
-	/**
-	 * @brief Address of attached scripting backend object (C# classes which derive from 'MonoBehaviour')
-	 * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/MonoBehaviour.html
-	 */
-	address_t m_scripting_object;
 
 	/**
 	 * @brief
@@ -79,14 +72,25 @@ public:
 	 */
 	std::string m_scripting_class_namespace;
 
+	/**
+	 * @brief Address of attached scripting backend object (C# classes which derive from 'MonoBehaviour')
+	 * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/MonoBehaviour.html
+	 */
+	address_t m_scripting_object_address;
+
 	object()
-		: m_address(0), m_instance_id(0)
+		: m_address(0), m_instance_id(0), m_scripting_class_name(""), m_scripting_class_namespace("")
 	{}
 	
-	explicit object(const address_t address)
+	object(address_t address)
 		: m_address(address),
 		m_instance_id(memory::read<int>(address + O_OBJECT_INSTANCEID))
 	{}
+
+	/**
+	 * @brief Returns address of current object in memory
+	 */
+	address_t get_address() const;
 };
 
 #endif
