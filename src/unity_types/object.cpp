@@ -1,11 +1,11 @@
 #include "object.hpp"
 
 void object::set_scripting_object() {
-	m_scripting_object = memory::read<address_t>(m_address + O_OBJECT_SCRIPTING_OBJECT);
+	m_scripting_object_address = memory::read<address_t>(m_address + O_OBJECT_SCRIPTING_OBJECT);
 }
 
 void object::set_scripting_class() {
-	m_scripting_class = memory::read_chain(m_scripting_object, { 0x0, 0x0 });
+	m_scripting_class = memory::read_chain(m_scripting_object_address, { 0x0, 0x0 });
 }
 
 void object::set_scripting_class_name() {
@@ -14,4 +14,8 @@ void object::set_scripting_class_name() {
 
 void object::set_scripting_class_namespace() {
 	m_scripting_class_namespace = memory::read_narrow_string(m_scripting_class + O_MONO_CLASS_NAMESPACE);
+}
+
+address_t object::get_address() const {
+	return m_address;
 }
