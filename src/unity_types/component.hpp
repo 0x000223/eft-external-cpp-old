@@ -27,11 +27,11 @@ protected:
 public:
 
 	component()
-		: object(0)
+		: object(0), m_game_object(0)
 	{}
 	
 	explicit component(const address_t address)
-		: object(address)
+		: object(address), m_game_object(0)
 	{
 		set_scripting_object();
 		set_scripting_class();
