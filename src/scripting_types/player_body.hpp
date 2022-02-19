@@ -6,6 +6,24 @@
 #include "skeleton.hpp"
 #include "transform.hpp"
 
+/**
+ * @brief Class which represents EFT.PlayerBody
+ */
+class player_body : public component
+{
+private:
+
+public:
+
+	player_body()
+		: component()
+	{}
+
+	explicit player_body(const address_t address)
+		: component(address)
+	{}
+};
+
 class player_body
 {
 	// EFT.PlayerBody
