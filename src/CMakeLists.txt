@@ -1,14 +1,15 @@
 
 add_subdirectory (imgui)
 
-# add_subdirectory (scripting_types)
+add_subdirectory (unity_types)
 
-# add_subdirectory (unity_types)
+add_subdirectory (scripting_types)
 
 target_sources (client
 	PUBLIC
 		main.cpp
-		render.hpp
+		memory.cpp
+		utility.cpp
 		render.cpp
-		graphics_handler.hpp
-		graphics_handler.cpp)
+		render_backend.cpp
+		world.cpp)
