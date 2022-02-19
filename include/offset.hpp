@@ -72,6 +72,12 @@ typedef unsigned long long offset_t;
 #define O_ARRAY_SIZE 0x20
 
 /**
+ * System.Collections.Generic.List
+ */
+#define O_LIST_ITEMS 0x10
+#define O_LIST_SIZE 0x18
+
+/**
  * EFT.Player
  */
 #define O_PLAYER_PLAYERBODY 0xA8
