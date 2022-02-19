@@ -8,8 +8,6 @@
 #ifndef GAMEOBJECT_HPP
 #define GAMEOBJECT_HPP
 
-#include <memory>
-
 #include "object.hpp"
 #include "component.hpp"
 
@@ -29,12 +27,12 @@ private:
 	/**
 	 * @brief Address of attached components array
 	 */
-	const address_t m_component_array;
+	address_t m_component_array;
 
 	/**
 	 * @brief Number of attached components
 	 */
-	const uint64_t m_component_count;
+	uint64_t m_component_count;
 
 	/**
 	 * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/GameObject-transform.html
@@ -49,23 +47,23 @@ public:
 	/**
 	 * @brief Used to identify a GameObject
 	 */
-	const uint16_t m_tag;
+	uint16_t m_tag;
 
 	/**
 	 * @brief Name of the GameObject
 	 */
-	const std::string m_name;
+	std::string m_name;
 
 	/**
 	 * @brief Address of the attached transform component
 	 */
-	const address_t m_transform;
+	address_t m_transform;
 
 	game_object()
-		: object(), m_tag(0), m_name("EMPTY_OBJECT"), m_transform(0), m_component_array(0), m_component_count(0)
+		: object(), m_tag(0), m_name(""), m_transform(0), m_component_array(0), m_component_count(0)
 	{}
 
-	explicit game_object(const address_t address)
+	game_object(address_t address)
 		: object(address),
 		m_component_array(memory::read<address_t>(m_address + O_GAMEOBJECT_COMPONENT_ARRAY)),
 		m_component_count(memory::read<uint64_t>(m_address + O_GAMEOBJECT_COMPONENT_SIZE)),
@@ -77,7 +75,7 @@ public:
 	/**
 	 * @brief
 	 */
-	component get_component_by_name(const std::string component_name) const;
+	component get_component_by_name(const std::string name) const;
 
 	/**
 	 * @brief Retruns all components which are attached to this GameObject
@@ -85,12 +83,13 @@ public:
 	std::vector<component> get_components() const;
 	
 	/**
-	 * @brief
+	 * @brief Returns all active GameObjects
+	 * @param Maximum limit of how many active GameObjects to return
 	 */
-	static std::vector<game_object> get_active_objects();
+	static std::vector<game_object> get_active_objects(std::size_t limit = 0);
 	
 	/**
-	 * @brief
+	 * @brief Returns all tagged GameObjects
 	 */
 	static std::vector<game_object> get_tagged_objects();
 
@@ -105,6 +104,16 @@ public:
 	 * @see https://docs.unity3d.com/2019.4/Documentation/ScriptReference/GameObject.FindWithTag.html
 	 */
 	static game_object find_with_tag(const uint16_t tag);
+
+	/**
+	 * @brief Returns first GameObject with a matching name
+	 */
+	static game_object find(const std::string name);
+
+	/**
+	 * @brief Returns main camera GameObject
+	 */
+	static game_object find_main_camera();
 };
 
 #endif
