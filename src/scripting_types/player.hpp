@@ -1,25 +1,21 @@
-/**
- * @file player.hpp
- * @date 12/02/2022
+/*****************************************************************//**
+ * \file   player.hpp
+ * \brief  
  * 
- */
+ * \author Max
+ * \date   February 2022
+ *********************************************************************/
 
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include <memory>
-
 #include "offset.hpp"
 #include "memory.hpp"
+#include "math.hpp"
 #include "utility.hpp"
-#include "transform.hpp"
-#include "eft_profile.hpp"
-#include "player_physical.hpp"
-#include "eft_player_body.hpp"
-#include "firearm_controller.hpp"
-#include "health_controller.hpp"
-#include "procedural_weapon_animation.hpp"
-#include "movement_context.hpp"
+
+#include "unity_types/component.hpp"
+#include "profile.hpp"
 
 /**
  * @brief Class which represents EFT.Player
