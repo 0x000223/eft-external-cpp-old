@@ -1,12 +1,18 @@
 #include "render_backend.hpp"
 
 #include <cstdint>
+#include <dwmapi.h>
+
 #include "imgui/imgui.h"
 
 extern HWND render_backend::g_window_handle = nullptr;
+
 extern ID3D11Device* render_backend::g_d3d11_device = nullptr;
+
 extern ID3D11RenderTargetView* render_backend::g_d3d11_render_target = nullptr;
+
 extern ID3D11DeviceContext* render_backend::g_d3d11_device_context = nullptr;
+
 extern IDXGISwapChain* render_backend::g_swapchain = nullptr;
 
 extern int render_backend::g_window_height = 0;
@@ -14,33 +20,14 @@ extern int render_backend::g_window_width = 0;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-BOOL render_backend::create_window(HWND& window_handle, WNDCLASSEX& window_class,WNDPROC wndproc, const char* class_name, const char* window_name, 
-	int posX, int posY, int width, int height, DWORD extended_window_style, DWORD window_style)
+BOOL render_backend::create_window(HWND& window_handle, WNDCLASSEX& window_class,const char* window_name, int posX, int posY, int width, int height, DWORD extended_window_style, DWORD window_style)
 {
-	ZeroMemory(&window_class, sizeof(window_class));
-
-	window_class = 
-	{
-		sizeof(WNDCLASSEX),
-		NULL,
-		wndproc,
-		0,
-		0,
-		GetModuleHandle(nullptr),
-		nullptr,
-		nullptr,
-		nullptr,
-		nullptr,
-		class_name,
-		nullptr
-	};
-
 	RegisterClassEx(&window_class);
 
 	window_handle = CreateWindowEx
 	(
 		extended_window_style,
-		class_name,
+		window_class.lpszClassName,
 		window_name,
 		window_style,
 		posX,
@@ -66,6 +53,14 @@ BOOL render_backend::get_window_size(HWND handle, int& height, int& width)
 	width	= rect.right  - rect.left;
 
 	return result;
+}
+
+vector2 render_backend::get_window_center() {
+
+	return vector2 {
+		.x = g_window_width / 2.f,
+		.y = g_window_height / 2.f
+	};
 }
 
 BOOL render_backend::d3d11_create_device(const HWND window_handle, IDXGISwapChain*& swapchain, ID3D11Device*& device, ID3D11DeviceContext*& device_context)
@@ -221,20 +216,24 @@ LRESULT render_backend::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 BOOL render_backend::initialize() {
 
-	static WNDCLASSEX wndclassex;
+	static WNDCLASSEX wc;
+	
+	wc.cbSize = sizeof(WNDCLASSEX);
+	wc.lpszClassName = "Windows.UI.Core.CoreWindow";
+	wc.lpfnWndProc = WndProc;
+	wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(0, 0, 0));
+	wc.style = CS_VREDRAW | CS_HREDRAW;
 
 	create_window(
 		g_window_handle,
-		wndclassex,
-		WndProc,
-		"Chrome_WidgetWin_1",
+		wc,
 		"Core Input",
 		0,
 		0,
 		1920,
 		1080,
-		WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_NOACTIVATE | WS_EX_TOPMOST,
-		WS_VISIBLE | WS_MAXIMIZE);
+		WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_NOACTIVATE,
+		WS_POPUP);
 
 	if (d3d11_create_device(g_window_handle, g_swapchain, g_d3d11_device, g_d3d11_device_context) == FALSE) {
 		terminate();
@@ -245,6 +244,12 @@ BOOL render_backend::initialize() {
 		terminate();
 		return FALSE;
 	}
+
+	SetLayeredWindowAttributes(g_window_handle, RGB(0, 0, 0), 0, ULW_COLORKEY);
+	SetLayeredWindowAttributes(g_window_handle, 0, 255, LWA_ALPHA);
+
+	MARGINS margins = { -1 };
+	DwmExtendFrameIntoClientArea(g_window_handle, &margins);
 
 	SetWindowLongPtrA(g_window_handle, GWLP_WNDPROC, reinterpret_cast<int64_t>(WndProc));
 
