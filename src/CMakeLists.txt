@@ -10,6 +10,8 @@ target_sources (client
 		main.cpp
 		memory.cpp
 		utility.cpp
+		math.cpp
 		render.cpp
 		render_backend.cpp
-		world.cpp)
+		world.cpp
+		feature.cpp)
