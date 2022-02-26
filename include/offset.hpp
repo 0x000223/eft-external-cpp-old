@@ -1,6 +1,6 @@
 /*****************************************************************//**
  * \file   offset.hpp
- * \brief  Updated for 0.12.12.15.16778
+ * \brief  Updated for 0.12.12.15.16909
  * 
  * \author Max
  * \date   February 2022
@@ -62,6 +62,17 @@ typedef unsigned long long offset_t;
 #define O_CAMERA_STATE_BACKGROUND_COLOR 0x3B4
 #define O_CAMERA_STATE_DEPTH 0x41C
 #define O_CAMERA_STATE_CAMERATYPE 0x4D0
+
+/**
+ * UnityEngine::Transform
+ */
+#define O_TRANSFORM_ACCESS 0x38
+#define O_TRANSFORM_ACCESS_INDEX 0x8
+#define O_TRANSFROM_ACCESS_HIERARCHY 0x0
+#define O_TRANSFORM_ACCESS_HIERARCHY_CAPACITY 0x10
+#define O_TRANSFORM_ACCESS_HIERARCHY_FIRSTFREEINDEX 0x14
+#define O_TRANSFORM_ACCESS_HIERARCHY_LOCALTRANSFORMS 0x18
+#define O_TRANSFORM_ACCESS_HIERARCHY_PARENTINDICES 0x20
 
 /**
  * Mono Class
