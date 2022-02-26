@@ -1,10 +1,16 @@
 #include "camera.hpp"
 
 matrix44 camera::get_world_to_camera_matrix() const { 
-	return memory::read<matrix44>(m_address + O_CAMERA_STATE + O_CAMERA_STATE_WORLDTOCAMERA_MATRIX);
+	return memory::read<matrix44>(m_address + O_CAMERA_STATE + 0x9C);//O_CAMERA_STATE_WORLDTOCAMERA_MATRIX);
 }
 
-vector2 camera::world_to_screen(const vector3& pos) {
+vector2& camera::world_to_screen(const vector3& pos) {
+
+	vector2 ret{ 0,0 };
+
+	if (pos.x == 0 && pos.y == 0 && pos.z == 0) {
+		return ret;
+	}
 
 	auto temp = get_world_to_camera_matrix();
 
@@ -12,8 +18,6 @@ vector2 camera::world_to_screen(const vector3& pos) {
 
 	const vector3 up = { view_matrix._21, view_matrix._22, view_matrix._23 };
 	const vector3 right = { view_matrix._11, view_matrix._12, view_matrix._13 };
-
-	vector2 ret{ 0,0 };
 
 	const float w =
 	{
@@ -23,9 +27,8 @@ vector2 camera::world_to_screen(const vector3& pos) {
 		view_matrix._44
 	};
 
-	if (w < 0.1f)
-	{
-		return vector2{ 0 };
+	if (w < 0.1f) {
+		return ret;
 	}
 
 	ret.x =
