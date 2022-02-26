@@ -128,11 +128,90 @@ typedef unsigned long long offset_t;
 #define O_PROFILE_STATS 0xE8
 
 /**
+ * EFT.Player.FirearmController
+ */
+#define O_FIREARMCONTROLLER_FIREPORT 0xE8
+
+/**
+ * EFT.PlayerBody
+ */
+#define O_PLAYERBODY_PLAYERBONES 0x20
+#define O_PLAYERBODY_SKELETONROOTJOINT 0x28
+
+/**
+ * PlayerBones
+ */
+#define O_PLAYERBONES_FIREPORT 0x140
+
+/**
+ * MovementContext
+ */
+#define O_MOVEMENTCONTEXT_ROTATION 0x22C
+
+/**
+ * @brief Diz.Skinning.Skeleton
+ */
+#define O_SKELETONROOTJOINT_BONES 0x18
+#define O_SKELETONROOTJOINT_KEYS 0x20
+#define O_SKELETONROOTJOINT_VALUES 0x28
+
+/**
  * EFT.GameWorld
  */
 #define O_GAMEWORLD_LOOTLIST 0x60
 #define O_GAMEWORLD_LOOTITEMS 0x70
 #define O_GAMEWORLD_ALLLOOT 0x78
 #define O_GAMEWORLD_REGISTEREDPLAYERS 0x80
+
+/**
+ * EFT.BifacialTransform
+ */
+#define O_BIFACIALTRANSFORM_ORIGINAL 0x10
+
+/**
+ * Physical
+ */
+#define O_PHYSICAL_LEGSSTAMINA 0x38
+#define O_PHYSICAL_HANDSSTAMINS 0x40
+#define O_PHYSICAL_OXYGEN 0x48
+
+/**
+ * EFT.ProceduralWeaponAnimation
+ */
+#define O_PROCWEPANIM_MASK 0x100
+#define O_PROCWEPANIM_BREATH 0x28
+#define O_PROCWEPANIM_WALK 0x30
+#define O_PROCWEPANIM_MOTION 0x38
+#define O_PROCWEPANIM_FORCE 0x40
+#define O_PROCWEPANIM_SHOT 0x48
+#define O_PROCWEPANIM_AIMINGDISPLACEMENT 0x2F8
+
+/**
+ * ShotEffector
+ */
+#define O_SHOTEFFECTOR_RECOILSTRENGTH_XY 0x40
+#define O_SHOTEFFECTOR_RECOILSTRENGTH_Z 0x48
+#define O_SHOTEFFECTOR_INTENSITY 0x70
+
+/**
+ * EFT.Animations.BreathEffector
+ */
+#define O_BREATHEFFECTOR_INTENSITY 0xA4
+#define O_BREATHEFFECTOR_BREATHINTENSITY 0xAC
+
+/**
+ * WalkEffector
+ */
+#define O_WALKEFFECTOR_INTENSITY 0x44
+
+/**
+ * MotionEffector
+ */
+#define O_MOTIONEFFECTOR_INTENSITY 0xD0
+
+/**
+ * ForceEffector
+ */
+#define O_FORCEEFFECTOR_INTENSITY 0x28
 
 #endif
