@@ -10,40 +10,83 @@
 #define RENDER_HPP
 
 #include <cstdint>
+#include <string>
 
-#include "render_backend.hpp"
-#include "menu.hpp"
-#include "settings.hpp"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
 
-struct render
-{
-private:
+namespace render {
 
-	static float clear_color[4];
-	
-	static ImFont* font_mbender;
-	static ImFont* font_mbender_bold;
+	/**
+	 * @brief
+	 */
+	static float clear_color[4] = { 0.f, 0.f, 0.f, 0.f };
 
-	
-	static auto draw_text(ImVec2 pos, ImColor color, std::string text) -> void;
+	/**
+	 * @brief
+	 */
+	static bool is_menu_rendered = false;
 
-	static auto draw_text_stroke(ImVec2 pos, ImColor color, std::string text) -> void;
-	
-	static auto draw_line(ImVec2 from, ImVec2 to, ImColor color) -> void;
+	/**
+	 * @brief Set default menu style
+	 */
+	void menu_set_style_default();
 
-	static auto draw_line_stroke(ImVec2 from, ImVec2 to, ImColor color) -> void;
-	
-	static auto draw_rect(ImVec2 pos, ImVec2 length, ImColor color) -> void;
+	/**
+	 * @brief Set main menu interface 
+	 */
+	static void menu_window_main();
 
-	static auto draw_rect_stroke(ImVec2 pos, ImVec2 length, ImColor color, ImColor outline_color = ImColor(0,0,0,255)) -> void;
-	
-	static auto draw_rect_filled(ImVec2 pos, ImVec2 length, ImColor color) -> void;
+	/**
+	 * @brief
+	 */
+	//static void menu_tab_visual();
 
-	static auto draw_edged_rect(ImVec2 pos, ImVec2 length, ImColor color, float percent = 0.4f, float thickness = 1.f, bool outline = true) -> void;
+	/**
+	 * @brief 
+	 */
+	//static void menu_tab_aim();
 
-public:
-	
-	static void frame();
-};
+	/**
+	 * @brief
+	 */
+	static void overlay();
+
+	/**
+	 * @brief
+	 */
+	static void text(const ImVec2& pos, const ImColor& color, const std::string& text);
+
+	/**
+	 * @brief
+	 */
+	static void text_stroke(const ImVec2& pos, const ImColor& color, const std::string& text);
+
+	/**
+	 * @brief
+	 */
+	static void line(const ImVec2& from, const ImVec2& to, const ImColor& color);
+
+	/**
+	 * @brief
+	 */
+	static void line_stroke(ImVec2 from, ImVec2 to, ImColor color);
+
+	/**
+	 * @brief
+	 */
+	static void rect(const ImVec2 pos, const ImVec2 length, const ImColor color);
+
+	/**
+	 * @brief
+	 */
+	static void circle(const ImVec2& pos, const float& radius, const ImColor& color);
+
+	/**
+	 * @brief Render a single frame
+	 */
+	void frame();
+}
 
 #endif
