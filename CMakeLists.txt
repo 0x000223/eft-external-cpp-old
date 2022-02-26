@@ -13,6 +13,8 @@ add_subdirectory (src)
 target_include_directories (client
 	PRIVATE
 		src
+		src/unity_types
+		src/scripting_types
 	PUBLIC
 		include)
 
