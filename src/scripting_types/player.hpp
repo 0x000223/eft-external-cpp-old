@@ -14,147 +14,91 @@
 #include "math.hpp"
 #include "utility.hpp"
 
-#include "unity_types/component.hpp"
+#include "component.hpp"
 #include "profile.hpp"
+#include "playerbody.hpp"
+#include "physical.hpp"
+#include "proc_wep_anim.hpp"
 
 /**
  * @brief Class which represents EFT.Player
  */
 class player : public component
 {
-	
+private:
+
+	/**
+	 * @brief Instance of Physical class
+	 */
+	physical m_physical;
+
 public:
 
-	std::shared_ptr<player_profile> profile;
+	/**
+	 * @brief Instance of type EFT.Profile
+	 */
+	profile m_profile;
 
-	std::shared_ptr<player_physical> physical;
+	/**
+	 * @brief Instance of EFT.Playerbody
+	 */
+	playerbody m_playerbody;
 
-	std::shared_ptr<player_body> body;
+	/**
+	 * @brief Address of ProceduralWeaponAnimation instance
+	 */
+	proc_wep_anim m_proc_wep_anim;
 
-	std::shared_ptr<procedural_weapon_animation> procedural_wep_anim;
+	/**
+	 * @brief Address of MovementContext instance
+	 */
+	address_t movement_context_address;
 
-	std::shared_ptr<firearm_controller> hands_controller;
+	/**
+	 * @brief Address of EFT.Player.AbstractHandsController instance 
+	 */
+	address_t hands_controller_address;
 
-	std::shared_ptr<health_controller> health_controller;
+	/**
+	 * @brief Nickname field from Info class
+	 */
+	std::string m_name;
 
-	std::shared_ptr<movement_context> movement_context;
-	
-	std::string name;
-
-	std::string faction;
+	/**
+	 * @brief String representation of EPlayerSide enum
+	 */
+	std::string m_side;
 
 	player()
 		: component()
 	{}
 	
-	explicit player(const address_t address) {
+	explicit player(const address_t address)
+		: component(address),
+		m_profile(memory::read<address_t>(m_address + O_PLAYER_PROFILE)),
+		m_name(utility::wide_to_narrow(m_profile.m_nickname)),
+		m_playerbody(memory::read<address_t>(m_address + O_PLAYER_PLAYERBODY)),
+		movement_context_address(memory::read<address_t>(m_address + O_PLAYER_MOVEMENTCONTEXT)),
+		hands_controller_address(memory::read<address_t>(m_address + O_PLAYER_HANDSCONTROLLER)),
+		m_physical(memory::read<address_t>(address + O_PLAYER_PHYSICAL)),
+		m_proc_wep_anim(memory::read<address_t>(address + O_PLAYER_PROCEDURALWEPANIM))
+	{}
 
-		profile = 
-			std::make_shared<player_profile>(
-				memory_handler::read<uintptr_t>(
-					address + offset::player::player_profile));
+	float get_health();
 
-		physical =
-			std::make_shared<player_physical>(
-				memory_handler::read<uintptr_t>(
-					address + offset::player::player_physical));
+	float get_max_health();
 
-		body =
-			std::make_shared<player_body>(
-				memory_handler::read<uintptr_t>(
-					address + offset::player::player_body));
+	vector3 get_root_position();
 
-		procedural_wep_anim =
-			std::make_shared<procedural_weapon_animation>(
-				memory_handler::read<uintptr_t>(
-					address + offset::player::procedural_weapon_anim));
+	vector3 get_head_position();
 
-		hands_controller =
-			std::make_shared<firearm_controller>(
-				memory_handler::read<uintptr_t>(
-					address + offset::player::hands_controller));
+	vector2 get_rotation() const;
 
-		health_controller =
-			std::make_shared<class health_controller>(
-				memory_handler::read<uintptr_t>(
-					address + offset::player::health_controller));
+	transform get_fireport();
 
-		movement_context =
-			std::make_shared<class movement_context>(
-				memory_handler::read<uintptr_t>(
-					address + offset::player::movement_context));
-		
-		name = utility::wide_to_narrow(profile->get_nickname());
+	void set_rotation(const vector2 rotation) const;
 
-		faction = profile->get_side_name();
-	}
-
-	~player() = default;
-	
-	auto get_health() const -> float
-	{
-		return health_controller->get_player_health();
-	}
-
-	auto get_max_health() const -> float
-	{
-		return health_controller->get_player_max_health();
-	}
-
-	auto get_root_position() const -> vector3
-	{
-		return body->bones->root.get_position();
-	}
-
-	auto get_head_position() const -> vector3
-	{
-		return body->bones->head.get_position();
-	}
-	
-	auto operator ! () const -> bool
-	{
-		return !this->address;
-	}
-
-	friend auto operator == (player first, player second) -> bool
-	{
-		return first.address == second.address;
-	}
-	
-	auto operator == (player& other) const -> bool
-	{
-		return this->address == other.address;
-	}
-
-	auto operator == (player* other) const -> bool
-	{
-		return this->address == other->address;
-	}
-
-	auto operator == (const std::unique_ptr<player>& other) const -> bool
-	{
-		if(!other)
-		{
-			return false;
-		}
-
-		return this->address == other->address;
-	}
-	
-	auto operator == (const std::shared_ptr<player>& other) const -> bool
-	{
-		if(!other)
-		{
-			return false;
-		}
-		
-		return this->address == other->address;
-	}
-
-	friend auto operator != (player first, player second) -> bool
-	{
-		return first.address != second.address;
-	}
+	void fill_stamina(const float value) const;
 };
 
 #endif
