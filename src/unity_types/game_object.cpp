@@ -9,20 +9,22 @@ address_t game_object::get_transform() const {
 	return memory::read<address_t>(m_component_array + 0x10 * 0 + 0x8); // Transform is always the first component - hence index '0'
 }
 
-component game_object::get_component_by_name(const string name) const { 
+component& game_object::get_component_by_name(const string name) const { 
+
+	auto ret = component();
 
 	for (auto i = 0; i < m_component_count; ++i) {
-		const auto current = component(memory::read<address_t>(m_component_array + 0x10 * i + 0x8));
+		auto ret = component(memory::read<address_t>(m_component_array + 0x10 * i + 0x8));
 
-		if (current.m_scripting_class_name.find(name) != std::string::npos) {
-			return current;
+		if (ret.m_scripting_class_name.find(name) != std::string::npos) {
+			return ret;
 		}
 	}
 
-	return component();
+	return ret;
 }
 
-vector<component> game_object::get_components() const {
+vector<component>& game_object::get_components() const {
 
 	vector<component> components;
 
@@ -33,18 +35,18 @@ vector<component> game_object::get_components() const {
 	return components;
 }
 
-vector<game_object> game_object::get_active_objects(size_t limit) {
-
-	if (g_GOM == 0) {
-		return vector<game_object>();
-	}
+vector<game_object>& game_object::get_active_objects(size_t limit) {
 
 	vector<game_object> active_objects;
+
+	if (g_GOM == 0) {
+		return active_objects;
+	}
 
 	auto active_node = memory::read<address_t>(g_GOM + O_GOM_ACTIVE_NODES);
 
 	if (active_node == memory::read<address_t>(active_node + O_GOM_NODE_NEXT)) { // No active nodes
-		return vector<game_object>();
+		return active_objects;
 	}
 
 	auto first_node = active_node;
@@ -67,13 +69,13 @@ vector<game_object> game_object::get_active_objects(size_t limit) {
 	return active_objects;
 }
 
-vector<game_object> game_object::get_tagged_objects() {
-
-	if (g_GOM == 0) {
-		return vector<game_object>();
-	}
+vector<game_object>& game_object::get_tagged_objects() {
 
 	vector<game_object> tagged_objects;
+
+	if (g_GOM == 0) {
+		return tagged_objects;
+	}
 
 	auto tagged_node = memory::read<address_t>(g_GOM + O_GOM_TAGGED_NODES);
 
