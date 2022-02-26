@@ -75,23 +75,23 @@ public:
 	/**
 	 * @brief
 	 */
-	component get_component_by_name(const std::string name) const;
+	component& get_component_by_name(const std::string name) const;
 
 	/**
 	 * @brief Retruns all components which are attached to this GameObject
 	 */
-	std::vector<component> get_components() const;
+	std::vector<component>& get_components() const;
 	
 	/**
 	 * @brief Returns all active GameObjects
 	 * @param Maximum limit of how many active GameObjects to return
 	 */
-	static std::vector<game_object> get_active_objects(std::size_t limit = 0);
+	static std::vector<game_object>& get_active_objects(std::size_t limit = 0);
 	
 	/**
 	 * @brief Returns all tagged GameObjects
 	 */
-	static std::vector<game_object> get_tagged_objects();
+	static std::vector<game_object>& get_tagged_objects();
 
 	/**
 	 * @brief Returns an array of active GameObjects
