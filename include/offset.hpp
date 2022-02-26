@@ -103,8 +103,13 @@ typedef unsigned long long offset_t;
 /**
  * EFT.Player
  */
+#define O_PLAYER_MOVEMENTCONTEXT 0x40
 #define O_PLAYER_PLAYERBODY 0xA8
-#define O_PLAYER_PROFILE 0x4b8
+#define O_PLAYER_PROCEDURALWEPANIM 0x198
+#define O_PLAYER_PROFILE 0x4C0
+#define O_PLAYER_PHYSICAL 0x4D0
+#define O_PLAYER_HANDSCONTROLLER 0x510
+#define O_PLAYER_PLAYERBONES 0x558
 
 /**
  * EFT.Profile
