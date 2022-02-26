@@ -12,6 +12,8 @@
 #include <Windows.h>
 #include <d3d11.h>
 
+#include "math.hpp"
+
 namespace render_backend {
 	
 	/**
@@ -77,12 +79,17 @@ namespace render_backend {
 	/**
 	 * @brief
 	 */
-	static BOOL create_window(HWND& window_handle, WNDCLASSEX& window_class, WNDPROC wndproc, const char* class_name, const char* window_name, int posX, int posY, int width, int height, DWORD extended_window_style = 0, DWORD window_style = 0);
+	static BOOL create_window(HWND& window_handle, WNDCLASSEX& window_class, const char* window_name, int posX, int posY, int width, int height, DWORD extended_window_style = 0, DWORD window_style = 0);
 
 	/**
 	 * @brief
 	 */
 	BOOL get_window_size(HWND handle, int& height, int& width);
+
+	/**
+	 * @brief
+	 */
+	vector2 get_window_center();
 
 	/**
 	 * @brief
