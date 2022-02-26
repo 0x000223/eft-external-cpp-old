@@ -1,277 +1,239 @@
 #include "render.hpp"
-#include "menu.hpp"
 
-float					render::clear_color[4]			= { 0.f, 0.f, 0.f, 0.f };
-int						render::window_height			= 0;
-int						render::window_width			= 0;
+#include "render_backend.hpp"
+#include "feature.hpp"
+using namespace std;
 
-ImFont*					render::font_mbender			= nullptr;
-ImFont*					render::font_mbender_bold		= nullptr;
+//ImFont*	render::font_mbender			= nullptr;
+//ImFont*	render::font_mbender_bold		= nullptr;
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+void render::menu_set_style_default() {
 
-auto render::init() -> BOOL
-{
-	window_handle = graphics_handler::create_window(L"Microsoft Edge");
-	
-	if(!window_handle)
-	{
-		return FALSE;
-	}
-	
-	if(!graphics_handler::create_d3d11_device(window_handle, swapchain, d3d11_device, d3d11_device_context))
-	{
-		return FALSE;
-	}
+	auto& style = ImGui::GetStyle();
 
-	if(!graphics_handler::create_d3d11_render_target(swapchain, d3d11_device, d3d11_render_target))
-	{
-		graphics_handler::release_dxgi_swapchain(swapchain);
-		graphics_handler::release_d3d11_device(d3d11_device);
+	style.FrameBorderSize = 1.f;
+	style.FrameRounding = 0.f;
+	style.FramePadding = ImVec2(4.f, 0.f);
+	style.GrabRounding = 3.f;
+	style.TabRounding = 0.f;
+	style.TabBorderSize = 1.f;
+	style.ScrollbarSize = 3.f;
 
-		return FALSE;
-	}
-
-	SetWindowLongPtrA(window_handle, GWLP_WNDPROC, reinterpret_cast<int64_t>(WndProc));
-
-	ShowWindow(window_handle, SW_SHOW);
-	UpdateWindow(window_handle);
-
-	graphics_handler::get_window_size(window_handle, window_height, window_width);
-
-	MoveWindow(window_handle, 0, 0, window_width, window_height, FALSE);
-	
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	
-	ImGui_ImplWin32_Init(window_handle);
-	ImGui_ImplDX11_Init(d3d11_device, d3d11_device_context);
-
-	ImGuiIO& io = ImGui::GetIO();
-	
-	font_mbender = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\MBender.otf)", 14.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
-	font_mbender_bold = io.Fonts->AddFontFromFileTTF(R"(..\..\resources\MBender-Bold.otf)", 14.f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
-	
-	menu::menu_style_default();
-	
-	return TRUE;
+	style.Colors[ImGuiCol_Text] = ImColor(135, 255, 212, 255);
+	style.Colors[ImGuiCol_WindowBg] = ImColor(15, 15, 15, 220);
+	style.Colors[ImGuiCol_TitleBgActive] = ImColor(18, 7, 37, 255);
+	style.Colors[ImGuiCol_Border] = ImColor(0, 0, 0, 255);
+	style.Colors[ImGuiCol_Tab] = ImColor(45, 20, 63, 255);
+	style.Colors[ImGuiCol_TabHovered] = ImColor(113, 10, 102, 189);
+	style.Colors[ImGuiCol_TabActive] = ImColor(169, 49, 132, 235);
+	style.Colors[ImGuiCol_FrameBg] = ImColor(28, 96, 100, 62);
+	style.Colors[ImGuiCol_FrameBgHovered] = ImColor(52, 117, 94, 102);
+	style.Colors[ImGuiCol_FrameBgActive] = ImColor(42, 172, 53, 171);
+	style.Colors[ImGuiCol_ScrollbarGrab] = ImColor(48, 12, 36, 255);
+	style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImColor(113, 4, 76, 255);
+	style.Colors[ImGuiCol_Button] = ImColor(89, 91, 137, 102);
+	style.Colors[ImGuiCol_ButtonHovered] = ImColor(56, 78, 103, 255);
+	style.Colors[ImGuiCol_CheckMark] = ImColor(255, 0, 118, 152);
+	style.Colors[ImGuiCol_SliderGrab] = ImColor(255, 0, 118, 152);
+	style.Colors[ImGuiCol_ResizeGrip] = ImColor(0, 0, 0, 42);
+	style.Colors[ImGuiCol_Separator] = ImColor(1, 0, 77, 128);
 }
 
-auto render::terminate() -> BOOL
-{
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
-	
-	graphics_handler::release_d3d11_render_target(d3d11_render_target);
-	graphics_handler::release_d3d11_device(d3d11_device);
-	graphics_handler::release_dxgi_swapchain(swapchain);
+static void render::menu_window_main() {
 
-	DestroyWindow(window_handle);
-	
-	return TRUE;
-}
+	static auto tab_window = 0;
+	static auto button_size = ImVec2(146.f, 30.f);
 
-auto render::render_frame() -> void
-{
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
+	ImGui::SetNextWindowSize(ImVec2(600.f, 400.f), ImGuiCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(1100.f, 350.f), ImGuiCond_Once);
 
-	if(GetAsyncKeyState(VK_HOME) & 0x01) // Toggle menu display (xor window transparency flag)
+	ImGui::Begin("eft-external-cpp", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+
+	if (ImGui::Button("Features", button_size))
 	{
-		SetWindowLongPtrA(window_handle, GWL_EXSTYLE, GetWindowLongA(window_handle, GWL_EXSTYLE) ^ WS_EX_TRANSPARENT);
-
-		SetForegroundWindow(window_handle);
-		
-		menu::show_menu = !menu::show_menu;
+		// Visuals child window
+		tab_window = 0;
 	}
 
-	if(menu::show_menu)
+	ImGui::SameLine(0.f, 0.0f);
+
+	if (ImGui::Button("Aim", button_size))
 	{
-		menu::main_window();
+		// Aim child window
+		tab_window = 1;
 	}
 
-	if(process_state::is_in_raid)
+	ImGui::SameLine(0.f, 0.0f);
+
+	if (ImGui::Button("Data", button_size))
 	{
-		overlay_window();
-	}
-	
-	ImGui::Render();
-
-	d3d11_device_context->OMSetRenderTargets(1, &d3d11_render_target, nullptr);
-	d3d11_device_context->ClearRenderTargetView(d3d11_render_target, clear_color);
-
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	
-	swapchain->Present(0, 0);
-}
-
-LRESULT render::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	if(ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-	{
-		return true;
+		// Data child window
+		tab_window = 2;
 	}
 
-	switch(msg)
+	ImGui::SameLine(0.f, 0.0f);
+
+	if (ImGui::Button("Settings", button_size))
 	{
-	case WM_SIZE:
+		// Settings child window
+		tab_window = 3;
+	}
 
-		if(d3d11_device != nullptr && wParam != SIZE_MINIMIZED)
-		{
-			graphics_handler::release_d3d11_render_target(d3d11_render_target);
-
-			swapchain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_B8G8R8A8_UNORM, 0);
-
-			graphics_handler::create_d3d11_render_target(swapchain, d3d11_device, d3d11_render_target);
-		}
-		
-		return true;
-		
-	case WM_SYSCOMMAND:
-
-		if((wParam & 0xFFF0) == SC_KEYMENU)
-		{
-			return 0;
-		}
-		
+	switch (tab_window)
+	{
+	case 0:
+		//menu_tab_visual();
 		break;
 
-	case WM_DESTROY:
+	case 1:
+		//menu_tab_aim();
+		break;
 
-		PostQuitMessage(0);
-		return 0;
+	default:;
+		ImGui::ShowStyleEditor();
+		break;
 	}
 
-	return DefWindowProc(hWnd, msg, wParam, lParam);
+	ImGui::End();
 }
 
-auto render::overlay_window() -> void
-{
-	ImGui::SetNextWindowSize(ImVec2( window_width, window_height ), ImGuiCond_Always);
+//static void render::menu_tab_visual() {
+//
+//	ImGui::BeginChild("visuals_child_window", ImVec2(0, 0), true, ImGuiWindowFlags_ChildWindow);
+//
+//	ImGui::TextColored(ImVec4(255, 255, 255, 255), "Visuals");
+//
+//	{
+//		ImGui::Text("Player Draw Distance");
+//
+//		ImGui::SliderFloat("", &settings::player_draw_distance, 0.f, 2000.f);
+//
+//		ImGui::Checkbox("Name", &settings::player_name);
+//
+//		ImGui::Checkbox("Health", &settings::player_health);
+//
+//		ImGui::Checkbox("Distance", &settings::player_distance);
+//
+//		ImGui::Checkbox("Faction", &settings::player_faction);
+//
+//		ImGui::Checkbox("Bones", &settings::player_bones);
+//
+//		ImGui::Checkbox("Snapline", &settings::player_snapline);
+//
+//		ImGui::Checkbox("Box", &settings::player_box);
+//	}
+//
+//	ImGui::TextColored(ImVec4(255, 255, 255, 255), "Camera");
+//
+//	{
+//		if (ImGui::Checkbox("Night Vision", &settings::night_vision))
+//		{
+//			// Toggle NVG
+//		}
+//
+//		if (ImGui::Checkbox("Thermal Vision", &settings::thermal_vision))
+//		{
+//			// Toggle thermal vision
+//		}
+//
+//		if (ImGui::Checkbox("No Visor", &settings::no_visor))
+//		{
+//			// Toggle no visor
+//		}
+//	}
+//
+//	ImGui::TextColored(ImVec4(255, 255, 255, 255), "Misc");
+//
+//	{
+//		ImGui::Checkbox("Stamina", &settings::infinite_stamina);
+//
+//		ImGui::Checkbox("No Recoil", &settings::no_recoil);
+//	}
+//
+//	ImGui::EndChild();
+//}
+//
+//static void render::menu_tab_aim() {
+//
+//	ImGui::BeginChild("aim_child_window", ImVec2(0, 0), ImGuiWindowFlags_ChildWindow);
+//
+//	ImGui::Checkbox("FOV Aimbot", &settings::fov_aim);
+//
+//	ImGui::Text("FOV");
+//
+//	ImGui::SliderFloat("", &settings::fov, 1.f, 2000.f);
+//
+//	ImGui::EndChild();
+//}
+
+static void render::overlay() {
+
+	if (world::is_active == false) { // Skip rendering overlay if inactive world
+		return;
+	}
+
+	ImGui::SetNextWindowSize(ImVec2( render_backend::g_window_width, render_backend::g_window_height ), ImGuiCond_Always);
 	ImGui::SetNextWindowPos(ImVec2( 0.f, 0.f ), ImGuiCond_Always);
 	
 	ImGui::Begin("Overlay", nullptr, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration);
-	
-	for(auto& player : raid_instance::players)
+
+	/**
+	 * Features
+	 */
+	static auto center = render_backend::get_window_center();
+	render::circle(ImVec2(center.x, center.y), 75.f, ImColor(255, 255, 255, 90)); // Hardcoded 75f FOV
+
+	for(auto& player : world::players)
 	{
-		try
-		{
-			if(!player || !raid_instance::local_player || player == raid_instance::local_player)
-			{
-				continue;
-			}
-
-			auto head3 = player.get_head_position();
-			auto head2 = camera::world_to_screen(head3);
-
-			auto root3 = player.get_root_position();
-			auto root2 = camera::world_to_screen(root3);
-			
-			auto local_root3 = raid_instance::local_player->get_root_position();
-			
-			auto distance = vector3::distance(local_root3, root3);
-
-			auto player_height = root2.y - head2.y;
-			auto player_width  = player_height * 0.35f;
-
-			auto player_health = player.get_health();
-
-			if(distance > settings::player_draw_distance)
-			{
-				continue;
-			}
-			
-			if(!head2)
-			{
-				continue;
-			}
-			
-			if(settings::player_name)
-			{
-				auto const pos = ImVec2(head2.x - 30.f, head2.y - 35.f);
-				auto const color = ImColor(255, 255, 205, 255);
-				
-				draw_text_stroke( pos, color, player.name);
-			}
-
-			if(settings::player_health)
-			{
-				auto const pos = ImVec2( head2.x - 10.f, head2.y - 20.f );
-				auto const color = ImColor(255, 0, 0, 255);
-				
-				draw_text_stroke( pos, color, std::to_string( static_cast<int>(player_health) ));
-			}
-			
-			if(settings::player_distance)
-			{
-				auto const pos = ImVec2(root2.x - 5.f, root2.y + 10.f);
-				auto const color = ImColor(255, 255, 255, 255);
-				
-				draw_text_stroke( pos, color, std::to_string( static_cast<int>(distance) ));
-			}
-
-			if(settings::player_faction)
-			{
-				auto const pos = ImVec2(head2.x - 20.f, head2.y - 50.f);
-				auto const color = ImColor(255, 255, 255, 255);
-				
-				draw_text_stroke(pos, color, player.faction);
-			}
-
-			if(settings::player_bones)
-			{
-				for(auto& [from, to] : player.body->bone_links)
-				{
-					auto from3 = from.get_position();
-					auto to3 = to.get_position();
-
-					auto const from2 = camera::world_to_screen(from3);
-					auto const to2 = camera::world_to_screen(to3);
-
-					auto const color = ImColor(0, 255, 0, 255);
-					
-					draw_line( ImVec2(from2.x, from2.y), ImVec2(to2.x, to2.y), color);
-				}
-			}
-			
-			if(settings::player_snapline)
-			{
-				auto const color = ImColor(255, 0, 0, 255);
-				
-				draw_line_stroke( ImVec2(1920.f / 2.f, 0.f), ImVec2(head2.x, head2.y), color);
-				ImGui::GetWindowDrawList()->AddCircleFilled( ImVec2(head2.x, head2.y), 2.f, ImColor(178,40,40,255));
-			}
-
-			if(settings::player_box)
-			{
-				auto const pos = ImVec2(head2.x - 15.f, head2.y - 10.f);
-				auto const color = ImColor(0,0,205,255);
-				
-				draw_rect_stroke( pos, ImVec2(head2.x + player_width, head2.y + player_height), color);
-			}
-
-			if(settings::fov_aim)
-			{
-				auto const color = ImColor(0,0,255,255);
-				
-				ImGui::GetWindowDrawList()->AddCircle( ImVec2(1920.f / 2.f, 1080.f / 2.f), settings::fov, color);
-			}
+		if (player.get_address() == 0 || player.get_address() == world::local_player.get_address()) {
+			continue;
 		}
-		catch (...) { }
+
+		const auto root3 = player.get_root_position();
+		const auto root2 = world::main_camera.world_to_screen(root3);
+
+		if (root2 == vector2::zero) { // Skip vector2.zero
+			continue;
+		}
+
+		/**
+		 * Nickname
+		 */
+		static auto color_nickname = ImColor(212, 255, 0);
+		render::text(ImVec2(root2.x, root2.y), color_nickname, player.m_name);
+
+		/**
+		 * Bones
+		 */
+		for (auto index = 0; index < player.m_playerbody.bone_link_indices.size(); index += 2) {
+
+			const auto index1 = player.m_playerbody.bone_link_indices[index];
+			const auto index2 = player.m_playerbody.bone_link_indices[index + 1];
+
+			const auto f3 = player.m_playerbody.m_positions[index1];
+			const auto f2 = world::main_camera.world_to_screen(f3);
+
+			const auto t3 = player.m_playerbody.m_positions[index2];
+			const auto t2 = world::main_camera.world_to_screen(t3);
+
+			if (f2 == vector2::zero || t2 == vector2::zero) { // Skip vector2.zero
+				continue;
+			}
+
+			auto const color = ImColor(0, 255, 0, 255);
+			
+			render::line( ImVec2(f2.x, f2.y), ImVec2(t2.x, t2.y), color);
+		}
 	}
 	
 	ImGui::End();
 }
 
-auto render::draw_text(const ImVec2 pos, const ImColor color, std::string text) -> void
-{
+static void render::text(const ImVec2& pos, const ImColor& color, const string& text) {
 	ImGui::GetWindowDrawList()->AddText(pos, color, text.c_str());
 }
 
-auto render::draw_text_stroke(const ImVec2 pos, const ImColor color, const std::string text) -> void
-{
+static void render::text_stroke(const ImVec2& pos, const ImColor& color, const string& text) {
 	auto draw_list = ImGui::GetWindowDrawList();
 	
 	draw_list->AddText( ImVec2(pos.x + 1.f, pos.y + 1.f), ImColor(0,0,0,255), text.c_str() );
@@ -282,49 +244,45 @@ auto render::draw_text_stroke(const ImVec2 pos, const ImColor color, const std::
 	draw_list->AddText( pos, color, text.c_str() );
 }
 
-auto render::draw_line(const ImVec2 from, const ImVec2 to, const ImColor color) -> void
-{
+static void render::line(const ImVec2& from, const ImVec2& to, const ImColor& color) {
 	ImGui::GetWindowDrawList()->AddLine(from, to, color);
 }
 
-auto render::draw_line_stroke(const ImVec2 from, const ImVec2 to, const ImColor color) -> void
-{
+static void render::line_stroke(const ImVec2 from, const ImVec2 to, const ImColor color) {
 	ImGui::GetWindowDrawList()->AddLine(from, to, ImColor(0,0,0,255), 1.5f);
 	ImGui::GetWindowDrawList()->AddLine(from, to, color);
 }
 
-auto render::draw_rect(const ImVec2 pos, const ImVec2 length, const ImColor color) -> void
-{
+static void render::rect(const ImVec2 pos, const ImVec2 length, const ImColor color) {
 	ImGui::GetWindowDrawList()->AddRect(pos, ImVec2(pos.x + length.x, pos.y + length.y), color, 0, ImDrawFlags_None);
 }
 
-auto render::draw_rect_stroke(const ImVec2 pos, const ImVec2 length, const ImColor color, const ImColor outline_color) -> void
-{
-	ImGui::GetWindowDrawList()->AddRect(pos, length, outline_color, 0.f, 0, 1.5f);
-
-	ImGui::GetWindowDrawList()->AddRect(pos, length, color);
+void render::circle(const ImVec2& pos, const float& radius, const ImColor& color) {
+	ImGui::GetWindowDrawList()->AddCircle(pos, radius, color);
 }
 
-auto render::draw_rect_filled(const ImVec2 pos, const ImVec2 length, const ImColor color) -> void
-{
-	ImGui::GetWindowDrawList()->AddRectFilled(pos, ImVec2( pos.x + length.x, pos.y + length.y ), color);
-}
+void render::frame() {
 
-auto render::draw_edged_rect(const ImVec2 pos, const ImVec2 length, const ImColor color, const float percent, const float thickness, const bool outline) -> void
-{
-	auto* draw_list = ImGui::GetWindowDrawList();
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 
-	ImVec2 max = { pos.x + length.x, pos.y + length.y };
-	
-	draw_list->AddLine(pos, ImVec2( pos.x + length.x * percent, pos.y ), color, thickness);
-	draw_list->AddLine(ImVec2( max.x, pos.y ), ImVec2( max.x - length.x * percent, pos.y), color, thickness);
+	if (GetAsyncKeyState(VK_HOME) & 0x01) { // Toggle menu display (xor window transparency flag)
+		
+		SetWindowLongPtrA(render_backend::g_window_handle, GWL_EXSTYLE, GetWindowLongA(render_backend::g_window_handle, GWL_EXSTYLE) ^ WS_EX_TRANSPARENT);
+		SetForegroundWindow(render_backend::g_window_handle);
+		is_menu_rendered = !is_menu_rendered;
+	}
 
-	draw_list->AddLine(ImVec2( pos.x, max.y ), ImVec2( pos.x + length.x * percent, max.y ), color, thickness);
-	draw_list->AddLine(max, ImVec2( max.x - length.x * percent, max.y ), color, thickness);
+	if(is_menu_rendered) { // Render menu
+		menu_window_main();
+	}
 
-	draw_list->AddLine(pos, ImVec2( pos.x, pos.y + length.y * percent ), color, thickness);
-	draw_list->AddLine(ImVec2( pos.x, max.y), ImVec2( pos.x, max.y - length.y * percent ), color, thickness);
+	overlay();
 
-	draw_list->AddLine(ImVec2( max.x, pos.y ), ImVec2( max.x, pos.y + length.y * percent ), color, thickness);
-	draw_list->AddLine(max, ImVec2( max.x, max.y - length.y * percent ), color, thickness);
+	ImGui::Render();
+	render_backend::g_d3d11_device_context->OMSetRenderTargets(1, &render_backend::g_d3d11_render_target, nullptr);
+	render_backend::g_d3d11_device_context->ClearRenderTargetView(render_backend::g_d3d11_render_target, clear_color);
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	render_backend::g_swapchain->Present(0, 0);
 }
