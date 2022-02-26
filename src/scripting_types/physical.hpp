@@ -1,57 +1,43 @@
-#pragma once
+
+#ifndef PHYSICAL_HPP
+#define PHYSICAL_HPP
 
 #include "offset.hpp"
-#include "memory_handler.hpp"
+#include "memory.hpp"
 
-class player_physical
-{
-	// E20C
-	
-	uintptr_t address;
+class physical {
 
-	uintptr_t stamina_address;
+private:
 
-	uintptr_t hands_stamina_address;
+	/**
+	 * @brief Address of this class instance
+	 */
+	address_t m_address;
 
-	uintptr_t oxygen_address;
-	
+	address_t legs_stamina_address;
+
+	address_t hands_stamina_address;
+
+	address_t oxygen_address;
+
 public:
 
-	explicit player_physical(const uintptr_t addr) : address(addr)
-	{
-		auto temp = 
-			memory_handler::read<uintptr_t>(addr + offset::player::physical::stamina);
+	physical()
+		: m_address(0), legs_stamina_address(0), hands_stamina_address(0), oxygen_address(0)
+	{}
 
-		stamina_address = temp + 0x48; // Current value
+	explicit physical(const address_t address)
+		: m_address(address),
+		legs_stamina_address(memory::read<address_t>(address + O_PHYSICAL_LEGSSTAMINA) + 0x48),
+		hands_stamina_address(memory::read<address_t>(address + O_PHYSICAL_HANDSSTAMINS) + 0x48),
+		oxygen_address(memory::read<address_t>(address + O_PHYSICAL_OXYGEN) + 0x48)
+	{}
 
-		temp =
-			memory_handler::read<uintptr_t>(addr + offset::player::physical::hands_stamina);
+	void set_legs_stamina(const float value) const;
 
-		hands_stamina_address = temp + 0x48;
+	void set_hands_stamina(const float value) const;
 
-		temp =
-			memory_handler::read<uintptr_t>(addr + offset::player::physical::oxygen);
-
-		oxygen_address = temp + 0x48;
-	}
-
-	auto get_address() const -> uintptr_t
-	{
-		return address;
-	}
-
-	auto set_stamina(const float value) const -> void
-	{
-		memory_handler::write<float>(stamina_address, value);
-	}
-
-	auto set_hands_stamina(const float value) const -> void
-	{
-		memory_handler::write<float>(hands_stamina_address, value);
-	}
-
-	auto set_oxygen(const float value) const -> void
-	{
-		memory_handler::write<float>(oxygen_address, value);
-	}
+	void set_oxygen(const float value) const;
 };
+
+#endif
