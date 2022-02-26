@@ -7,6 +7,8 @@
 #ifndef MATH_HPP
 #define MATH_HPP
 
+#include <math.h>
+
 /**
  * @brief
  */
@@ -14,18 +16,35 @@ struct vector2
 {
 	float x, y;
 
-	auto operator !() const -> bool
-	{
+	static vector2 zero;
+
+	bool operator !() const {
 		return !this->x && !this->y;
 	}
 
-	auto operator +(vector2 other) const -> vector2
-	{
-		return vector2(this->x + other.x, this->y + other.y);
+	vector2 operator +(vector2 other) const {
+		return vector2 {
+			.x = this->x + other.x, 
+			.y = this->y + other.y
+		};
 	}
 
-	auto distance(const vector2 other) const -> float
-	{
+	vector2 operator*(float scalar) const {
+		return vector2 {
+			.x = this->x * scalar,
+			.y = this->y * scalar
+		};
+	}
+
+	bool operator ==(const vector2 other) const {
+		if (this->x == other.x 
+			&& this->y == other.y) {
+			return true;
+		}
+		return false;
+	}
+
+	float distance(const vector2 other) const {
 		auto const a = this->x - other.x;
 		auto const b = this->y - other.y;
 
@@ -40,21 +59,30 @@ struct vector3
 {
 	float x, y, z;
 
-	auto operator -(const vector3 other) const -> vector3
+	static vector3 zero;
+
+	vector3 operator -(const vector3 other) const
 	{
-		vector3 ret
-		{
-			ret.x = this->x - other.x,
-			ret.y = this->y - other.y,
-			ret.z = this->z - other.z,
+		vector3 ret {
+			.x = this->x - other.x,
+			.y = this->y - other.y,
+			.z = this->z - other.z,
 		};
 
 		return ret;
 	}
 
-	auto operator *(const float other) const -> vector3
-	{
+	vector3 operator *(const float other) const {
 		return vector3(this->x * other, this->y * other);
+	}
+
+	bool operator ==(const vector3 other) const {
+		if (this->x == other.x 
+			&& this->y == other.y 
+			&& this->z == other.z) {
+			return true;
+		}
+		return false;
 	}
 
 	auto distance(const vector3 other) const -> float
@@ -66,15 +94,12 @@ struct vector3
 		return sqrtf(a * a + b * b + c * c);
 	}
 
-	auto length() const -> float
-	{
+	float length() const {
 		auto const temp = powf(this->x, 2.f) + powf(this->y, 2.f) + powf(this->z, 2.f);
-
 		return sqrtf(temp);
 	}
 
-	static auto distance(vector3& first, vector3& second) -> float
-	{
+	static float distance(vector3& first, vector3& second) {
 		auto const a = first.x - second.x;
 		auto const b = first.y - second.y;
 		auto const c = first.z - second.z;
@@ -82,18 +107,16 @@ struct vector3
 		return sqrtf(a * a + b * b + c * c);
 	}
 
-	static auto calculate_angle(const vector3 from, const vector3 to) -> vector2
-	{
+	static vector2 calculate_angle(const vector3 from, const vector3 to) {
 		auto const diff = from - to;
 		auto const length = diff.length();
 
-		vector2 ret
-		{
-			ret.x = asinf(diff.y / length),
-			ret.y = -atan2(diff.x, -diff.z),
+		vector2 ret {
+			.x = -atan2f(diff.x, -diff.z),
+			.y =  asinf(diff.y / length)
 		};
 
-		return vector2(ret.x * 57.29578, ret.y * 57.29578);
+		return ret * 57.29578;
 	}
 };
 
