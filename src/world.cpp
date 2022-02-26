@@ -40,13 +40,15 @@ void world::initialize() {
 		world::attached_game_object = game_object::find("GameWorld");
 	}
 
-	auto game_world_component = world::attached_game_object.get_component_by_name("GameWorld");
+	component& game_world_component = world::attached_game_object.get_component_by_name("GameWorld");
 
 	while (game_world_component.get_address() == 0) { // GameWorld Component may initialize with delay
 		game_world_component = world::attached_game_object.get_component_by_name("GameWorld");
 	}
 
 	world::scripting_object_address = game_world_component.m_scripting_object_address;
+
+	world::local_player = world::get_local_player();
 }
 
 void world::terminate() {
@@ -90,6 +92,7 @@ void world::update_state() {
 }
 
 void world::update_players() {
+
 	if (world::is_active) {
 		auto new_player_list = get_player_list();
 
