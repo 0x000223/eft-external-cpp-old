@@ -37,7 +37,7 @@ public:
 	/**
 	 * @brief Transforms position from world space to screen space
 	 */
-	vector2 world_to_screen(const vector3& pos);
+	vector2& world_to_screen(const vector3& pos);
 
 	/**
 	 * @brief
