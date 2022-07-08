@@ -66,3 +66,23 @@ void feature::no_recoil() {
 
 	memory::write<float>(world::local_player.m_proc_wep_anim.m_address + O_PROCWEPANIM_AIMINGDISPLACEMENT, 0);
 }
+
+void feature::thermal_vision() {
+	
+	static bool toggle = false;
+	const auto camera_obj = game_object::find_main_camera();
+	const auto thermal_comp = camera_obj.get_component_by_name("Thermal");
+	memory::write<bool>(thermal_comp.m_scripting_object_address + O_THERMALVISION_ON, toggle);
+	memory::write<bool>(thermal_comp.m_scripting_object_address + O_THERMALVISION_ISNOISY, false);
+	memory::write<bool>(thermal_comp.m_scripting_object_address + O_THERMALVISION_ISMUTIONBLURRED, false);
+	toggle = !toggle;
+}
+
+void feature::night_vision() {
+
+	static bool toggle = false;
+	const auto camera_obj = game_object::find_main_camera();
+	const auto night_comp = camera_obj.get_component_by_name("Night");
+	memory::write<bool>(night_comp.m_scripting_object_address + O_NIGHTVISION_ON, toggle);
+	toggle = !toggle;
+}
