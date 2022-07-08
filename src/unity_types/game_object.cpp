@@ -9,7 +9,7 @@ address_t game_object::get_transform() const {
 	return memory::read<address_t>(m_component_array + 0x10 * 0 + 0x8); // Transform is always the first component - hence index '0'
 }
 
-component& game_object::get_component_by_name(const string name) const { 
+component game_object::get_component_by_name(const string name) const { 
 
 	auto ret = component();
 
@@ -24,7 +24,7 @@ component& game_object::get_component_by_name(const string name) const {
 	return ret;
 }
 
-vector<component>& game_object::get_components() const {
+vector<component> game_object::get_components() const {
 
 	vector<component> components;
 
@@ -35,7 +35,7 @@ vector<component>& game_object::get_components() const {
 	return components;
 }
 
-vector<game_object>& game_object::get_active_objects(size_t limit) {
+vector<game_object> game_object::get_active_objects(size_t limit) {
 
 	vector<game_object> active_objects;
 
@@ -69,7 +69,7 @@ vector<game_object>& game_object::get_active_objects(size_t limit) {
 	return active_objects;
 }
 
-vector<game_object>& game_object::get_tagged_objects() {
+vector<game_object> game_object::get_tagged_objects() {
 
 	vector<game_object> tagged_objects;
 
