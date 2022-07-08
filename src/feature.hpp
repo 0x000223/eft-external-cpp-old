@@ -17,6 +17,16 @@ namespace feature {
 	 * @brief
 	 */
 	void no_recoil();
+
+	/**
+	 * @brief
+	 */
+	void thermal_vision();
+
+	/**
+	 * @brief
+	 */
+	void night_vision();
 }
 
 #endif
