@@ -40,7 +40,7 @@ void world::initialize() {
 		world::attached_game_object = game_object::find("GameWorld");
 	}
 
-	component& game_world_component = world::attached_game_object.get_component_by_name("GameWorld");
+	component game_world_component = world::attached_game_object.get_component_by_name("GameWorld");
 
 	while (game_world_component.get_address() == 0) { // GameWorld Component may initialize with delay
 		game_world_component = world::attached_game_object.get_component_by_name("GameWorld");
