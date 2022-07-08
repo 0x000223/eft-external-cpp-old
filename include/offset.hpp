@@ -214,4 +214,17 @@ typedef unsigned long long offset_t;
  */
 #define O_FORCEEFFECTOR_INTENSITY 0x28
 
+/**
+ * ThermalVision
+ */
+#define O_THERMALVISION_ON 0xD0
+#define O_THERMALVISION_ISNOISY 0xD1
+#define O_THERMALVISION_ISMUTIONBLURRED 0xD3
+
+/**
+ * BSG.CameraEffects.NightVision
+ */
+#define O_NIGHTVISION_ON 0xCC
+#define O_NIGHTVISION_INTENSITY 0xA8
+
 #endif
