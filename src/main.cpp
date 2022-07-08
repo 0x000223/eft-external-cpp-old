@@ -29,7 +29,7 @@ int WinMain(HINSTANCE, HINSTANCE, char*, int) {
 			if (process::get_process_id("EscapeFromTarkov.exe") == 0) {
 				exit(-1);
 			}
-			Sleep(1000);
+			Sleep(500);
 		}
 	});
 	
@@ -37,7 +37,7 @@ int WinMain(HINSTANCE, HINSTANCE, char*, int) {
 	std::future<void> task_world_state = std::async(std::launch::async, []() {
 		while (true) {
 			world::update_state();
-			Sleep(1000);
+			Sleep(500);
 		}
 	});
 
@@ -45,7 +45,7 @@ int WinMain(HINSTANCE, HINSTANCE, char*, int) {
 	std::future<void> task_update_players = std::async(std::launch::async, []() {
 		while (true) {
 			world::update_players();
-			Sleep(1000);
+			Sleep(500);
 		}
 	});
 	
@@ -58,7 +58,7 @@ int WinMain(HINSTANCE, HINSTANCE, char*, int) {
 						{
 							player.m_playerbody.m_positions[index] = player.m_playerbody.m_transforms[index].get_position();
 						}
-						catch (...) {}; // TEMP Workaround
+						catch (...) { break; }; // TEMP Workaround
 					}
 				}
 			}
@@ -81,10 +81,24 @@ int WinMain(HINSTANCE, HINSTANCE, char*, int) {
 				feature::no_recoil();
 
 				/**
-				 *  FOV Aimbot
+				 * FOV Aimbot
 				 */
 				if (GetAsyncKeyState(0x46)) { // 'F' - aimbot_fov
 					feature::aimbot_fov();
+				}
+
+				/**
+				 * Thermal Vision
+				 */
+				if (GetAsyncKeyState(VK_F1) & 0x01) { // 'F1' - thermal vision
+					feature::thermal_vision();
+				}
+
+				/**
+				 * Night Vision
+				 */
+				if (GetAsyncKeyState(VK_F2) & 0x01) { // 'F2' - night vision
+					feature::night_vision();
 				}
 			}
 			Sleep(100);
