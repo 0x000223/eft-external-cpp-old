@@ -180,8 +180,14 @@ static void render::overlay() {
 	/**
 	 * Features
 	 */
-	static auto center = render_backend::get_window_center();
+	static const auto center = render_backend::get_window_center();
 	render::circle(ImVec2(center.x, center.y), 75.f, ImColor(255, 255, 255, 90)); // Hardcoded 75f FOV
+
+	/**
+	 * Crosshair
+	 */
+	render::line(ImVec2(center.x, center.y - 10.f), ImVec2(center.x, center.y + 10.f), ImColor(255, 0, 0));
+	render::line(ImVec2(center.x - 10.f, center.y), ImVec2(center.x + 10.f, center.y), ImColor(255, 0, 0));
 
 	for(auto& player : world::players)
 	{
@@ -209,6 +215,10 @@ static void render::overlay() {
 
 			const auto index1 = player.m_playerbody.bone_link_indices[index];
 			const auto index2 = player.m_playerbody.bone_link_indices[index + 1];
+
+			if (player.m_playerbody.m_positions.empty()) { // Skip garbage object
+				continue;
+			}
 
 			const auto f3 = player.m_playerbody.m_positions[index1];
 			const auto f2 = world::main_camera.world_to_screen(f3);
